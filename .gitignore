@@ -1,0 +1,22 @@
+# Allowlist: this repo publishes only the three baseline projects.
+# Everything in the OPHIS workspace is ignored by default.
+/*
+!/.gitignore
+!/fengheguai/
+!/DeepScientist_Baseline/
+!/AI_Scientist_v2_Baseline/
+
+# Junk, at any depth inside the allowlisted trees.
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.DS_Store
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+.env
+.env.*
+*.pem
+*.key

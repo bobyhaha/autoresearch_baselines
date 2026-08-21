@@ -1,0 +1,38 @@
+# Adapted from AI-Scientist-v2's bfts_config.yaml.
+# Only the knobs that survive the port are listed; the rest of the upstream file
+# configures stages, plotting, VLM feedback and report writing, none of which the
+# autoresearch task uses.
+
+base_dir: ~/ai_scientist_v2_baseline
+task_dir: ~/ai_scientist_v2_baseline/task   # pristine karpathy/autoresearch checkout
+
+exec:
+  gpu: 2                # pinned; the box is shared with other tenants
+  hard_timeout: 900     # kill a trial that overruns the 300s budget by a wide margin
+
+agent:
+  # Upstream default is 4 parallel workers. One GPU means one worker, so the search
+  # policy picks a single node per iteration instead of N.
+  num_workers: 1
+
+  search:
+    max_debug_depth: 3
+    debug_prob: 0.5
+    num_drafts: 3
+
+  # Upstream points `code`/`feedback` at API models. Here the coding model is the
+  # operator's Claude session, reached through the rendezvous backend, and feedback
+  # (metric parsing) is deterministic rather than model-generated.
+  code:
+    backend: rendezvous
+    rendezvous_timeout: 7200
+  feedback:
+    backend: deterministic   # parse val_bpb from the run log; audit the run
+
+metric:
+  name: val_bpb
+  lower_is_better: true
+  # Integrity guards: a candidate cannot score by cutting training short or by
+  # editing the read-only evaluation harness.
+  min_training_seconds: 295
+  prepare_py_must_match_pristine: true

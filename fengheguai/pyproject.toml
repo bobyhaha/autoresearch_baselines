@@ -1,0 +1,29 @@
+[project]
+name = "fengheguai"
+version = "0.1.0"
+description = "A verifiable 300-second val_bpb autoresearch engine for nanoGPT-style training"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+fengheguai = "fengheguai.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["fengheguai"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"program.md" = "fengheguai/program.md"
+
+[tool.hatch.build.targets.sdist]
+include = ["fengheguai", "tests", "README.md", "SOURCES.md", "program.md", "pyproject.toml", "LICENSE"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

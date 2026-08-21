@@ -1,0 +1,5 @@
+node_id	val_bpb	memory_gb	status	description
+6d0ccd43	0.991192	44.0	keep	baseline (pristine karpathy/autoresearch train.py, unmodified)
+fbec943f	0.988966	44.0	keep	Attention throughput: halve the SSSL short-attention span (seq/2=1024 -> seq/4=512). Compute-bound single-epoch regime, so cheaper attention should buy more optimizer steps in the fixed 300s.
+d05761a3	0.983545	43.9	keep	Optimizer cadence: halve TOTAL_BATCH_SIZE 2**19 -> 2**18, doubling optimizer steps per token at fixed token throughput.
+c89462a1	0.981576	43.9	keep	Stack the two confirmed levers from the other lineage: on top of TOTAL_BATCH_SIZE 2**18, halve the SSSL short-attention span seq/2 -> seq/4.

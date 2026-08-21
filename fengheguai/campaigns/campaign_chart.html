@@ -1,0 +1,245 @@
+<title>Fengheguai h200-claude — 300s val_bpb campaign</title>
+<style>
+  :root{
+    color-scheme: light;
+    --ground:#f7f8fa; --panel:#ffffff; --edge:#dfe4ea;
+    --ink:#10141a; --ink-2:#5b6472; --ink-3:#8b95a3;
+    --accent:#2a78d6; --accent-soft:#2a78d622; --warm:#eb6834; --crit:#d03b3b;
+    --grid:#e6eaef; --dot:#aeb8c4;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --ground:#14171c; --panel:#191d24; --edge:#2b323c;
+      --ink:#eef1f5; --ink-2:#9aa4b2; --ink-3:#6f7986;
+      --accent:#3987e5; --accent-soft:#3987e533; --warm:#d95926; --crit:#e06666;
+      --grid:#252b34; --dot:#525c69;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --ground:#14171c; --panel:#191d24; --edge:#2b323c;
+    --ink:#eef1f5; --ink-2:#9aa4b2; --ink-3:#6f7986;
+    --accent:#3987e5; --accent-soft:#3987e533; --warm:#d95926; --crit:#e06666;
+    --grid:#252b34; --dot:#525c69;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+       line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 24px 72px;display:flex;flex-direction:column;gap:36px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+           color:var(--ink-2);margin:0}
+  h1{font-family:var(--mono);font-size:clamp(21px,3.1vw,29px);font-weight:600;letter-spacing:-.01em;
+     margin:6px 0 0;text-wrap:balance}
+  .sub{margin:10px 0 0;color:var(--ink-2);max-width:66ch;font-size:15px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+         background:var(--edge);border:1px solid var(--edge);border-radius:10px;overflow:hidden}
+  .stat{background:var(--panel);padding:16px 18px;display:flex;flex-direction:column;gap:5px}
+  .stat .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+  .stat .v{font-family:var(--mono);font-size:23px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .stat .n{font-size:12px;color:var(--ink-2)}
+  .accent{color:var(--accent)}
+  .panel{background:var(--panel);border:1px solid var(--edge);border-radius:10px;padding:20px 20px 12px}
+  .phead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px}
+  .ptitle{font-family:var(--mono);font-size:13px;letter-spacing:.04em;font-weight:600;margin:0}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-2);font-family:var(--mono)}
+  .lg{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:11px;height:11px;border-radius:50%;display:inline-block}
+  .sw.line{width:16px;height:2px;border-radius:1px}
+  .sw.x{width:11px;height:11px;border-radius:0}
+  figure{margin:0}
+  .chart-scroll{overflow-x:auto}
+  svg{display:block;width:100%;min-width:640px;height:auto;touch-action:pan-y}
+  .gl{stroke:var(--grid);stroke-width:1}
+  .axis{fill:var(--ink-3);font-family:var(--mono);font-size:10.5px}
+  .axis-t{fill:var(--ink-2);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em}
+  .trial{fill:var(--dot)}
+  .prom{fill:var(--accent)}
+  .bestline{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+  .basel{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:4 4}
+  .fail{stroke:var(--crit);stroke-width:1.6;stroke-linecap:round}
+  .hit{fill:transparent;cursor:crosshair}
+  .cross{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3;opacity:0}
+  .halo{fill:none;stroke:var(--panel);stroke-width:2}
+  figcaption{font-size:12.5px;color:var(--ink-2);margin-top:10px;padding-bottom:4px;max-width:74ch}
+  .tip{position:absolute;pointer-events:none;opacity:0;transform:translate(-50%,-118%);
+       background:var(--panel);border:1px solid var(--edge);border-radius:7px;padding:8px 10px;
+       font-family:var(--mono);font-size:11.5px;white-space:nowrap;box-shadow:0 6px 18px #0000001f;z-index:5}
+  .tip b{font-weight:600}
+  .tip .row{color:var(--ink-2)}
+  .rel{position:relative}
+  table{border-collapse:collapse;width:100%;font-size:13px}
+  th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--edge)}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+     position:sticky;top:0;background:var(--panel)}
+  td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+  tr.p td{background:var(--accent-soft)}
+  .tag{font-family:var(--mono);font-size:10.5px;padding:1px 6px;border-radius:99px;border:1px solid var(--edge);color:var(--ink-2)}
+  .tag.keep{color:var(--accent);border-color:var(--accent)}
+  .tag.fail{color:var(--crit);border-color:var(--crit)}
+  details{background:var(--panel);border:1px solid var(--edge);border-radius:10px;padding:0}
+  summary{cursor:pointer;padding:14px 20px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em}
+  summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .tbox{max-height:420px;overflow:auto;padding:0 20px 16px}
+  .mech{width:100%;font-size:13.5px}
+  .mech td{padding:7px 10px}
+  .mech td.num{white-space:nowrap}
+  footer{color:var(--ink-3);font-size:12px;font-family:var(--mono);display:flex;flex-wrap:wrap;gap:14px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Fengheguai · campaign h200-claude · H200 · 300&#8202;s budget</p>
+    <h1>Minimizing val_bpb, 103 trials</h1>
+    <p class="sub">Every point is one locked 300-second training run scored through the immutable
+      <code>prepare.evaluate_bpb</code>. The agent proposing each change was a Claude session; the controller
+      audited and measured every candidate independently.</p>
+  </header>
+
+  <section class="stats" aria-label="Campaign summary">
+    <div class="stat"><span class="k">Baseline</span><span class="v">0.991068</span><span class="n">locked, 2 runs</span></div>
+    <div class="stat"><span class="k">Champion</span><span class="v accent">0.967286</span><span class="n">t0096</span></div>
+    <div class="stat"><span class="k">Improvement</span><span class="v accent">&minus;2.40%</span><span class="n">&minus;0.023782 bpb</span></div>
+    <div class="stat"><span class="k">Trials</span><span class="v">103</span><span class="n">99 valid · 4 crashed</span></div>
+    <div class="stat"><span class="k">Promotions</span><span class="v">23</span><span class="n">median of 2 runs</span></div>
+  </section>
+
+  <section class="panel">
+    <div class="phead">
+      <p class="ptitle">val_bpb by trial</p>
+      <div class="legend">
+        <span class="lg"><span class="sw line" style="background:var(--accent)"></span>Best so far</span>
+        <span class="lg"><span class="sw" style="background:var(--accent)"></span>Promoted</span>
+        <span class="lg"><span class="sw" style="background:var(--dot)"></span>Discarded</span>
+        <span class="lg"><span class="sw x" style="color:var(--crit)">&#10005;</span>Crashed</span>
+      </div>
+    </div>
+    <figure>
+      <div class="chart-scroll rel" id="host">
+        <svg id="chart" viewBox="0 0 1000 430" role="img"
+             aria-label="Scatter of val_bpb for 103 trials with a descending best-so-far step line from 0.991068 to 0.967286."></svg>
+        <div class="tip" id="tip"></div>
+      </div>
+      <figcaption>The y-axis is clipped to the observed range, not zero — the whole campaign spans
+        0.024&#8202;bpb. Rises above the line are rejected candidates: the controller keeps them as
+        evidence rather than discarding the run.</figcaption>
+    </figure>
+  </section>
+
+  <section class="panel">
+    <p class="ptitle" style="margin-bottom:10px">Where the improvement came from</p>
+    <div class="chart-scroll">
+      <table class="mech">
+        <thead><tr><th>Source</th><th>Mechanism</th><th style="text-align:right">&Delta; bpb</th></tr></thead>
+        <tbody>
+          <tr><td>Batch &amp; LR scaling</td><td>2<sup>19</sup>&rarr;2<sup>17</sup> with &radic;-scaled Muon rate</td><td class="num">&minus;0.0090</td></tr>
+          <tr><td>Capacity</td><td>depth 8&rarr;12 at fixed width</td><td class="num">&minus;0.0045</td></tr>
+          <tr><td>Missing mechanisms</td><td>document masking, dense value embeddings, gate width</td><td class="num">&minus;0.0032</td></tr>
+          <tr><td>Attention shape</td><td>4 global layers, 256-token local span</td><td class="num">&minus;0.0023</td></tr>
+          <tr><td>Initialisation</td><td>value-embed table rescaled off the fan-in scale, and the LR it had masked</td><td class="num">&minus;0.0018</td></tr>
+          <tr><td>Weight averaging</td><td>EMA over the tail, once a promoted LR floor stopped full annealing</td><td class="num">&minus;0.0011</td></tr>
+          <tr><td>Operating-point fixes</td><td>weight decay and softcap re-derived after the batch moved</td><td class="num">&minus;0.0006</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <details>
+    <summary>All 87 trials (table view)</summary>
+    <div class="tbox"><table id="tbl">
+      <thead><tr><th>#</th><th>Trial</th><th>Stage</th><th style="text-align:right">val_bpb</th>
+      <th style="text-align:right">Steps</th><th>Status</th><th>Change</th></tr></thead>
+      <tbody></tbody></table></div>
+  </details>
+
+  <footer>
+    <span>ledger: hash-chained, audit ok, 0 errors</span>
+    <span>evaluator: prepare.evaluate_bpb (immutable)</span>
+    <span>contract: TIME_BUDGET = 300&#8202;s</span>
+  </footer>
+</div>
+
+<script>
+const D = [{"i":0,"id":"b0000","stage":"baseline","status":"baseline","v":0.9910678033605353,"promoted":true,"steps":1019,"label":"baseline","best":0.9910678033605353},{"i":1,"id":"t0001","stage":"refine","status":"keep","v":0.9835112155304498,"promoted":true,"steps":2020,"label":"batch 2^19\u21922^18","best":0.9835112155304498},{"i":2,"id":"t0002","stage":"explore","status":"keep","v":0.9816290652971562,"promoted":true,"steps":2099,"label":"short window 1024\u2192512","best":0.9816290652971562},{"i":3,"id":"t0003","stage":"refine","status":"discard","v":0.9866882102198972,"promoted":false,"steps":4082,"label":"","best":0.9816290652971562},{"i":4,"id":"t0004","stage":"refine","status":"keep","v":0.9811466475513575,"promoted":true,"steps":2101,"label":"\u221a-rescale LRs","best":0.9811466475513575},{"i":5,"id":"t0005","stage":"refine","status":"discard","v":0.9812476714101173,"promoted":false,"steps":4078,"label":"","best":0.9811466475513575},{"i":6,"id":"t0006","stage":"refine","status":"discard","v":0.983236733080541,"promoted":false,"steps":3957,"label":"","best":0.9811466475513575},{"i":7,"id":"t0007","stage":"recombine","status":"discard","v":0.9871388796639186,"promoted":false,"steps":4069,"label":"","best":0.9811466475513575},{"i":8,"id":"t0008","stage":"explore","status":"keep","v":0.980244868838793,"promoted":true,"steps":2062,"label":"value embeds \u2192 all layers","best":0.980244868838793},{"i":9,"id":"t0009","stage":"refine","status":"failed","v":null,"promoted":false,"steps":null,"label":"","best":0.980244868838793},{"i":10,"id":"t0010","stage":"debug","status":"keep","v":0.9781648119476691,"promoted":true,"steps":2097,"label":"document masking","best":0.9781648119476691},{"i":11,"id":"t0011","stage":"explore","status":"discard","v":0.9786838139350805,"promoted":false,"steps":2114,"label":"","best":0.9781648119476691},{"i":12,"id":"t0012","stage":"refine","status":"keep","v":0.9779340079065637,"promoted":true,"steps":2096,"label":"embedding LR unscaled","best":0.9779340079065637},{"i":13,"id":"t0013","stage":"explore","status":"keep","v":0.9742292797012511,"promoted":true,"steps":1725,"label":"depth 8\u219210","best":0.9742292797012511},{"i":14,"id":"t0014","stage":"recombine","status":"discard","v":0.9748416645281933,"promoted":false,"steps":1714,"label":"","best":0.9742292797012511},{"i":15,"id":"t0015","stage":"explore","status":"discard","v":0.978027068598594,"promoted":false,"steps":1259,"label":"","best":0.9742292797012511},{"i":16,"id":"t0016","stage":"refine","status":"keep","v":0.9734222198085134,"promoted":true,"steps":1472,"label":"depth 10\u219212","best":0.9734222198085134},{"i":17,"id":"t0017","stage":"refine","status":"keep","v":0.973370817846824,"promoted":true,"steps":1470,"label":"depth-scaled matrix LR","best":0.973370817846824},{"i":18,"id":"t0018","stage":"refine","status":"discard","v":0.9743826985879623,"promoted":false,"steps":1469,"label":"","best":0.973370817846824},{"i":19,"id":"t0019","stage":"refine","status":"discard","v":0.9735474451979333,"promoted":false,"steps":1472,"label":"","best":0.973370817846824},{"i":20,"id":"t0020","stage":"explore","status":"discard","v":0.9748384462480386,"promoted":false,"steps":1471,"label":"","best":0.973370817846824},{"i":21,"id":"t0021","stage":"recombine","status":"discard","v":0.9749406250455237,"promoted":false,"steps":1278,"label":"","best":0.973370817846824},{"i":22,"id":"t0022","stage":"explore","status":"discard","v":0.9751770259335362,"promoted":false,"steps":1510,"label":"","best":0.973370817846824},{"i":23,"id":"t0023","stage":"explore","status":"discard","v":0.9735336540900568,"promoted":false,"steps":1471,"label":"","best":0.973370817846824},{"i":24,"id":"t0024","stage":"explore","status":"discard","v":0.982521341457166,"promoted":false,"steps":1465,"label":"","best":0.973370817846824},{"i":25,"id":"t0025","stage":"explore","status":"discard","v":0.9741061682384052,"promoted":false,"steps":1465,"label":"","best":0.973370817846824},{"i":26,"id":"t0026","stage":"explore","status":"discard","v":0.9741288463574964,"promoted":false,"steps":1470,"label":"","best":0.973370817846824},{"i":27,"id":"t0027","stage":"explore","status":"discard","v":0.9734994745064817,"promoted":false,"steps":1471,"label":"","best":0.973370817846824},{"i":28,"id":"t0028","stage":"recombine","status":"discard","v":0.9757319055679596,"promoted":false,"steps":1473,"label":"","best":0.973370817846824},{"i":29,"id":"t0029","stage":"explore","status":"discard","v":0.9744227439184243,"promoted":false,"steps":1470,"label":"","best":0.973370817846824},{"i":30,"id":"t0030","stage":"explore","status":"discard","v":0.974557200298043,"promoted":false,"steps":1452,"label":"","best":0.973370817846824},{"i":31,"id":"t0031","stage":"explore","status":"keep","v":0.9731625492214542,"promoted":true,"steps":1470,"label":"VE gate 32\u2192128 ch","best":0.9731625492214542},{"i":32,"id":"t0032","stage":"explore","status":"discard","v":0.9753057241262599,"promoted":false,"steps":1459,"label":"","best":0.9731625492214542},{"i":33,"id":"t0033","stage":"explore","status":"discard","v":0.976977895423817,"promoted":false,"steps":1468,"label":"","best":0.9731625492214542},{"i":34,"id":"t0034","stage":"explore","status":"keep","v":0.9730974999201942,"promoted":true,"steps":1468,"label":"rotary base 30000","best":0.9730974999201942},{"i":35,"id":"t0035","stage":"recombine","status":"discard","v":0.9737653265982259,"promoted":false,"steps":1465,"label":"","best":0.9730974999201942},{"i":36,"id":"t0036","stage":"explore","status":"discard","v":0.9773407847324418,"promoted":false,"steps":1472,"label":"","best":0.9730974999201942},{"i":37,"id":"t0037","stage":"explore","status":"keep","v":0.9727044783720472,"promoted":true,"steps":1465,"label":"output softcap 15\u219210","best":0.9727044783720472},{"i":38,"id":"t0038","stage":"refine","status":"discard","v":0.9779095396058246,"promoted":false,"steps":1466,"label":"","best":0.9727044783720472},{"i":39,"id":"t0039","stage":"explore","status":"discard","v":0.975855888160245,"promoted":false,"steps":1465,"label":"","best":0.9727044783720472},{"i":40,"id":"t0040","stage":"refine","status":"discard","v":0.9739688141287068,"promoted":false,"steps":1465,"label":"","best":0.9727044783720472},{"i":41,"id":"t0041","stage":"explore","status":"discard","v":0.9728110564796973,"promoted":false,"steps":1464,"label":"","best":0.9727044783720472},{"i":42,"id":"t0042","stage":"recombine","status":"discard","v":0.9754424829286763,"promoted":false,"steps":1442,"label":"","best":0.9727044783720472},{"i":43,"id":"t0043","stage":"explore","status":"discard","v":0.9731431463573648,"promoted":false,"steps":1464,"label":"","best":0.9727044783720472},{"i":44,"id":"t0044","stage":"explore","status":"failed","v":null,"promoted":false,"steps":null,"label":"","best":0.9727044783720472},{"i":45,"id":"t0045","stage":"debug","status":"discard","v":0.972758561878882,"promoted":false,"steps":1455,"label":"","best":0.9727044783720472},{"i":46,"id":"t0046","stage":"explore","status":"discard","v":0.9729824080664499,"promoted":false,"steps":1438,"label":"","best":0.9727044783720472},{"i":47,"id":"t0047","stage":"explore","status":"discard","v":0.9742991436433379,"promoted":false,"steps":1347,"label":"","best":0.9727044783720472},{"i":48,"id":"t0048","stage":"explore","status":"keep","v":0.9726619517071179,"promoted":true,"steps":1464,"label":"final LR floor 0.1","best":0.9726619517071179},{"i":49,"id":"t0049","stage":"recombine","status":"discard","v":0.9751541007459485,"promoted":false,"steps":1465,"label":"","best":0.9726619517071179},{"i":50,"id":"t0050","stage":"refine","status":"discard","v":0.9737720815787093,"promoted":false,"steps":1465,"label":"","best":0.9726619517071179},{"i":51,"id":"t0051","stage":"refine","status":"keep","v":0.9719442983952986,"promoted":true,"steps":2836,"label":"batch 2^18\u21922^17 + rates","best":0.9719442983952986},{"i":52,"id":"t0052","stage":"explore","status":"discard","v":0.9758883401280092,"promoted":false,"steps":5383,"label":"","best":0.9719442983952986},{"i":53,"id":"t0053","stage":"refine","status":"keep","v":0.9716303097460754,"promoted":true,"steps":2838,"label":"embedding LR 0.6","best":0.9716303097460754},{"i":54,"id":"t0054","stage":"refine","status":"discard","v":0.9716904522882974,"promoted":false,"steps":2840,"label":"","best":0.9716303097460754},{"i":55,"id":"t0055","stage":"explore","status":"discard","v":0.9747874122267177,"promoted":false,"steps":2844,"label":"","best":0.9716303097460754},{"i":56,"id":"t0056","stage":"recombine","status":"discard","v":0.9727008607354868,"promoted":false,"steps":2839,"label":"","best":0.9716303097460754},{"i":57,"id":"t0057","stage":"explore","status":"discard","v":0.9716797559263274,"promoted":false,"steps":2841,"label":"","best":0.9716303097460754},{"i":58,"id":"t0058","stage":"explore","status":"timeout","v":null,"promoted":false,"steps":2921,"label":"","best":0.9716303097460754},{"i":59,"id":"t0059","stage":"debug","status":"discard","v":0.9717164732867419,"promoted":false,"steps":2835,"label":"","best":0.9716303097460754},{"i":60,"id":"t0060","stage":"explore","status":"discard","v":0.9734310429227032,"promoted":false,"steps":2453,"label":"","best":0.9716303097460754},{"i":61,"id":"t0061","stage":"explore","status":"discard","v":0.9735052071345666,"promoted":false,"steps":2840,"label":"","best":0.9716303097460754},{"i":62,"id":"t0062","stage":"explore","status":"discard","v":0.9744508160113684,"promoted":false,"steps":2840,"label":"","best":0.9716303097460754},{"i":63,"id":"t0063","stage":"recombine","status":"discard","v":0.9725036548150298,"promoted":false,"steps":2836,"label":"","best":0.9716303097460754},{"i":64,"id":"t0064","stage":"explore","status":"discard","v":0.97861617254451,"promoted":false,"steps":2806,"label":"","best":0.9716303097460754},{"i":65,"id":"t0065","stage":"explore","status":"keep","v":0.9712854567039197,"promoted":true,"steps":2837,"label":"weight decay 0.2\u21920.146","best":0.9712854567039197},{"i":66,"id":"t0066","stage":"refine","status":"discard","v":0.9714648175165073,"promoted":false,"steps":2836,"label":"","best":0.9712854567039197},{"i":67,"id":"t0067","stage":"refine","status":"discard","v":0.971522322709026,"promoted":false,"steps":2839,"label":"","best":0.9712854567039197},{"i":68,"id":"t0068","stage":"explore","status":"discard","v":0.9720840206884827,"promoted":false,"steps":2836,"label":"","best":0.9712854567039197},{"i":69,"id":"t0069","stage":"explore","status":"keep","v":0.9710711085428672,"promoted":true,"steps":2841,"label":"softcap 10\u219213","best":0.9710711085428672},{"i":70,"id":"t0070","stage":"recombine","status":"discard","v":0.9715707763554909,"promoted":false,"steps":2840,"label":"","best":0.9710711085428672},{"i":71,"id":"t0071","stage":"explore","status":"discard","v":0.9764983439920607,"promoted":false,"steps":3004,"label":"","best":0.9710711085428672},{"i":72,"id":"t0072","stage":"refine","status":"discard","v":0.9710810929854847,"promoted":false,"steps":2842,"label":"","best":0.9710711085428672},{"i":73,"id":"t0073","stage":"explore","status":"keep","v":0.9705892368503939,"promoted":true,"steps":2833,"label":"3\u21924 global layers","best":0.9705892368503939},{"i":74,"id":"t0074","stage":"explore","status":"discard","v":0.9709626124595193,"promoted":false,"steps":2822,"label":"","best":0.9705892368503939},{"i":75,"id":"t0075","stage":"explore","status":"discard","v":0.9709684489202697,"promoted":false,"steps":2827,"label":"","best":0.9705892368503939},{"i":76,"id":"t0076","stage":"explore","status":"keep","v":0.9701349111653594,"promoted":true,"steps":2873,"label":"short span 512\u2192256","best":0.9701349111653594},{"i":77,"id":"t0077","stage":"recombine","status":"discard","v":0.9705911992877714,"promoted":false,"steps":2867,"label":"","best":0.9701349111653594},{"i":78,"id":"t0078","stage":"refine","status":"discard","v":0.972754423215331,"promoted":false,"steps":2905,"label":"","best":0.9701349111653594},{"i":79,"id":"t0079","stage":"refine","status":"discard","v":0.9704233977132278,"promoted":false,"steps":2851,"label":"","best":0.9701349111653594},{"i":80,"id":"t0080","stage":"explore","status":"discard","v":0.9704675846358545,"promoted":false,"steps":2869,"label":"","best":0.9701349111653594},{"i":81,"id":"t0081","stage":"explore","status":"discard","v":0.9702756614019319,"promoted":false,"steps":2867,"label":"","best":0.9701349111653594},{"i":82,"id":"t0082","stage":"explore","status":"discard","v":0.9702530903103574,"promoted":false,"steps":2875,"label":"","best":0.9701349111653594},{"i":83,"id":"t0083","stage":"explore","status":"discard","v":0.9706214028789715,"promoted":false,"steps":2671,"label":"","best":0.9701349111653594},{"i":84,"id":"t0084","stage":"recombine","status":"discard","v":0.972235320856343,"promoted":false,"steps":3122,"label":"","best":0.9701349111653594},{"i":85,"id":"t0085","stage":"explore","status":"discard","v":0.9709218349756469,"promoted":false,"steps":2873,"label":"","best":0.9701349111653594},{"i":86,"id":"t0086","stage":"explore","status":"discard","v":0.971715162865256,"promoted":false,"steps":2875,"label":"","best":0.9701349111653594},{"i":87,"id":"t0087","stage":"explore","status":"keep","v":0.9692771705486012,"promoted":true,"steps":2875,"label":"value-embed init \u00d722.6","best":0.9692771705486012},{"i":88,"id":"t0088","stage":"refine","status":"discard","v":0.9693419506836436,"promoted":false,"steps":2874,"label":"","best":0.9692771705486012},{"i":89,"id":"t0089","stage":"explore","status":"keep","v":0.9683887385933526,"promoted":true,"steps":2875,"label":"value-embed LR 0.6\u21920.3","best":0.9683887385933526},{"i":90,"id":"t0090","stage":"refine","status":"discard","v":0.9685277550906491,"promoted":false,"steps":2875,"label":"","best":0.9683887385933526},{"i":91,"id":"t0091","stage":"recombine","status":"discard","v":0.9688977966062622,"promoted":false,"steps":2858,"label":"","best":0.9683887385933526},{"i":92,"id":"t0092","stage":"refine","status":"discard","v":0.9963740955859284,"promoted":false,"steps":1828,"label":"","best":0.9683887385933526},{"i":93,"id":"t0093","stage":"explore","status":"failed","v":null,"promoted":false,"steps":null,"label":"","best":0.9683887385933526},{"i":94,"id":"t0094","stage":"debug","status":"discard","v":0.968509340500545,"promoted":false,"steps":2871,"label":"","best":0.9683887385933526},{"i":95,"id":"t0095","stage":"explore","status":"discard","v":0.9808173537010051,"promoted":false,"steps":2710,"label":"","best":0.9683887385933526},{"i":96,"id":"t0096","stage":"explore","status":"keep","v":0.967285914547847,"promoted":true,"steps":2869,"label":"weight averaging (EMA)","best":0.967285914547847},{"i":97,"id":"t0097","stage":"refine","status":"discard","v":0.9674449183007731,"promoted":false,"steps":2868,"label":"","best":0.967285914547847},{"i":98,"id":"t0098","stage":"recombine","status":"discard","v":0.9675274924260652,"promoted":false,"steps":2872,"label":"","best":0.967285914547847},{"i":99,"id":"t0099","stage":"explore","status":"discard","v":0.9672897965583478,"promoted":false,"steps":2869,"label":"","best":0.967285914547847},{"i":100,"id":"t0100","stage":"explore","status":"discard","v":0.9691584102069142,"promoted":false,"steps":2868,"label":"","best":0.967285914547847},{"i":101,"id":"t0101","stage":"explore","status":"discard","v":0.968588974830216,"promoted":false,"steps":2869,"label":"","best":0.967285914547847},{"i":102,"id":"t0102","stage":"explore","status":"discard","v":0.9680071413007844,"promoted":false,"steps":2871,"label":"","best":0.967285914547847}];
+const W=1000,H=430,M={t:18,r:96,b:38,l:62};
+const iw=W-M.l-M.r, ih=H-M.t-M.b;
+const vals=D.filter(d=>d.v!=null).map(d=>d.v);
+const lo=Math.min(...vals), hi=Math.max(...vals);
+const pad=(hi-lo)*0.10, y0=lo-pad, y1=hi+pad;
+const X=i=>M.l+(i/(D.length-1))*iw;
+const Y=v=>M.t+(1-(v-y0)/(y1-y0))*ih;
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let s='';
+// gridlines + y labels
+const ticks=6;
+for(let k=0;k<=ticks;k++){
+  const v=y0+(y1-y0)*k/ticks, yy=Y(v);
+  s+=`<line class="gl" x1="${M.l}" y1="${yy.toFixed(1)}" x2="${M.l+iw}" y2="${yy.toFixed(1)}"/>`;
+  s+=`<text class="axis" x="${M.l-10}" y="${(yy+3.5).toFixed(1)}" text-anchor="end">${v.toFixed(3)}</text>`;
+}
+// baseline reference
+const b0=D[0].v;
+s+=`<line class="basel" x1="${M.l}" y1="${Y(b0).toFixed(1)}" x2="${M.l+iw}" y2="${Y(b0).toFixed(1)}"/>`;
+s+=`<text class="axis-t" x="${M.l+iw+8}" y="${(Y(b0)+3.5).toFixed(1)}">BASELINE</text>`;
+// x ticks
+[0,10,20,30,40,50,60,70,80,86].forEach(i=>{
+  s+=`<text class="axis" x="${X(i).toFixed(1)}" y="${H-14}" text-anchor="middle">${i===0?'b0':'t'+i}</text>`;
+});
+// best-so-far step path
+let p='';
+D.forEach((d,i)=>{ const x=X(i),y=Y(d.best);
+  p += i===0 ? `M${x.toFixed(1)},${y.toFixed(1)}` : `L${x.toFixed(1)},${(Y(D[i-1].best)).toFixed(1)}L${x.toFixed(1)},${y.toFixed(1)}`;});
+s+=`<path class="bestline" d="${p}"/>`;
+// dots
+D.forEach((d,i)=>{
+  const x=X(i);
+  if(d.v==null){ const yb=M.t+ih-6;
+    s+=`<path class="fail" d="M${(x-3.5).toFixed(1)},${yb-3.5} l7,7 M${(x+3.5).toFixed(1)},${yb-3.5} l-7,7"/>`; return; }
+  const y=Y(d.v);
+  if(d.promoted){ s+=`<circle class="halo" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5"/>`+
+                     `<circle class="prom" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.2"/>`; }
+  else s+=`<circle class="trial" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.6"/>`;
+});
+// champion direct label
+const last=D[D.length-1];
+s+=`<text class="axis-t" x="${(M.l+iw+8)}" y="${(Y(last.best)+3.5).toFixed(1)}" style="fill:var(--accent)">0.967286</text>`;
+s+=`<line class="cross" id="cx" x1="0" y1="${M.t}" x2="0" y2="${M.t+ih}"/>`;
+s+=`<rect class="hit" id="hit" x="${M.l}" y="${M.t}" width="${iw}" height="${ih}"/>`;
+document.getElementById('chart').innerHTML=s;
+
+// hover
+const svg=document.getElementById('chart'),tip=document.getElementById('tip'),
+      host=document.getElementById('host'),cx=document.getElementById('cx');
+function at(ev){
+  const r=svg.getBoundingClientRect();
+  const px=(ev.clientX-r.left)/r.width*W;
+  let i=Math.round((px-M.l)/iw*(D.length-1));
+  i=Math.max(0,Math.min(D.length-1,i));
+  const d=D[i];
+  cx.setAttribute('x1',X(i)); cx.setAttribute('x2',X(i)); cx.style.opacity=.85;
+  const dv=d.v==null?'crashed':d.v.toFixed(6);
+  const rel=d.v==null?'':(d.v<=d.best?'<span class="row">new best</span>':
+      `<span class="row">+${(d.v-d.best).toFixed(6)} vs best</span>`);
+  tip.innerHTML=`<b>${esc(d.id)}</b> · ${esc(d.stage||'')}<br>${dv}`+
+      (d.label?`<br><span class="row">${esc(d.label)}</span>`:'')+(rel?'<br>'+rel:'');
+  const hr=host.getBoundingClientRect();
+  tip.style.left=(ev.clientX-hr.left+host.scrollLeft)+'px';
+  tip.style.top=(ev.clientY-hr.top)+'px';
+  tip.style.opacity=1;
+}
+host.addEventListener('mousemove',at);
+host.addEventListener('mouseleave',()=>{tip.style.opacity=0;cx.style.opacity=0});
+
+// table
+const tb=document.querySelector('#tbl tbody');
+tb.innerHTML=D.map(d=>{
+  const st=d.v==null?'<span class="tag fail">crash</span>':
+    (d.promoted?'<span class="tag keep">promoted</span>':'<span class="tag">discard</span>');
+  return `<tr class="${d.promoted?'p':''}"><td class="num">${d.i}</td><td>${esc(d.id)}</td>`+
+   `<td>${esc(d.stage||'')}</td><td class="num">${d.v==null?'&mdash;':d.v.toFixed(6)}</td>`+
+   `<td class="num">${d.steps==null?'&mdash;':d.steps}</td><td>${st}</td><td>${esc(d.label||'')}</td></tr>`;
+}).join('');
+</script>

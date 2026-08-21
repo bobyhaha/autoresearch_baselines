@@ -1,0 +1,30 @@
+2026-08-21 12:34:13 INFO ======================================================================
+2026-08-21 12:34:13 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 2
+2026-08-21 12:34:13 INFO journal: 1 existing nodes
+2026-08-21 12:34:13 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-21 12:34:13 INFO ----------------------------------------------------------------------
+2026-08-21 12:34:13 INFO iteration 1 (journal size 1)
+2026-08-21 12:34:13 INFO select: drafting (1/3 roots)
+2026-08-21 12:34:13 INFO generated draft node fbec943f from baseline
+2026-08-21 12:34:13 INFO running trial for node fbec943f (draft)
+2026-08-21 12:42:05 INFO node fbec943f -> val_bpb=0.988966 | val_bpb=0.988966 steps=1059.0 mfu=40.78% vram=44.0GB params=50.3M
+2026-08-21 12:42:05 INFO iteration 1 done in 472s | best so far: fbec943f (0.988966)
+2026-08-21 12:42:05 INFO ----------------------------------------------------------------------
+2026-08-21 12:42:05 INFO iteration 2 (journal size 2)
+2026-08-21 12:42:05 INFO select: drafting (2/3 roots)
+2026-08-21 12:42:05 INFO generated draft node d05761a3 from baseline
+2026-08-21 12:42:05 INFO running trial for node d05761a3 (draft)
+2026-08-21 12:49:43 INFO node d05761a3 -> val_bpb=0.983545 | val_bpb=0.983545 steps=2020.0 mfu=42.43% vram=43.9GB params=50.3M
+2026-08-21 12:49:43 INFO iteration 2 done in 458s | best so far: d05761a3 (0.983545)
+2026-08-21 12:49:43 INFO ----------------------------------------------------------------------
+2026-08-21 12:49:43 INFO iteration 3 (journal size 3)
+2026-08-21 12:49:43 INFO select: improve best node d05761a3 (Metric↓(val_bpb)(0.983545))
+2026-08-21 12:49:43 INFO generated improve node c89462a1 from d05761a3
+2026-08-21 12:49:43 INFO running trial for node c89462a1 (improve)
+2026-08-21 12:57:19 INFO node c89462a1 -> val_bpb=0.981576 | val_bpb=0.981576 steps=2099.0 mfu=40.62% vram=43.9GB params=50.3M
+2026-08-21 12:57:19 INFO iteration 3 done in 456s | best so far: c89462a1 (0.981576)
+2026-08-21 12:57:19 INFO ----------------------------------------------------------------------
+2026-08-21 12:57:19 INFO iteration 4 (journal size 4)
+2026-08-21 12:57:19 INFO select: improve best node c89462a1 (Metric↓(val_bpb)(0.981576))
+2026-08-21 12:57:58 INFO generated improve node edd151d9 from c89462a1
+2026-08-21 12:57:58 INFO running trial for node edd151d9 (improve)

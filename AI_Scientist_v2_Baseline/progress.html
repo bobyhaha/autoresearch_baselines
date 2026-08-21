@@ -1,0 +1,339 @@
+<title>Autoresearch Progress — AI-Scientist-v2 port</title>
+<style>
+:root {
+  color-scheme: light;
+  --page:      #ffffff;
+  --panel:     #ffffff;
+  --ink:       #1a1a1a;
+  --ink-2:     #4a4a4a;
+  --ink-3:     #8a8a8a;
+  --spine:     #333333;
+  --grid:      #e8e8e8;
+  --rule:      #e0e0e0;
+  --panel-2:   #fafafa;
+  --kept:      #2ecc71;   /* karpathy/autoresearch: kept experiments */
+  --kept-edge: #1a1a1a;   /* his black marker edge — supplies the relief */
+  --best:      #27ae60;   /* his running-best step line */
+  --anno:      #1a7a3a;   /* his annotation ink */
+  --disc:      #cccccc;   /* his discarded dots */
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page:      #14181d;
+    --panel:     #171c22;
+    --ink:       #f0f3f6;
+    --ink-2:     #a8b2bd;
+    --ink-3:     #6f7984;
+    --spine:     #7b858f;
+    --grid:      #232931;
+    --rule:      #262c34;
+    --panel-2:   #1c2128;
+    --kept:      #1faa5e;
+    --kept-edge: #0b0e12;
+    --best:      #1faa5e;
+    --anno:      #6ee7a8;
+    --disc:      #4b535c;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page:      #14181d;
+  --panel:     #171c22;
+  --ink:       #f0f3f6;
+  --ink-2:     #a8b2bd;
+  --ink-3:     #6f7984;
+  --spine:     #7b858f;
+  --grid:      #232931;
+  --rule:      #262c34;
+  --panel-2:   #1c2128;
+  --kept:      #1faa5e;
+  --kept-edge: #0b0e12;
+  --best:      #1faa5e;
+  --anno:      #6ee7a8;
+  --disc:      #4b535c;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+.mono { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 38px 22px 70px; }
+
+header { margin-bottom: 26px; }
+.eyebrow { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 9px; }
+h1 { font-size: 25px; line-height: 1.25; margin: 0 0 8px; font-weight: 600; letter-spacing: -.012em; text-wrap: balance; }
+.sub { margin: 0; color: var(--ink-2); max-width: 68ch; font-size: 14.5px; }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 11px; margin: 24px 0 30px; }
+.tile { border: 1px solid var(--rule); border-radius: 6px; padding: 13px 15px; background: var(--panel-2); }
+.tile .k { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+.tile .v { font-size: 24px; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; }
+.tile .n { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
+.win { color: var(--best); }
+
+section { margin-bottom: 34px; }
+h2 { font-size: 16px; font-weight: 620; margin: 0 0 4px; }
+.cap { margin: 0 0 13px; color: var(--ink-2); font-size: 13.5px; max-width: 76ch; }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 14px; }
+.scroll { overflow-x: auto; }
+svg { display: block; max-width: 100%; height: auto; }
+.duo { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
+
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: right; padding: 7px 10px; border-bottom: 1px solid var(--rule);
+  font-variant-numeric: tabular-nums; white-space: nowrap; }
+th { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; font-size: 10.5px;
+  letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+th:first-child, td:first-child, th:last-child, td:last-child { text-align: left; }
+td:last-child { white-space: normal; min-width: 250px; color: var(--ink-2); }
+tr.k td { background: color-mix(in srgb, var(--kept) 12%, transparent); }
+.badge { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px;
+  padding: 1.5px 6px; border-radius: 3px; background: var(--panel-2); color: var(--ink-3); border: 1px solid var(--rule); }
+.badge.k { background: color-mix(in srgb, var(--kept) 20%, transparent); color: var(--anno);
+  border-color: color-mix(in srgb, var(--kept) 40%, transparent); }
+
+.findings { list-style: none; padding: 0; margin: 0; display: grid; gap: 9px; }
+.findings li { padding-left: 14px; border-left: 2px solid var(--rule); color: var(--ink-2); font-size: 14px; }
+.findings b { color: var(--ink); font-weight: 600; }
+
+.tip { position: fixed; pointer-events: none; opacity: 0; transition: opacity .1s; background: var(--ink);
+  color: var(--page); border-radius: 5px; padding: 8px 10px; font-size: 12px; line-height: 1.45;
+  max-width: 300px; z-index: 9; box-shadow: 0 4px 14px rgba(0,0,0,.25); }
+.tip .t { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 600; font-size: 12.5px; margin-bottom: 3px; }
+.hit { fill: transparent; cursor: crosshair; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">AI-Scientist-v2 best-first tree search · karpathy/autoresearch · single H200, GPU 2</p>
+  <h1 id="title">Autoresearch Progress</h1>
+  <p class="sub">Each experiment trains a candidate <span class="mono">train.py</span> for a fixed 300&nbsp;s of
+  wall clock, then scores it with <span class="mono">val_bpb</span>. Chart conventions follow
+  <span class="mono">analysis.ipynb</span> from the reference repo: grey for discarded runs, green for kept
+  ones, and a step line tracking the running best.</p>
+</header>
+
+<div class="tiles" id="tiles"></div>
+
+<section>
+  <div class="panel scroll"><svg id="progress" viewBox="0 0 1140 560" role="img"
+    aria-label="Autoresearch progress: val_bpb per experiment with a running-best step line falling from 0.991192 to 0.974019."></svg></div>
+</section>
+
+<section>
+  <h2>Why the bigger model won</h2>
+  <p class="cap">The depth sweep with everything else held fixed. Quality is single-peaked at 85.9M parameters,
+  but GPU utilisation climbs the whole way. That is why a Chinchilla-style tokens-per-parameter argument fails
+  here — under a wall-clock budget, a larger model is handed more actual FLOPs rather than spending a fixed
+  number differently.</p>
+  <div class="duo">
+    <div class="panel scroll"><svg id="capacity" viewBox="0 0 560 320" role="img"
+      aria-label="val_bpb versus parameter count, minimum at 85.9M."></svg></div>
+    <div class="panel scroll"><svg id="mfu" viewBox="0 0 560 320" role="img"
+      aria-label="MFU versus parameter count, rising from 26.5 to 47.5 percent."></svg></div>
+  </div>
+</section>
+
+<section>
+  <h2>What has been established</h2>
+  <ul class="findings">
+    <li><b>Noise floor 0.000148</b> — standard deviation of three byte-identical runs. Anything under
+      ~0.0003 is unresolvable at n=1; a 0.001 effect is ~7σ.</li>
+    <li><b>Batch 2<sup>18</sup> is optimal at both model sizes</b>, bracketed on both sides. The prediction that
+      critical batch size would grow with the model was wrong: at fixed wall clock, doubling the batch simply
+      halves the step count.</li>
+    <li><b>Capacity is single-peaked at DEPTH 10</b> — 26.3M and 135.3M both lose to 85.9M.</li>
+    <li><b>Adam-group LRs were under-tuned; optimizer geometry was not.</b>
+      <span class="mono">EMBEDDING_LR</span> 0.6→0.8 won 0.0018 (~12σ) and 1.0 gave it back, so the optimum sits
+      near 0.8 — while <span class="mono">MATRIX_LR</span>, batch size and
+      <span class="mono">WARMDOWN_RATIO</span> were all already correct.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>All experiments</h2>
+  <div class="panel scroll"><table id="tbl"></table></div>
+</section>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+const D = [
+ {i:0, id:"6d0ccd43", bpb:0.991192, p:50.3,  s:1017, mfu:42.52, short:"baseline",                       plan:"baseline (pristine karpathy/autoresearch train.py, unmodified)"},
+ {i:1, id:"fbec943f", bpb:0.988966, p:50.3,  s:1059, mfu:40.78, short:"short window 1/4 instead of 1/2", plan:"Attention throughput: halve the SSSL short-attention span (seq/2 → seq/4)"},
+ {i:2, id:"d05761a3", bpb:0.983545, p:50.3,  s:2020, mfu:42.43, short:"halve total batch 524K→262K",     plan:"Optimizer cadence: halve TOTAL_BATCH_SIZE 2**19 → 2**18, doubling optimizer steps per token"},
+ {i:3, id:"c89462a1", bpb:0.981576, p:50.3,  s:2099, mfu:40.62, short:"stack batch + short window",      plan:"Stack the two confirmed levers from the other lineage"},
+ {i:4, id:"edd151d9", bpb:0.987011, p:50.3,  s:4046, mfu:39.23, short:"batch 262K→131K",                 plan:"Halve the optimizer batch again, 2**18 → 2**17 — below critical batch size"},
+ {i:5, id:"c002e4a2", bpb:0.981310, p:50.3,  s:2151, mfu:39.84, short:"short window 1/8 (256 tokens)",   plan:"Attention span seq/4 → seq/8 — within noise, not an established win"},
+ {i:6, id:"e28ccb85", bpb:1.024066, p:26.3,  s:2841, mfu:26.54, short:"depth 6",                         plan:"DEPTH 8 → 6 — removes 48% of parameters"},
+ {i:7, id:"c7c8d842", bpb:0.980058, p:50.3,  s:2204, mfu:40.83, short:"max-autotune compile",            plan:"Compile with mode=max-autotune-no-cudagraphs — pure throughput, no model change"},
+ {i:8, id:"fd76db94", bpb:0.975832, p:85.9,  s:1325, mfu:44.96, short:"depth 10 (dim 640)",              plan:"DEPTH 8 → 10, model_dim 512 → 640, n_head 4 → 5"},
+ {i:9, id:"3c3fa271", bpb:0.979841, p:135.3, s:870,  mfu:47.48, short:"depth 12",                        plan:"DEPTH 10 → 12 — highest MFU of the campaign but only 870 steps fit"},
+ {i:10,id:"c4cbd164", bpb:0.976128, p:85.9,  s:1322, mfu:44.87, short:"replicate 1",                     plan:"REPLICATE of fd76db94, byte-identical source — measures run-to-run noise"},
+ {i:11,id:"860fa667", bpb:0.975999, p:85.9,  s:1322, mfu:44.86, short:"replicate 2",                     plan:"REPLICATE of fd76db94, byte-identical source — measures run-to-run noise"},
+ {i:12,id:"b219d0f7", bpb:0.976931, p:85.9,  s:1322, mfu:44.87, short:"matrix LR 0.04→0.05",             plan:"MATRIX_LR 0.04 → 0.05 — the Muon LR was already at its optimum"},
+ {i:13,id:"5a90b3aa", bpb:0.987102, p:85.9,  s:668,  mfu:44.96, short:"batch 262K→524K",                 plan:"TOTAL_BATCH_SIZE 2**18 → 2**19 at the new shape — halves the step count"},
+ {i:14,id:"8bed6ff2", bpb:0.978169, p:85.9,  s:1322, mfu:44.86, short:"warmdown 0.5→0.35",               plan:"WARMDOWN_RATIO 0.5 → 0.35 — the default was already correct"},
+ {i:15,id:"502959c2", bpb:0.974019, p:85.9,  s:1323, mfu:44.89, short:"embedding LR 0.6→0.8",            plan:"EMBEDDING_LR 0.6 → 0.8 — the clearest knob result of the campaign (~12σ)"},
+ {i:16,id:"8282a51e", bpb:0.974545, p:85.9,  s:1322, mfu:44.86, short:"embedding LR 0.8→1.0",            plan:"EMBEDDING_LR 0.8 → 1.0 — overshoots; the optimum sits near 0.8"},
+];
+let run = Infinity;
+D.forEach(d => { d.keep = d.bpb < run; if (d.keep) run = d.bpb; d.best = run; });
+const BASE = D[0].bpb, BEST = run, KEPT = D.filter(d => d.keep);
+
+document.getElementById("title").textContent =
+  `Autoresearch Progress: ${D.length} Experiments, ${KEPT.length} Kept Improvements`;
+
+const tip = document.getElementById("tip");
+function showTip(e, html) {
+  tip.innerHTML = html; tip.style.opacity = 1;
+  const r = tip.getBoundingClientRect();
+  let x = e.clientX + 14, y = e.clientY - r.height - 10;
+  if (x + r.width > innerWidth - 8) x = e.clientX - r.width - 14;
+  if (y < 8) y = e.clientY + 16;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+}
+const hideTip = () => tip.style.opacity = 0;
+const N = (v,n=6) => v.toFixed(n);
+const el = (t,a,txt) => { const n = document.createElementNS("http://www.w3.org/2000/svg", t);
+  for (const k in a) n.setAttribute(k, a[k]); if (txt != null) n.textContent = txt; return n; };
+
+/* ---- stat tiles ---- */
+document.getElementById("tiles").innerHTML = [
+  ["Best val_bpb", N(BEST), "node 502959c2"],
+  ["Improvement", "−" + ((BASE-BEST)/BASE*100).toFixed(2) + "%", `−${(BASE-BEST).toFixed(6)} vs baseline`, 1],
+  ["Experiments", D.length, `${KEPT.length} kept`],
+  ["Noise floor (σ)", "0.000148", "3 identical runs"],
+].map(([k,v,n,w]) => `<div class="tile"><div class="k">${k}</div>
+  <div class="v${w?" win":""}">${v}</div><div class="n">${n}</div></div>`).join("");
+
+/* ---- main progress chart, following analysis.ipynb conventions ---- */
+(function () {
+  const svg = document.getElementById("progress");
+  const L=86, R=26, T=96, B=52, W=1140, H=560;
+  const pw=W-L-R, ph=H-T-B;
+  // y-limits exactly as the notebook computes them.
+  const margin = (BASE - BEST) * 0.15;
+  const lo = BEST - margin, hi = BASE + margin;
+  const cutoff = BASE + 0.0005;
+  const x = i => L + i * pw / (D.length - 1);
+  const y = v => T + (hi - v) / (hi - lo) * ph;
+
+  const step = 0.0025;
+  for (let g = Math.ceil(lo/step)*step; g <= hi; g += step) {
+    svg.appendChild(el("line", {x1:L, x2:L+pw, y1:y(g), y2:y(g), stroke:"var(--grid)", "stroke-width":1}));
+    svg.appendChild(el("text", {x:L-11, y:y(g)+4, "text-anchor":"end", fill:"var(--ink-2)",
+      "font-size":12, class:"mono"}, g.toFixed(4)));
+  }
+  svg.appendChild(el("rect", {x:L, y:T, width:pw, height:ph, fill:"none",
+    stroke:"var(--spine)", "stroke-width":1}));
+
+  // running-best step line, where="post"
+  let path = `M ${x(KEPT[0].i)} ${y(KEPT[0].bpb)}`;
+  for (let k=1; k<KEPT.length; k++)
+    path += ` L ${x(KEPT[k].i)} ${y(KEPT[k-1].bpb)} L ${x(KEPT[k].i)} ${y(KEPT[k].bpb)}`;
+  svg.appendChild(el("path", {d:path, fill:"none", stroke:"var(--best)", "stroke-width":2,
+    opacity:.75, "stroke-linejoin":"round"}));
+
+  D.forEach(d => {
+    if (d.bpb > cutoff) {   // off-scale loss: marked, never dropped
+      svg.appendChild(el("path", {d:`M ${x(d.i)-6} ${T+9} L ${x(d.i)+6} ${T+9} L ${x(d.i)} ${T+20} Z`,
+        fill:"none", stroke:"var(--ink-3)", "stroke-width":1.2}));
+    } else if (d.keep) {
+      svg.appendChild(el("circle", {cx:x(d.i), cy:y(d.bpb), r:6, fill:"var(--kept)",
+        stroke:"var(--kept-edge)", "stroke-width":1}));
+      svg.appendChild(el("text", {x:x(d.i)+7, y:y(d.bpb)-7, fill:"var(--anno)", "font-size":11.5,
+        transform:`rotate(-30, ${x(d.i)+7}, ${y(d.bpb)-7})`}, d.short));
+    } else {
+      svg.appendChild(el("circle", {cx:x(d.i), cy:y(d.bpb), r:3.4, fill:"var(--disc)"}));
+    }
+    if (d.i % 2 === 0)
+      svg.appendChild(el("text", {x:x(d.i), y:H-30, "text-anchor":"middle", fill:"var(--ink-2)",
+        "font-size":12, class:"mono"}, d.i));
+    const hit = el("rect", {x:x(d.i)-pw/(2*(D.length-1)), y:T, width:pw/(D.length-1), height:ph, class:"hit"});
+    hit.addEventListener("mousemove", e => showTip(e, `<div class="t">#${d.i} · ${d.id} · ${
+      d.keep ? "KEPT" : "discarded"}</div>${d.plan}<br>val_bpb <b>${N(d.bpb)}</b> · ${d.p}M params · ${
+      d.s} steps · MFU ${d.mfu}%`));
+    hit.addEventListener("mouseleave", hideTip);
+    svg.appendChild(hit);
+  });
+
+  svg.appendChild(el("text", {x:L+pw/2, y:H-8, "text-anchor":"middle", fill:"var(--ink)",
+    "font-size":13}, "Experiment #"));
+  svg.appendChild(el("text", {x:-(T+ph/2), y:20, transform:"rotate(-90)", "text-anchor":"middle",
+    fill:"var(--ink)", "font-size":13}, "Validation BPB (lower is better)"));
+
+  // legend, inside the axes at upper right as in the notebook
+  const lx = L+pw-232, ly = T+14;
+  svg.appendChild(el("rect", {x:lx, y:ly, width:220, height:80, fill:"var(--panel)",
+    stroke:"var(--rule)", "stroke-width":1, rx:3, opacity:.96}));
+  svg.appendChild(el("circle", {cx:lx+18, cy:ly+17, r:3.4, fill:"var(--disc)"}));
+  svg.appendChild(el("text", {x:lx+34, y:ly+21, fill:"var(--ink-2)", "font-size":12}, "Discarded"));
+  svg.appendChild(el("circle", {cx:lx+18, cy:ly+37, r:6, fill:"var(--kept)",
+    stroke:"var(--kept-edge)", "stroke-width":1}));
+  svg.appendChild(el("text", {x:lx+34, y:ly+41, fill:"var(--ink-2)", "font-size":12}, "Kept"));
+  svg.appendChild(el("line", {x1:lx+10, x2:lx+27, y1:ly+57, y2:ly+57, stroke:"var(--best)",
+    "stroke-width":2, opacity:.75}));
+  svg.appendChild(el("text", {x:lx+34, y:ly+61, fill:"var(--ink-2)", "font-size":12}, "Running best"));
+  svg.appendChild(el("path", {d:`M ${lx+12} ${ly+72} L ${lx+24} ${ly+72} L ${lx+18} ${ly+80} Z`,
+    fill:"none", stroke:"var(--ink-3)", "stroke-width":1.2}));
+  svg.appendChild(el("text", {x:lx+34, y:ly+80, fill:"var(--ink-2)", "font-size":12},
+    `Worse than baseline (${D.filter(d=>d.bpb>cutoff).length}, off scale)`));
+})();
+
+/* ---- small multiples: the DEPTH sweep ---- */
+function mini(id, key, lo, hi, ticks, fmt, colour, ylab) {
+  const svg = document.getElementById(id);
+  const L=62, R=20, T=20, B=48, W=560, H=320;
+  const pw=W-L-R, ph=H-T-B;
+  const pts = [D[6], D[7], D[8], D[9]];
+  const px = p => L + (p-15)/(145-15)*pw;
+  const py = v => T + (hi-v)/(hi-lo)*ph;
+  ticks.forEach(g => {
+    svg.appendChild(el("line", {x1:L, x2:L+pw, y1:py(g), y2:py(g), stroke:"var(--grid)", "stroke-width":1}));
+    svg.appendChild(el("text", {x:L-9, y:py(g)+4, "text-anchor":"end", fill:"var(--ink-2)",
+      "font-size":11.5, class:"mono"}, fmt(g)));
+  });
+  svg.appendChild(el("rect", {x:L, y:T, width:pw, height:ph, fill:"none", stroke:"var(--spine)", "stroke-width":1}));
+  svg.appendChild(el("path", {d:"M " + pts.map(d=>`${px(d.p)} ${py(d[key])}`).join(" L "),
+    fill:"none", stroke:colour, "stroke-width":2, opacity:.75}));
+  pts.forEach(d => {
+    svg.appendChild(el("circle", {cx:px(d.p), cy:py(d[key]), r:6, fill:colour,
+      stroke:"var(--kept-edge)", "stroke-width":1}));
+    svg.appendChild(el("text", {x:px(d.p), y:H-26, "text-anchor":"middle", fill:"var(--ink-2)",
+      "font-size":11.5, class:"mono"}, d.p));
+    const hit = el("circle", {cx:px(d.p), cy:py(d[key]), r:18, class:"hit"});
+    hit.addEventListener("mousemove", e => showTip(e, `<div class="t">${d.p}M · ${d.short}</div>
+      val_bpb <b>${N(d.bpb)}</b> · MFU <b>${d.mfu}%</b> · ${d.s} steps`));
+    hit.addEventListener("mouseleave", hideTip);
+    svg.appendChild(hit);
+  });
+  svg.appendChild(el("text", {x:L+pw/2, y:H-6, "text-anchor":"middle", fill:"var(--ink)",
+    "font-size":12}, "parameters (M)"));
+  svg.appendChild(el("text", {x:-(T+ph/2), y:16, transform:"rotate(-90)", "text-anchor":"middle",
+    fill:"var(--ink)", "font-size":12}, ylab));
+}
+mini("capacity","bpb", 0.9735, 1.0265, [0.98,0.99,1.00,1.01,1.02], v=>v.toFixed(2),
+     "var(--kept)", "Validation BPB (lower is better)");
+mini("mfu","mfu", 24, 50, [25,30,35,40,45,50], v=>String(v), "var(--best)", "MFU (%)");
+
+/* ---- table ---- */
+document.getElementById("tbl").innerHTML =
+  `<thead><tr><th>#</th><th>node</th><th>val_bpb</th><th>Δ vs baseline</th><th>params</th><th>steps</th>
+   <th>MFU</th><th>status</th><th>description</th></tr></thead><tbody>` +
+  D.map(d => `<tr class="${d.keep?"k":""}">
+    <td class="mono">${d.i}</td><td class="mono">${d.id}</td><td class="mono">${N(d.bpb)}</td>
+    <td class="mono">${d.bpb<BASE?"−":"+"}${Math.abs(d.bpb-BASE).toFixed(6)}</td>
+    <td class="mono">${d.p}M</td><td class="mono">${d.s}</td><td class="mono">${d.mfu}%</td>
+    <td><span class="badge${d.keep?" k":""}">${d.keep?"keep":"discard"}</span></td>
+    <td>${d.plan}</td></tr>`).join("") + "</tbody>";
+</script>

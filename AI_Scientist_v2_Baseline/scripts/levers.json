@@ -1,0 +1,106 @@
+{
+  "_comment": "Lever library. Each entry replaces a whole line matched by a unique prefix, so a lever stays valid as the winning train.py evolves and its current value changes. 'value' is substituted into 'line'.",
+  "levers": {
+    "head64": {
+      "prefix": "HEAD_DIM = ",
+      "line": "HEAD_DIM = 64           # target head dimension for attention",
+      "plan": "Attention expressivity at constant FLOPs: HEAD_DIM 128 -> 64 doubles the head count at the same model_dim. Same parameter count, same matmul cost, more independent attention subspaces."
+    },
+    "span4": {
+      "prefix": "        short_window = long_window //",
+      "line": "        short_window = long_window // 4",
+      "plan": "Attention span seq/8 -> seq/4. The span was tuned at the old 50.3M shape, and seq/8 was never established over seq/4 (1 sigma)."
+    },
+    "span2": {
+      "prefix": "        short_window = long_window //",
+      "line": "        short_window = long_window // 2",
+      "plan": "Attention span back to the original seq/2. Tests whether the span cut still pays at the larger shape with far fewer steps."
+    },
+    "mlr03": {
+      "prefix": "MATRIX_LR = ",
+      "line": "MATRIX_LR = 0.03        # learning rate for matrix parameters (Muon)",
+      "plan": "MATRIX_LR 0.04 -> 0.03. Raising to 0.05 lost 0.0011 (~7 sigma), so if the optimum moved it moved down."
+    },
+    "aspect72": {
+      "prefix": "ASPECT_RATIO = ",
+      "line": "ASPECT_RATIO = 72       # model_dim = depth * ASPECT_RATIO",
+      "plan": "Width sweep at fixed DEPTH 10, wider: model_dim 640 -> 768 (6 heads). Separates width from depth, which the DEPTH knob confounds via rounding."
+    },
+    "aspect48": {
+      "prefix": "ASPECT_RATIO = ",
+      "line": "ASPECT_RATIO = 48       # model_dim = depth * ASPECT_RATIO",
+      "plan": "Width sweep at fixed DEPTH 10, narrower: model_dim 640 -> 512 (4 heads). With the 768 probe this gives three points at constant depth."
+    },
+    "wd01": {
+      "prefix": "WEIGHT_DECAY = ",
+      "line": "WEIGHT_DECAY = 0.1      # cautious weight decay for Muon",
+      "plan": "WEIGHT_DECAY 0.2 -> 0.1. The run is sub-single-epoch so there is little to regularise against; less decay may leave more capacity usable."
+    },
+    "unemb006": {
+      "prefix": "UNEMBEDDING_LR = ",
+      "line": "UNEMBEDDING_LR = 0.006  # learning rate for lm_head (Adam)",
+      "plan": "UNEMBEDDING_LR 0.004 -> 0.006. The embedding LR responded strongly to being raised; the unembedding is the paired Adam group and may too."
+    },
+    "scalar07": {
+      "prefix": "SCALAR_LR = ",
+      "line": "SCALAR_LR = 0.7         # learning rate for per-layer scalars (Adam)",
+      "plan": "SCALAR_LR 0.5 -> 0.7. Same reasoning as the embedding LR: fewer total steps means each Adam group gets less total movement."
+    },
+    "warmup005": {
+      "prefix": "WARMUP_RATIO = ",
+      "line": "WARMUP_RATIO = 0.05     # fraction of time budget for LR warmup",
+      "plan": "WARMUP_RATIO 0.0 -> 0.05. No warmup at all is unusual; at a larger model and higher embedding LR a short warmup may stabilise early steps."
+    },
+    "finallr01": {
+      "prefix": "FINAL_LR_FRAC = ",
+      "line": "FINAL_LR_FRAC = 0.1     # final LR as fraction of initial",
+      "plan": "FINAL_LR_FRAC 0.0 -> 0.1. Decaying fully to zero wastes the last steps; a nonzero floor keeps them useful."
+    },
+    "pattern8": {
+      "prefix": "WINDOW_PATTERN = ",
+      "line": "WINDOW_PATTERN = \"SSSSSSSL\" # sliding window pattern: L=full, S=short context",
+      "plan": "WINDOW_PATTERN SSSL -> SSSSSSSL: only 1 layer in 8 attends to full context instead of 2 in 4."
+    },
+    "emb12": {
+      "prefix": "EMBEDDING_LR = ",
+      "line": "EMBEDDING_LR = 1.2      # learning rate for token embeddings (Adam)",
+      "plan": "Push the embedding-LR axis further to 1.2."
+    },
+    "emb09": {
+      "prefix": "EMBEDDING_LR = ",
+      "line": "EMBEDDING_LR = 0.9      # learning rate for token embeddings (Adam)",
+      "plan": "Fine-grained embedding LR probe at 0.9."
+    },
+    "warmdown07": {
+      "prefix": "WARMDOWN_RATIO = ",
+      "line": "WARMDOWN_RATIO = 0.7    # fraction of time budget for LR warmdown",
+      "plan": "WARMDOWN_RATIO 0.5 -> 0.7 (MORE cooldown). Corrects a premature closure: I tested only 0.35, saw it lose, and declared 0.5 optimal from a one-sided test. The untested direction is up."
+    },
+    "unemb008": {
+      "prefix": "UNEMBEDDING_LR = ",
+      "line": "UNEMBEDDING_LR = 0.008  # learning rate for lm_head (Adam)",
+      "plan": "UNEMBEDDING_LR 0.004 -> 0.008. Same family as the embedding LR, which was the campaign's clearest knob win."
+    },
+    "rope50k": {
+      "prefix": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=",
+      "line": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=50000, device=None):",
+      "plan": "RoPE base frequency 10000 -> 50000. A longer rotary wavelength changes how positions are encoded across the 2048-token context; untouched so far and structurally independent of every axis tested."
+    },
+    "rope100k": {
+      "prefix": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=",
+      "line": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=100000, device=None):",
+      "plan": "RoPE base frequency -> 100000, continuing the axis if 50000 pays."
+    },
+    "x0_005": {
+      "prefix": "        self.x0_lambdas.fill_(",
+      "line": "        self.x0_lambdas.fill_(0.05)",
+      "plan": "x0_lambda init 0.1 -> 0.05. These per-layer scalars gate how much of the embedding output is re-injected at each block; the init sets where that mixing starts."
+    },
+    "span16": {
+      "prefix": "        short_window = long_window //",
+      "line": "        short_window = long_window // 16",
+      "plan": "Attention span seq/8 -> seq/16 (128 tokens). seq/8 beat seq/4 by ~11 sigma at this shape, so the axis is still live and needs bracketing from below."
+    }
+  },
+  "_prior_note": "Several lever choices below are informed by task/progress.png \u2014 the reference repo's own published example run, which is inside this workspace. It is a prior over WHICH levers to try first, not evidence: every claim rests on the measurement taken here. Directions it reports as kept: warmdown up to 0.7, 5% warmup, unembedding LR 0.008, SSSSL window pattern, RoPE base increases, x0_lambda init 0.05."
+}
