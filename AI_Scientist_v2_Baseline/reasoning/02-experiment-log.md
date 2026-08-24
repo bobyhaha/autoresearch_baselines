@@ -3375,3 +3375,58 @@ equivalent. The instrumentation to answer it (`RAN_ON_GPU`) existed only because
 had already caught me unable to answer the same question.
 
 ---
+
+## Entry 63 — 2026-08-25 — Campaign closed
+
+The 24-hour window ended at 23:57 on 2026-08-24. All sessions stopped, no processes of
+ours left on the box, results committed as `c0e973c` and pushed to
+`bobyhaha/autoresearch_baselines`.
+
+### Final result
+
+| seed | baseline | final config | improvement |
+|---|---|---|---|
+| **42** (optimised on) | 0.991192 | 0.969886 (n=17) | **2.15%** |
+| 43 (held out) | 0.989440 | 0.972412 | 1.72% |
+| 137 (held out) | 0.990118 | 0.971373 | 1.89% |
+| 2024 (held out) | 0.991566 | 0.972270 | 1.95% |
+
+**Mean 1.93% ± 0.18 · held-out 1.85% · selection effect 14%.**
+
+149 trials: 115 scored, 26 refused as environmentally compromised, **zero failed on their
+own merits.** Not one candidate crashed or produced an invalid result because the idea was
+wrong — every failure was a co-tenant on the shared box.
+
+### What is unfinished
+
+The ablation reached **5 of 9** levers. RoPE, `EMBEDDING_LR`, `UNEMBEDDING_LR` and
+`WEIGHT_DECAY` never got a clean window. Those four are therefore still reported at their
+*introduction* values, which the completed five show to be roughly half the contribution
+measured in the final configuration. Anyone reading the per-lever table should treat those
+four as lower bounds.
+
+### The shape of the time
+
+Roughly a third of the trial budget went to measurement rather than search — replicates,
+seed pairing, ablation, interaction retests. That allocation produced the three findings
+that actually changed what could be claimed: the winner's curse on the reported minimum,
+the 14% selection effect, and the ~2× gap between introduction and ablation values. The
+search itself plateaued after experiment 48; everything after that was working out what
+the first 48 had really shown.
+
+More of my own time went to infrastructure than to research, and most of that to a single
+recurring error: **confirming that an operation reported success rather than that the
+resulting state was correct.** Purges silently reverted, a fix that was never in the file,
+a flag that tagged new data but not old, a device switch that made results incomparable.
+Each was caught by an invariant rather than by noticing — which is the argument for having
+written the invariants down.
+
+### Standing artefacts
+
+- `README.md` — the report
+- `reasoning/` — this log (63 entries, retractions intact) and the upstream audit
+- `campaign/journal.json` — all 123 nodes with full source and logs
+- `campaign/env_failures.json` — all 26 refusals, with the reason each was refused
+- `scripts/fidelity_check.sh` — 21 checks, last run 20 pass / 0 fail
+
+Closed.
