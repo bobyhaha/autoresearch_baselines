@@ -1,0 +1,104 @@
+gpu_watch: GPU 2, every 1800s for 86400s, logging to /data/home/zhubaiyu/ai_scientist_v2_baseline/campaign/gpu_usage.log
+[gpu_watch 0.00h] gpu2 util=100% mem=104047MiB ours=3 TRAINING nodes=24 best=0.972938
+gpu_watch: GPU 0, every 1800s for 72000s, logging to /data/home/zhubaiyu/ai_scientist_v2_baseline/campaign/gpu_usage.log
+./scripts/gpu_watch.sh: line 94: [: 0
+0: integer expression expected
+./scripts/gpu_watch.sh: line 95: [: 0
+0: integer expression expected
+[gpu_watch 0.00h] gpu0 util=99% mem=38410MiB ours=0
+0 IDLE nodes=24 best=0.972938
+gpu_watch: GPU 0, every 1800s for 72000s, logging to /data/home/zhubaiyu/ai_scientist_v2_baseline/campaign/gpu_usage.log
+[gpu_watch 0.00h] gpu0 util=0% mem=2187MiB ours=3 foreign=2166MiB STARTUP_OR_EVAL nodes=26 best=0.972938
+[gpu_watch 0.50h] gpu0 util=100% mem=71166MiB ours=36 foreign=2166MiB TRAINING nodes=29 best=0.972938
+[gpu_watch 1.00h] gpu0 util=0% mem=9200MiB ours=0 foreign=9174MiB IDLE nodes=30 best=0.97289
+[gpu_watch 1.50h] gpu0 util=0% mem=22252MiB ours=0 foreign=22226MiB IDLE nodes=30 best=0.97289
+[gpu_watch 2.00h] gpu0 util=100% mem=22252MiB ours=0 foreign=22226MiB IDLE nodes=30 best=0.97289
+[gpu_watch 2.50h] gpu0 util=69% mem=22252MiB ours=0 foreign=22226MiB IDLE nodes=30 best=0.97289
+[gpu_watch 3.00h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 3.50h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 4.00h] gpu0 util=100% mem=9647MiB ours=0 foreign=9580MiB IDLE nodes=30 best=0.97289
+[gpu_watch 4.50h] gpu0 util=99% mem=11983MiB ours=0 foreign=11916MiB IDLE nodes=30 best=0.97289
+[gpu_watch 5.00h] gpu0 util=100% mem=11983MiB ours=0 foreign=11916MiB IDLE nodes=30 best=0.97289
+[gpu_watch 5.50h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 6.00h] gpu0 util=98% mem=9697MiB ours=0 foreign=9630MiB IDLE nodes=30 best=0.97289
+[gpu_watch 6.50h] gpu0 util=99% mem=12033MiB ours=0 foreign=11966MiB IDLE nodes=30 best=0.97289
+[gpu_watch 7.00h] gpu0 util=100% mem=12033MiB ours=0 foreign=11966MiB IDLE nodes=30 best=0.97289
+[gpu_watch 7.50h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 8.00h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 8.50h] gpu0 util=95% mem=9527MiB ours=0 foreign=9460MiB IDLE nodes=30 best=0.97289
+[gpu_watch 9.00h] gpu0 util=100% mem=9707MiB ours=0 foreign=9640MiB IDLE nodes=30 best=0.97289
+[gpu_watch 9.50h] gpu0 util=100% mem=12041MiB ours=0 foreign=11974MiB IDLE nodes=30 best=0.97289
+[gpu_watch 10.00h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 10.50h] gpu0 util=96% mem=9469MiB ours=0 foreign=9402MiB IDLE nodes=30 best=0.97289
+[gpu_watch 11.00h] gpu0 util=100% mem=9695MiB ours=0 foreign=9628MiB IDLE nodes=30 best=0.97289
+[gpu_watch 11.50h] gpu0 util=100% mem=12027MiB ours=0 foreign=11960MiB IDLE nodes=30 best=0.97289
+[gpu_watch 12.00h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 12.50h] gpu0 util=99% mem=9691MiB ours=0 foreign=9624MiB IDLE nodes=30 best=0.97289
+[gpu_watch 13.00h] gpu0 util=99% mem=9707MiB ours=0 foreign=9640MiB IDLE nodes=30 best=0.97289
+[gpu_watch 13.50h] gpu0 util=99% mem=12035MiB ours=0 foreign=11968MiB IDLE nodes=30 best=0.97289
+[gpu_watch 14.00h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 14.50h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 15.00h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 15.50h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 16.00h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 16.50h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 17.00h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 17.50h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 18.00h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 18.50h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 19.00h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+[gpu_watch 19.50h] gpu0 util=0% mem=2187MiB ours=0 foreign=2166MiB IDLE nodes=30 best=0.97289
+gpu_watch: 24h window complete
+gpu_watch: GPU 0, every 1800s for 86400s, logging to /data/home/zhubaiyu/ai_scientist_v2_baseline/campaign/gpu_usage.log
+[gpu_watch 0.00h] gpu0 util=0% mem=3000MiB ours=3 foreign=2974MiB STARTUP_OR_EVAL nodes=30 best=0.97289
+[gpu_watch 0.50h] gpu0 util=99% mem=71982MiB ours=36 foreign=2974MiB TRAINING nodes=33 best=0.972139
+[gpu_watch 1.00h] gpu0 util=70% mem=71982MiB ours=36 foreign=2974MiB TRAINING nodes=36 best=0.970759
+[gpu_watch 1.50h] gpu0 util=100% mem=71982MiB ours=36 foreign=2974MiB TRAINING nodes=40 best=0.970344
+[gpu_watch 2.00h] gpu0 util=0% mem=3000MiB ours=3 foreign=2974MiB STARTUP_OR_EVAL nodes=44 best=0.970344
+[gpu_watch 2.50h] gpu0 util=0% mem=3002MiB ours=3 foreign=2974MiB STARTUP_OR_EVAL nodes=48 best=0.970168
+[gpu_watch 3.00h] gpu0 util=100% mem=71982MiB ours=36 foreign=2974MiB TRAINING nodes=51 best=0.969635
+[gpu_watch 3.50h] gpu0 util=100% mem=71980MiB ours=36 foreign=2974MiB TRAINING nodes=55 best=0.969635
+[gpu_watch 4.00h] gpu0 util=0% mem=3002MiB ours=3 foreign=2974MiB STARTUP_OR_EVAL nodes=59 best=0.969635
+[gpu_watch 4.50h] gpu0 util=99% mem=65846MiB ours=36 foreign=2974MiB TRAINING nodes=62 best=0.969635
+[gpu_watch 5.00h] gpu0 util=0% mem=3002MiB ours=3 foreign=2974MiB STARTUP_OR_EVAL nodes=66 best=0.969635
+[gpu_watch 5.50h] gpu0 util=100% mem=71982MiB ours=36 foreign=2974MiB TRAINING nodes=69 best=0.969635
+[gpu_watch 6.00h] gpu0 util=100% mem=86988MiB ours=36 foreign=2974MiB TRAINING nodes=73 best=0.969635
+[gpu_watch 6.50h] gpu0 util=0% mem=3000MiB ours=3 foreign=2974MiB STARTUP_OR_EVAL nodes=77 best=0.969635
+[gpu_watch 7.00h] gpu0 util=100% mem=39800MiB ours=36 foreign=2974MiB TRAINING nodes=80 best=0.969635
+[gpu_watch 7.50h] gpu0 util=100% mem=88174MiB ours=36 foreign=2974MiB TRAINING nodes=83 best=0.969635
+[gpu_watch 8.00h] gpu0 util=0% mem=3000MiB ours=3 foreign=2974MiB STARTUP_OR_EVAL nodes=87 best=0.969635
+[gpu_watch 8.50h] gpu0 util=100% mem=71982MiB ours=36 foreign=2974MiB TRAINING nodes=90 best=0.969626
+[gpu_watch 9.00h] gpu0 util=100% mem=71980MiB ours=36 foreign=2974MiB TRAINING nodes=94 best=0.969626
+[gpu_watch 9.50h] gpu0 util=84% mem=11232MiB ours=36 foreign=2974MiB TRAINING nodes=98 best=0.969626
+[gpu_watch 10.00h] gpu0 util=51% mem=71982MiB ours=36 foreign=2974MiB TRAINING nodes=101 best=0.969615
+[gpu_watch 10.50h] gpu0 util=100% mem=105118MiB ours=0 foreign=105086MiB IDLE nodes=103 best=0.969615
+gpu_watch: GPU 7, every 1800s for 47000s, logging to /data/home/zhubaiyu/ai_scientist_v2_baseline/campaign/gpu_usage.log
+[gpu_watch 0.00h] gpu7 util=0% mem=4MiB ours=3 foreign=0MiB STARTUP_OR_EVAL nodes=103 best=0.969615
+gpu_watch: GPU 0, every 1800s for 43000s, logging to /data/home/zhubaiyu/ai_scientist_v2_baseline/campaign/gpu_usage.log
+[gpu_watch 0.00h] gpu0 util=99% mem=40770MiB ours=3 foreign=40738MiB TRAINING nodes=105 best=0.969615
+[gpu_watch 0.50h] gpu0 util=100% mem=139975MiB ours=37 foreign=90330MiB TRAINING nodes=103 best=0.969615
+[gpu_watch 1.00h] gpu0 util=100% mem=71982MiB ours=37 foreign=2974MiB TRAINING nodes=103 best=0.969615
+[gpu_watch 1.50h] gpu0 util=100% mem=71980MiB ours=37 foreign=2974MiB TRAINING nodes=104 best=0.969615
+[gpu_watch 2.00h] gpu0 util=100% mem=48454MiB ours=0 foreign=48414MiB IDLE nodes=105 best=0.969615
+gpu_watch: GPU 7, every 1800s for 36000s, logging to /data/home/zhubaiyu/ai_scientist_v2_baseline/campaign/gpu_usage.log
+[gpu_watch 0.00h] gpu7 util=0% mem=4MiB ours=1 foreign=0MiB STARTUP_OR_EVAL nodes=103 best=0.969615
+[gpu_watch 0.50h] gpu7 util=0% mem=75257MiB ours=0 foreign=75240MiB IDLE nodes=103 best=0.969615
+[gpu_watch 1.00h] gpu7 util=100% mem=75257MiB ours=1 foreign=75240MiB TRAINING nodes=103 best=0.969615
+[gpu_watch 1.50h] gpu7 util=100% mem=75257MiB ours=1 foreign=75240MiB TRAINING nodes=106 best=0.969615
+[gpu_watch 2.00h] gpu7 util=100% mem=75257MiB ours=37 foreign=75240MiB TRAINING nodes=105 best=0.969615
+[gpu_watch 2.50h] gpu7 util=99% mem=45949MiB ours=0 foreign=45940MiB IDLE nodes=107 best=0.969615
+[gpu_watch 3.00h] gpu7 util=0% mem=4MiB ours=37 foreign=0MiB STARTUP_OR_EVAL nodes=108 best=0.969615
+[gpu_watch 3.50h] gpu7 util=99% mem=43897MiB ours=0 foreign=43888MiB IDLE nodes=109 best=0.969615
+[gpu_watch 4.00h] gpu7 util=100% mem=78649MiB ours=0 foreign=78640MiB IDLE nodes=111 best=0.969615
+[gpu_watch 4.50h] gpu7 util=42% mem=78649MiB ours=37 foreign=78640MiB STARTUP_OR_EVAL nodes=112 best=0.969615
+[gpu_watch 5.00h] gpu7 util=16% mem=78649MiB ours=0 foreign=78640MiB IDLE nodes=113 best=0.969615
+[gpu_watch 5.50h] gpu7 util=0% mem=4MiB ours=0 foreign=0MiB IDLE nodes=115 best=0.969615
+[gpu_watch 6.00h] gpu7 util=100% mem=94739MiB ours=4 foreign=94730MiB TRAINING nodes=116 best=0.969615
+[gpu_watch 6.50h] gpu7 util=59% mem=1627MiB ours=0 foreign=1612MiB IDLE nodes=118 best=0.969615
+[gpu_watch 7.00h] gpu7 util=51% mem=8507MiB ours=1 foreign=8492MiB TRAINING nodes=118 best=0.969615
+[gpu_watch 7.50h] gpu7 util=0% mem=4MiB ours=1 foreign=0MiB STARTUP_OR_EVAL nodes=116 best=0.969615
+[gpu_watch 8.00h] gpu7 util=99% mem=78649MiB ours=1 foreign=78640MiB TRAINING nodes=117 best=0.969615
+[gpu_watch 8.50h] gpu7 util=14% mem=9501MiB ours=1 foreign=11158MiB STARTUP_OR_EVAL nodes=117 best=0.969615
+[gpu_watch 9.00h] gpu7 util=90% mem=2643MiB ours=1 foreign=2634MiB TRAINING nodes=118 best=0.969615
+[gpu_watch 9.50h] gpu7 util=99% mem=2583MiB ours=37 foreign=2568MiB TRAINING nodes=118 best=0.969615
+gpu_watch: 24h window complete

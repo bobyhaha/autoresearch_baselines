@@ -1,0 +1,232 @@
+[restock 23:57:25] started: low=4 target=12 every 120.0s
+[restock 00:07:26] swept 11 unreachable entries (parent != 32fb73bd)
+[restock 00:07:26] queued lever pattern8 against 32fb73bd
+[restock 00:07:26] queued lever emb09 against 32fb73bd
+[restock 00:07:26] queued lever warmdown07 against 32fb73bd
+[restock 00:07:26] queued lever unemb008 against 32fb73bd
+[restock 00:07:26] queued lever rope50k against 32fb73bd
+[restock 00:07:26] queued lever rope100k against 32fb73bd
+[restock 00:07:26] queued lever x0_005 against 32fb73bd
+[restock 00:07:26] queued lever wd005 against 32fb73bd
+[restock 00:07:26] queued lever wd015 against 32fb73bd
+[restock 00:07:26] queued lever scalar03 against 32fb73bd
+[restock 00:07:26] queued lever rope200k against 32fb73bd
+[restock 00:07:26] queued lever x0_015 against 32fb73bd
+[restock 00:07:26] restocked 12; queue depth now 12
+[restock 00:49:28] swept 7 unreachable entries (parent != 126f7484)
+[restock 00:49:28] queued lever pattern8 against 126f7484
+[restock 00:49:28] queued lever emb09 against 126f7484
+[restock 00:49:28] queued lever warmdown07 against 126f7484
+[restock 00:49:28] queued lever unemb008 against 126f7484
+[restock 00:49:28] queued lever rope100k against 126f7484
+[restock 00:49:28] queued lever x0_005 against 126f7484
+[restock 00:49:28] queued lever wd005 against 126f7484
+[restock 00:49:28] queued lever wd015 against 126f7484
+[restock 00:49:28] queued lever scalar03 against 126f7484
+[restock 00:49:28] queued lever rope200k against 126f7484
+[restock 00:49:28] queued lever x0_015 against 126f7484
+[restock 00:49:28] queued lever finallr005 against 126f7484
+[restock 00:49:28] restocked 12; queue depth now 12
+[restock 01:07:29] swept 10 unreachable entries (parent != 928ca8dd)
+[restock 01:07:29] queued lever pattern8 against 928ca8dd
+[restock 01:07:29] queued lever warmdown07 against 928ca8dd
+[restock 01:07:29] queued lever unemb008 against 928ca8dd
+[restock 01:07:29] queued lever rope100k against 928ca8dd
+[restock 01:07:29] queued lever x0_005 against 928ca8dd
+[restock 01:07:29] queued lever wd005 against 928ca8dd
+[restock 01:07:29] queued lever wd015 against 928ca8dd
+[restock 01:07:29] queued lever scalar03 against 928ca8dd
+[restock 01:07:29] queued lever rope200k against 928ca8dd
+[restock 01:07:29] queued lever x0_015 against 928ca8dd
+[restock 01:07:29] queued lever finallr005 against 928ca8dd
+[restock 01:07:29] queued lever betas9 against 928ca8dd
+[restock 01:07:29] restocked 12; queue depth now 12
+[restock 01:45:10] started: low=4 target=12 every 120.0s
+[restock 02:05:11] swept 5 unreachable entries (parent != 18f11d35)
+[restock 02:05:11] queued lever x0_005 against 18f11d35
+[restock 02:05:11] queued lever scalar03 against 18f11d35
+[restock 02:05:12] queued lever x0_015 against 18f11d35
+[restock 02:05:12] queued lever finallr005 against 18f11d35
+[restock 02:05:12] queued lever betas9 against 18f11d35
+[restock 02:05:12] queued lever betas7 against 18f11d35
+[restock 02:05:12] queued lever unemb005 against 18f11d35
+[restock 02:05:12] queued lever emb085 against 18f11d35
+[restock 02:05:12] queued lever mlr035 against 18f11d35
+[restock 02:05:12] queued lever muon500 against 18f11d35
+[restock 02:05:12] queued lever muon150 against 18f11d35
+[restock 02:05:12] queued lever head64 against 18f11d35
+[restock 02:05:12] restocked 12; queue depth now 12
+[restock 02:15:19] started: low=4 target=12 every 120.0s
+[restock 02:35:20] swept 8 unreachable entries (parent != 44c84533)
+[restock 02:35:20] queued lever wd01 against 44c84533
+[restock 02:35:20] queued lever scalar03 against 44c84533
+[restock 02:35:20] queued lever x0_015 against 44c84533
+[restock 02:35:21] queued lever betas9 against 44c84533
+[restock 02:35:21] queued lever betas7 against 44c84533
+[restock 02:35:21] queued lever unemb005 against 44c84533
+[restock 02:35:21] queued lever emb085 against 44c84533
+[restock 02:35:21] queued lever mlr035 against 44c84533
+[restock 02:35:21] queued lever muon500 against 44c84533
+[restock 02:35:21] queued lever muon150 against 44c84533
+[restock 02:35:21] restocked 10; queue depth now 10
+[restock 03:15:23] started: low=4 target=12 every 120.0s
+[restock 03:25:23] queued lever emb085 against 44c84533
+[restock 03:25:23] queued lever rope25k against 44c84533
+[restock 03:25:23] queued lever rope75k against 44c84533
+[restock 03:25:23] queued lever finallr0025 against 44c84533
+[restock 03:25:23] queued lever finallr0075 against 44c84533
+[restock 03:25:24] queued lever emb095 against 44c84533
+[restock 03:25:24] queued lever betas299 against 44c84533
+[restock 03:25:24] queued lever muonhi against 44c84533
+[restock 03:25:24] queued lever muonlo against 44c84533
+[restock 03:25:24] restocked 9; queue depth now 12
+[restock 03:45:38] started: low=4 target=12 every 120.0s
+[restock 03:45:38] evicted 1 queued candidates whose lever is now closed
+[restock 04:15:13] started: low=4 target=12 every 120.0s
+[restock 04:15:13] queued lever depth9 against 44c84533
+[restock 04:15:14] queued lever ve_all against 44c84533
+[restock 04:15:14] queued lever act_gelu against 44c84533
+[restock 04:15:14] queued lever rotary4 against 44c84533
+[restock 04:15:14] queued lever finallr0025 against 44c84533
+[restock 04:15:14] queued lever finallr0075 against 44c84533
+[restock 04:15:14] queued lever emb095 against 44c84533
+[restock 04:15:14] queued lever betas299 against 44c84533
+[restock 04:15:14] queued lever muonhi against 44c84533
+[restock 04:15:14] queued lever muonlo against 44c84533
+[restock 04:15:14] queued lever wd02 against 44c84533
+[restock 04:15:14] restocked 11; queue depth now 11
+[restock 04:47:16] evicted 1 queued candidates whose lever is now closed
+[restock 05:13:17] queued lever mlp3 against 44c84533
+[restock 05:13:17] queued lever mlp5 against 44c84533
+[restock 05:13:17] queued lever betas299 against 44c84533
+[restock 05:13:17] restocked 3; queue depth now 6
+[restock 05:37:18] queued lever wd02 against 44c84533
+[restock 05:37:18] restocked 1; queue depth now 4
+[restock 05:45:19] queued lever mlp3 against 44c84533
+[restock 05:45:19] restocked 1; queue depth now 4
+[restock 05:47:19] evicted 2 queued candidates whose lever is now closed
+[restock 05:47:19] queued lever qknorm_off against 44c84533
+[restock 05:47:19] queued lever relu_cubed against 44c84533
+[restock 05:47:19] queued lever dbs64 against 44c84533
+[restock 05:47:19] queued lever matmul_highest against 44c84533
+[restock 05:47:19] restocked 4; queue depth now 6
+[restock 06:09:20] queued lever qknorm_off against 44c84533
+[restock 06:09:20] restocked 1; queue depth now 4
+[restock 06:17:21] queued lever relu_cubed against 44c84533
+[restock 06:17:21] queued lever rt_batch19 against 44c84533
+[restock 06:17:21] queued lever rt_batch17 against 44c84533
+[restock 06:17:21] queued lever rt_depth12 against 44c84533
+[restock 06:17:21] queued lever rt_width768 against 44c84533
+[restock 06:17:21] restocked 5; queue depth now 8
+[restock 06:45:22] evicted 2 queued candidates whose lever is now closed
+[restock 06:47:22] queued lever rt_batch19 against 44c84533
+[restock 06:47:22] restocked 1; queue depth now 4
+[restock 06:55:23] queued lever rt_batch17 against 44c84533
+[restock 06:55:23] restocked 1; queue depth now 4
+[restock 07:03:23] queued lever rt_depth12 against 44c84533
+[restock 07:03:23] restocked 1; queue depth now 4
+[restock 07:13:24] queued lever rt_width768 against 44c84533
+[restock 07:13:24] restocked 1; queue depth now 4
+[restock 07:17:24] evicted 3 queued candidates whose lever is now closed
+[restock 07:17:24] queued lever cmp_mlp3_d12 against 44c84533
+[restock 07:17:24] queued lever cmp_mlp5_d9 against 44c84533
+[restock 07:17:24] queued replicate of 44c84533
+[restock 07:17:24] restocked 3; queue depth now 4
+[restock 07:23:25] queued replicate of 44c84533
+[restock 07:23:25] restocked 1; queue depth now 4
+[restock 07:31:25] queued lever cmp_mlp3_d12 against 44c84533
+[restock 07:31:25] restocked 1; queue depth now 4
+[restock 07:41:26] queued lever cmp_mlp5_d9 against 44c84533
+[restock 07:41:26] restocked 1; queue depth now 4
+[restock 07:45:26] evicted 1 queued candidates whose lever is now closed
+[restock 07:45:26] queued lever cmp_deep_narrow against 44c84533
+[restock 07:45:26] restocked 1; queue depth now 4
+[restock 07:49:26] queued replicate of 44c84533
+[restock 07:49:26] restocked 1; queue depth now 4
+[restock 07:57:27] queued replicate of 44c84533
+[restock 07:57:27] restocked 1; queue depth now 4
+[restock 08:05:27] swept 4 unreachable (parent != 7fcec1f0)
+[restock 08:05:27] queued lever cmp_deep_narrow against 7fcec1f0
+[restock 08:05:27] queued replicate of 7fcec1f0
+[restock 08:05:27] queued replicate of 7fcec1f0
+[restock 08:05:27] queued replicate of 7fcec1f0
+[restock 08:05:27] restocked 4; queue depth now 4
+[restock 08:07:27] queued lever cmp_deep_narrow against 7fcec1f0
+[restock 08:07:27] restocked 1; queue depth now 4
+[restock 08:15:28] queued replicate of 7fcec1f0
+[restock 08:15:28] restocked 1; queue depth now 4
+[restock 08:23:28] queued replicate of 7fcec1f0
+[restock 08:23:28] restocked 1; queue depth now 4
+[restock 08:31:29] queued replicate of 7fcec1f0
+[restock 08:31:29] restocked 1; queue depth now 4
+[restock 08:39:29] queued replicate of 7fcec1f0
+[restock 08:39:29] restocked 1; queue depth now 4
+[restock 08:45:26] started: low=4 target=12 every 120.0s
+[restock 08:45:26] queued lever seed43 against 7fcec1f0
+[restock 08:45:26] queued lever seed137 against 7fcec1f0
+[restock 08:45:26] queued lever seed2024 against 7fcec1f0
+[restock 08:45:26] restocked 3; queue depth now 6
+[restock 09:09:27] queued replicate of 7fcec1f0
+[restock 09:09:27] restocked 1; queue depth now 4
+[restock 09:17:28] queued lever seed43 against 7fcec1f0
+[restock 09:17:28] restocked 1; queue depth now 4
+[restock 09:25:28] queued lever seed137 against 7fcec1f0
+[restock 09:25:28] restocked 1; queue depth now 4
+[restock 09:33:29] queued lever seed2024 against 7fcec1f0
+[restock 09:33:29] restocked 1; queue depth now 4
+[restock 09:41:29] queued replicate of 7fcec1f0
+[restock 09:41:29] restocked 1; queue depth now 4
+[restock 09:49:30] swept 7 unreachable (parent != 42465468)
+[restock 09:49:30] queued replicate of 42465468
+[restock 09:49:30] queued replicate of 42465468
+[restock 09:49:30] queued replicate of 42465468
+[restock 09:49:30] queued replicate of 42465468
+[restock 09:49:30] restocked 4; queue depth now 4
+[restock 09:51:30] queued replicate of 42465468
+[restock 09:51:30] restocked 1; queue depth now 4
+[restock 09:59:30] queued replicate of 42465468
+[restock 09:59:30] restocked 1; queue depth now 4
+[restock 10:07:31] queued replicate of 42465468
+[restock 10:07:31] restocked 1; queue depth now 4
+[restock 10:36:42] started: low=4 target=12 every 120.0s
+[restock 10:38:17] started: low=4 target=12 every 120.0s
+[restock 10:51:11] started: low=4 target=12 every 120.0s
+[restock 10:53:11] queued replicate of 44c84533
+[restock 10:53:11] restocked 1; queue depth now 4
+[restock 11:02:04] started: low=4 target=12 every 120.0s
+[restock 18:34:29] queued replicate of 44c84533
+[restock 18:34:29] restocked 1; queue depth now 4
+[restock 19:18:31] queued replicate of 44c84533
+[restock 19:18:31] restocked 1; queue depth now 4
+[restock 19:28:32] queued replicate of 44c84533
+[restock 19:28:32] restocked 1; queue depth now 4
+[restock 19:38:33] queued replicate of 44c84533
+[restock 19:38:33] restocked 1; queue depth now 4
+[restock 20:46:36] queued replicate of 44c84533
+[restock 20:46:36] restocked 1; queue depth now 4
+[restock 21:20:38] queued replicate of 44c84533
+[restock 21:20:38] restocked 1; queue depth now 4
+[restock 22:08:41] queued replicate of 44c84533
+[restock 22:08:41] restocked 1; queue depth now 4
+[restock 22:10:41] duration elapsed, exiting
+[restock 22:35:58] started: low=4 target=12 every 120.0s
+[restock 22:39:58] queued replicate of 44c84533
+[restock 22:39:58] restocked 1; queue depth now 4
+[restock 22:51:59] queued replicate of 44c84533
+[restock 22:51:59] restocked 1; queue depth now 4
+[restock 23:00:00] queued replicate of 44c84533
+[restock 23:00:00] restocked 1; queue depth now 4
+[restock 23:08:00] queued replicate of 44c84533
+[restock 23:08:00] restocked 1; queue depth now 4
+[restock 23:10:00] queued replicate of 44c84533
+[restock 23:10:00] restocked 1; queue depth now 4
+[restock 23:18:01] queued replicate of 44c84533
+[restock 23:18:01] restocked 1; queue depth now 4
+[restock 23:26:01] queued replicate of 44c84533
+[restock 23:26:01] restocked 1; queue depth now 4
+[restock 23:36:02] queued replicate of 44c84533
+[restock 23:36:02] restocked 1; queue depth now 4
+[restock 23:38:02] queued replicate of 44c84533
+[restock 23:38:02] restocked 1; queue depth now 4
+[restock 23:46:03] queued replicate of 44c84533
+[restock 23:46:03] restocked 1; queue depth now 4

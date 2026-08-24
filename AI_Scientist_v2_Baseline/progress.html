@@ -84,6 +84,11 @@ h2 { font-size: 16px; font-weight: 620; margin: 0 0 4px; }
 .panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 14px; }
 .scroll { overflow-x: auto; }
 svg { display: block; max-width: 100%; height: auto; }
+/* Wide charts scroll inside their panel rather than scaling down to fit it. */
+svg.wide { max-width: none; height: auto; }
+.scroll { overflow-x: auto; overscroll-behavior-x: contain; }
+.scrollhint { font-size: 12px; color: var(--ink-3); margin: 0 0 8px;
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; }
 .duo { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
 
 table { border-collapse: collapse; width: 100%; font-size: 13px; }
@@ -114,7 +119,7 @@ tr.k td { background: color-mix(in srgb, var(--kept) 12%, transparent); }
 
 <div class="wrap">
 <header>
-  <p class="eyebrow">AI-Scientist-v2 best-first tree search · karpathy/autoresearch · single H200, GPU 2</p>
+  <p class="eyebrow">AI-Scientist-v2 best-first tree search · karpathy/autoresearch · single H200</p>
   <h1 id="title">Autoresearch Progress</h1>
   <p class="sub">Each experiment trains a candidate <span class="mono">train.py</span> for a fixed 300&nbsp;s of
   wall clock, then scores it with <span class="mono">val_bpb</span>. Chart conventions follow
@@ -125,16 +130,17 @@ tr.k td { background: color-mix(in srgb, var(--kept) 12%, transparent); }
 <div class="tiles" id="tiles"></div>
 
 <section>
-  <div class="panel scroll"><svg id="progress" viewBox="0 0 1140 560" role="img"
-    aria-label="Autoresearch progress: val_bpb per experiment with a running-best step line falling from 0.991192 to 0.974019."></svg></div>
+  <p class="scrollhint">↔ scroll horizontally — one column per experiment</p>
+  <div class="panel scroll"><svg id="progress" class="wide" width="2760" height="600" viewBox="0 0 2760 600" role="img"
+    aria-label="Autoresearch progress: val_bpb per experiment with a running-best step line falling from 0.991192 to 0.969615."></svg></div>
 </section>
 
 <section>
   <h2>Why the bigger model won</h2>
-  <p class="cap">The depth sweep with everything else held fixed. Quality is single-peaked at 85.9M parameters,
-  but GPU utilisation climbs the whole way. That is why a Chinchilla-style tokens-per-parameter argument fails
-  here — under a wall-clock budget, a larger model is handed more actual FLOPs rather than spending a fixed
-  number differently.</p>
+  <p class="cap">The depth sweep with everything else held fixed. Quality is single-peaked at 85.9M parameters
+  while GPU utilisation climbs the whole way — so optimising utilisation directly would have picked the worst
+  of the three. This is why a Chinchilla-style tokens-per-parameter argument fails here: under a wall-clock
+  budget a larger model is handed more actual FLOPs, rather than spending a fixed number differently.</p>
   <div class="duo">
     <div class="panel scroll"><svg id="capacity" viewBox="0 0 560 320" role="img"
       aria-label="val_bpb versus parameter count, minimum at 85.9M."></svg></div>
@@ -144,18 +150,42 @@ tr.k td { background: color-mix(in srgb, var(--kept) 12%, transparent); }
 </section>
 
 <section>
+  <h2>What each lever is worth — and why they don't add up</h2>
+  <p class="cap">Grey is what the lever measured when it was first introduced. Green is what removing it
+  from the <i>finished</i> configuration costs. Every lever is worth more in the final config, because a
+  single-lever ablation measures a <b>marginal</b> contribution — what it is worth given everything else is
+  present. Marginals cannot be summed: these five total 0.0363 against an actual improvement of 0.0213.
+  The same gain is credited to several levers at once.</p>
+  <div class="panel scroll"><svg id="ablation" viewBox="0 0 1140 300" role="img"
+    aria-label="Paired bars comparing each lever's contribution at introduction versus in the final configuration; all five are larger in the final configuration."></svg></div>
+</section>
+
+<section>
   <h2>What has been established</h2>
   <ul class="findings">
-    <li><b>Noise floor 0.000148</b> — standard deviation of three byte-identical runs. Anything under
-      ~0.0003 is unresolvable at n=1; a 0.001 effect is ~7σ.</li>
-    <li><b>Batch 2<sup>18</sup> is optimal at both model sizes</b>, bracketed on both sides. The prediction that
-      critical batch size would grow with the model was wrong: at fixed wall clock, doubling the batch simply
-      halves the step count.</li>
-    <li><b>Capacity is single-peaked at DEPTH 10</b> — 26.3M and 135.3M both lose to 85.9M.</li>
-    <li><b>Adam-group LRs were under-tuned; optimizer geometry was not.</b>
-      <span class="mono">EMBEDDING_LR</span> 0.6→0.8 won 0.0018 (~12σ) and 1.0 gave it back, so the optimum sits
-      near 0.8 — while <span class="mono">MATRIX_LR</span>, batch size and
-      <span class="mono">WARMDOWN_RATIO</span> were all already correct.</li>
+    <li><b>The improvement generalises across seeds — and 14% of the headline was selection.</b>
+      Measuring the baseline <i>and</i> the final config at four seeds gives 2.16% / 1.72% / 1.89% / 1.95%,
+      mean <b>1.93% ± 0.18</b>. Seed 42 is the seed the search optimised on; held-out seeds average 1.85%.
+      The gap is the winner's curse operating on the whole search, one level above the replicate case.</li>
+    <li><b>The reported best is a biased statistic.</b> The incumbent's minimum (0.969615) is the luckiest of
+      16 byte-identical runs whose mean is 0.969890. The mean is the estimator; the minimum never moves
+      upward, which is exactly what makes it biased.</li>
+    <li><b>The two largest effects are losses from replacing a primitive the baseline chose.</b>
+      relu² → GeLU costs <b>+0.0254</b>; removing QK normalisation costs <b>+0.0147</b> — the latter despite
+      producing the campaign's highest MFU (46.3%) and 4% more steps. Both are quality effects with
+      throughput moving the wrong way.</li>
+    <li><b>Ablating the final config gives ~2× the introduction value.</b> Removing a lever from the finished
+      configuration costs more than adding it to an unfinished one:
+      <span class="mono">FINAL_LR_FRAC</span> 0.00053 → <b>0.00142</b>, shape 0.00423 → <b>0.00791</b>,
+      max-autotune 0.00125 → <b>0.00212</b>. The levers compound.</li>
+    <li><b>Capacity is capped near 86M</b>, confirmed five independent ways: depth 6/9/12, width 512/768,
+      value-embedding coverage, MLP ratio 3×/5×, and retests of all three at the final operating point.</li>
+    <li><b>Six of nine optimizer knobs sit on the baseline's own default.</b> Only settings that scale with
+      step count moved — <span class="mono">EMBEDDING_LR</span>, <span class="mono">UNEMBEDDING_LR</span>,
+      <span class="mono">FINAL_LR_FRAC</span> — plus <span class="mono">WEIGHT_DECAY</span>.</li>
+    <li><b>The noise floor is a property of the cluster, not the code.</b> Byte-identical replicates gave
+      sd 0.00013 early in the run and 0.00044 late, with step counts drifting 1316 → 1301 under load. All
+      134 trials ran on a shared box; 19 were refused as contended or OOM rather than scored.</li>
   </ul>
 </section>
 
@@ -168,23 +198,121 @@ tr.k td { background: color-mix(in srgb, var(--kept) 12%, transparent); }
 
 <script>
 const D = [
- {i:0, id:"6d0ccd43", bpb:0.991192, p:50.3,  s:1017, mfu:42.52, short:"baseline",                       plan:"baseline (pristine karpathy/autoresearch train.py, unmodified)"},
- {i:1, id:"fbec943f", bpb:0.988966, p:50.3,  s:1059, mfu:40.78, short:"short window 1/4 instead of 1/2", plan:"Attention throughput: halve the SSSL short-attention span (seq/2 → seq/4)"},
- {i:2, id:"d05761a3", bpb:0.983545, p:50.3,  s:2020, mfu:42.43, short:"halve total batch 524K→262K",     plan:"Optimizer cadence: halve TOTAL_BATCH_SIZE 2**19 → 2**18, doubling optimizer steps per token"},
- {i:3, id:"c89462a1", bpb:0.981576, p:50.3,  s:2099, mfu:40.62, short:"stack batch + short window",      plan:"Stack the two confirmed levers from the other lineage"},
- {i:4, id:"edd151d9", bpb:0.987011, p:50.3,  s:4046, mfu:39.23, short:"batch 262K→131K",                 plan:"Halve the optimizer batch again, 2**18 → 2**17 — below critical batch size"},
- {i:5, id:"c002e4a2", bpb:0.981310, p:50.3,  s:2151, mfu:39.84, short:"short window 1/8 (256 tokens)",   plan:"Attention span seq/4 → seq/8 — within noise, not an established win"},
- {i:6, id:"e28ccb85", bpb:1.024066, p:26.3,  s:2841, mfu:26.54, short:"depth 6",                         plan:"DEPTH 8 → 6 — removes 48% of parameters"},
- {i:7, id:"c7c8d842", bpb:0.980058, p:50.3,  s:2204, mfu:40.83, short:"max-autotune compile",            plan:"Compile with mode=max-autotune-no-cudagraphs — pure throughput, no model change"},
- {i:8, id:"fd76db94", bpb:0.975832, p:85.9,  s:1325, mfu:44.96, short:"depth 10 (dim 640)",              plan:"DEPTH 8 → 10, model_dim 512 → 640, n_head 4 → 5"},
- {i:9, id:"3c3fa271", bpb:0.979841, p:135.3, s:870,  mfu:47.48, short:"depth 12",                        plan:"DEPTH 10 → 12 — highest MFU of the campaign but only 870 steps fit"},
- {i:10,id:"c4cbd164", bpb:0.976128, p:85.9,  s:1322, mfu:44.87, short:"replicate 1",                     plan:"REPLICATE of fd76db94, byte-identical source — measures run-to-run noise"},
- {i:11,id:"860fa667", bpb:0.975999, p:85.9,  s:1322, mfu:44.86, short:"replicate 2",                     plan:"REPLICATE of fd76db94, byte-identical source — measures run-to-run noise"},
- {i:12,id:"b219d0f7", bpb:0.976931, p:85.9,  s:1322, mfu:44.87, short:"matrix LR 0.04→0.05",             plan:"MATRIX_LR 0.04 → 0.05 — the Muon LR was already at its optimum"},
- {i:13,id:"5a90b3aa", bpb:0.987102, p:85.9,  s:668,  mfu:44.96, short:"batch 262K→524K",                 plan:"TOTAL_BATCH_SIZE 2**18 → 2**19 at the new shape — halves the step count"},
- {i:14,id:"8bed6ff2", bpb:0.978169, p:85.9,  s:1322, mfu:44.86, short:"warmdown 0.5→0.35",               plan:"WARMDOWN_RATIO 0.5 → 0.35 — the default was already correct"},
- {i:15,id:"502959c2", bpb:0.974019, p:85.9,  s:1323, mfu:44.89, short:"embedding LR 0.6→0.8",            plan:"EMBEDDING_LR 0.6 → 0.8 — the clearest knob result of the campaign (~12σ)"},
- {i:16,id:"8282a51e", bpb:0.974545, p:85.9,  s:1322, mfu:44.86, short:"embedding LR 0.8→1.0",            plan:"EMBEDDING_LR 0.8 → 1.0 — overshoots; the optimum sits near 0.8"},
+ {i:0, id:"6d0ccd43", bpb:0.991192, p:50.3, s:1017, mfu:42.52, vram:44.0, short:"baseline", plan:"baseline (pristine karpathy/autoresearch train.py, unmodified)"},
+ {i:1, id:"fbec943f", bpb:0.988966, p:50.3, s:1059, mfu:40.78, vram:44.0, short:"short window 1/4", plan:"Attention throughput: halve the SSSL short-attention span (seq/2=1024 -> seq/4=512). Compute-bound single-epoch regime, so cheaper attention should bu"},
+ {i:2, id:"d05761a3", bpb:0.983545, p:50.3, s:2020, mfu:42.43, vram:43.9, short:"batch 524K->262K", plan:"Optimizer cadence: halve TOTAL_BATCH_SIZE 2**19 -> 2**18, doubling optimizer steps per token at fixed token throughput."},
+ {i:3, id:"c89462a1", bpb:0.981576, p:50.3, s:2099, mfu:40.62, vram:43.9, short:"Stack the two confirmed levers fro", plan:"Stack the two confirmed levers from the other lineage: on top of TOTAL_BATCH_SIZE 2**18, halve the SSSL short-attention span seq/2 -> seq/4."},
+ {i:4, id:"edd151d9", bpb:0.987011, p:50.3, s:4046, mfu:39.23, vram:22.2, short:"batch 262K->131K", plan:"Push the winning axis: halve the optimizer batch again, TOTAL_BATCH_SIZE 2**18 -> 2**17, with DEVICE_BATCH_SIZE 128 -> 64 to keep grad_accum_steps at "},
+ {i:5, id:"c002e4a2", bpb:0.981310, p:50.3, s:2151, mfu:39.84, vram:43.9, short:"short window 1/8", plan:"Continue the attention-span axis: short-attention span seq/4=512 -> seq/8=256. Tests whether span reduction has saturated."},
+ {i:6, id:"e28ccb85", bpb:1.024066, p:26.3, s:2841, mfu:26.54, vram:26.5, short:"depth 6", plan:"Compute-optimal shape: DEPTH 8 -> 6. The run sees ~564M tokens at 50.3M params = 11 tokens/param, well under the ~20 that is compute-optimal at fixed "},
+ {i:7, id:"c7c8d842", bpb:0.980058, p:50.3, s:2204, mfu:40.83, vram:48.5, short:"max-autotune compile", plan:"Pure throughput, no model change: compile with mode=max-autotune-no-cudagraphs. MFU has drifted down to ~39.8 percent, so better kernel selection shou"},
+ {i:8, id:"fd76db94", bpb:0.975832, p:85.9, s:1325, mfu:44.96, vram:70.9, short:"depth 10", plan:"Bracket the shape axis in the opposite direction: DEPTH 8 -> 10. DEPTH 6 lost badly (+0.043), which falsifies the tokens-per-param argument that predi"},
+ {i:9, id:"3c3fa271", bpb:0.979841, p:135.3, s:870, mfu:47.48, vram:98.3, short:"depth 12", plan:"Keep climbing the capacity axis: DEPTH 10 -> 12 (model_dim 640 -> 768, n_head 5 -> 6). DEPTH 10 won by 0.0042 with 71 percent more params and 40 perce"},
+ {i:10, id:"c4cbd164", bpb:0.976128, p:85.9, s:1322, mfu:44.87, vram:66.2, short:"replicate", plan:"REPLICATE 1 of fd76db94 (byte-identical source). Measures run-to-run noise directly. Deliberately parented on the current best so it runs exactly when"},
+ {i:11, id:"860fa667", bpb:0.975999, p:85.9, s:1322, mfu:44.86, vram:66.2, short:"replicate", plan:"REPLICATE 2 of fd76db94 (byte-identical source). Measures run-to-run noise directly. Deliberately parented on the current best so it runs exactly when"},
+ {i:12, id:"b219d0f7", bpb:0.976931, p:85.9, s:1322, mfu:44.87, vram:66.2, short:"matrix LR 0.05", plan:"Re-tune the Muon LR for the new shape: MATRIX_LR 0.04 -> 0.05. The 0.04 default was tuned at model_dim 512; the winning model is 640 wide with 1325 st"},
+ {i:13, id:"5a90b3aa", bpb:0.987102, p:85.9, s:668, mfu:44.96, vram:66.5, short:"batch 262K->524K", plan:"Re-tune batch at the new capacity: TOTAL_BATCH_SIZE 2**18 -> 2**19. The 2**18 optimum was established at 50.3M params and 2000+ steps; critical batch "},
+ {i:14, id:"8bed6ff2", bpb:0.978169, p:85.9, s:1322, mfu:44.86, vram:66.2, short:"warmdown 0.35", plan:"Schedule shape: WARMDOWN_RATIO 0.5 -> 0.35. Half the budget spent decaying the LR is a lot, and it matters more now that the run is only 1325 steps ra"},
+ {i:15, id:"502959c2", bpb:0.974019, p:85.9, s:1323, mfu:44.89, vram:66.2, short:"baseline", plan:"Embedding LR probe: EMBEDDING_LR 0.6 -> 0.8. With far fewer optimizer steps than baseline, embeddings get less total movement, so a higher rate may co"},
+ {i:16, id:"8282a51e", bpb:0.974545, p:85.9, s:1322, mfu:44.86, vram:66.2, short:"embed LR 1.0", plan:"Push the embedding-LR axis: 0.8 -> 1.0. Raising 0.6 -> 0.8 won 0.0018 (~12 sigma), the clearest knob result of the campaign, so the axis is live and w"},
+ {i:17, id:"9fee3cf3", bpb:0.980724, p:85.9, s:1270, mfu:43.08, vram:66.4, short:"head dim 64", plan:"Attention expressivity at constant FLOPs: HEAD_DIM 128 -> 64 doubles the head count at the same model_dim. Same parameter count, same matmul cost, mor"},
+ {i:18, id:"b220b327", bpb:0.975628, p:85.9, s:1291, mfu:45.36, vram:66.2, short:"short window 1/4", plan:"Attention span seq/8 -> seq/4. The span was tuned at the old 50.3M shape, and seq/8 was never established over seq/4 (1 sigma)."},
+ {i:19, id:"e6d38dce", bpb:0.974240, p:85.9, s:1314, mfu:44.6, vram:66.2, short:"matrix LR 0.03", plan:"MATRIX_LR 0.04 -> 0.03. Raising to 0.05 lost 0.0011 (~7 sigma), so if the optimum moved it moved down."},
+ {i:20, id:"aaa966e6", bpb:0.977611, p:114.8, s:1017, mfu:47.62, vram:78.8, short:"width 768", plan:"Width sweep at fixed DEPTH 10, wider: model_dim 640 -> 768 (6 heads). Separates width from depth, which the DEPTH knob confounds via rounding."},
+ {i:21, id:"3182a773", bpb:0.976064, p:60.8, s:1808, mfu:41.69, vram:53.7, short:"width 512", plan:"Width sweep at fixed DEPTH 10, narrower: model_dim 640 -> 512 (4 heads). With the 768 probe this gives three points at constant depth."},
+ {i:22, id:"c3a62a53", bpb:0.972938, p:85.9, s:1317, mfu:44.7, vram:66.2, short:"unembed LR 0.006", plan:"UNEMBEDDING_LR 0.004 -> 0.006. The embedding LR responded strongly to being raised; the unembedding is the paired Adam group and may too."},
+ {i:23, id:"b6c0d04e", bpb:0.973128, p:85.9, s:1316, mfu:44.64, vram:66.2, short:"Continue the unembedding-LR axis: ", plan:"Continue the unembedding-LR axis: 0.006 -> 0.008. Raising 0.004 -> 0.006 won 0.0011 (~7 sigma), so the axis is live and needs bracketing above before "},
+ {i:24, id:"d20fd8aa", bpb:0.986212, p:85.9, s:1153, mfu:38.38, vram:70.9, short:"short window 1/16", plan:"Attention span seq/8 -> seq/16 (128 tokens). seq/8 beat seq/4 by ~11 sigma at this shape, so the axis is still live and needs bracketing from below."},
+ {i:25, id:"3027e6ae", bpb:0.977949, p:85.9, s:1241, mfu:42.08, vram:66.5, short:"5% warmup", plan:"WARMUP_RATIO 0.0 -> 0.05. No warmup at all is unusual; at a larger model and higher embedding LR a short warmup may stabilise early steps."},
+ {i:26, id:"4297ef27", bpb:0.973168, p:85.9, s:1311, mfu:44.49, vram:66.5, short:"embed LR 0.9", plan:"Fine-grained embedding LR probe at 0.9."},
+ {i:27, id:"f08d1c89", bpb:0.973181, p:85.9, s:1313, mfu:44.54, vram:66.5, short:"baseline", plan:"GPU-MOVE VALIDATION: byte-identical replicate of c3a62a53, first run on GPU 0. c3a62a53 scored 0.972938 on GPU 2 with sd 0.000148 known from three rep"},
+ {i:28, id:"faac0edd", bpb:0.974859, p:85.9, s:1311, mfu:44.47, vram:66.5, short:"scalar LR 0.7", plan:"SCALAR_LR 0.5 -> 0.7. Same reasoning as the embedding LR: fewer total steps means each Adam group gets less total movement."},
+ {i:29, id:"4224e469", bpb:0.972890, p:85.9, s:1311, mfu:44.49, vram:66.5, short:"weight decay 0.1", plan:"WEIGHT_DECAY 0.2 -> 0.1. The run is sub-single-epoch so there is little to regularise against; less decay may leave more capacity usable."},
+ {i:30, id:"32fb73bd", bpb:0.972139, p:85.9, s:1315, mfu:44.63, vram:66.5, short:"final LR 0.1", plan:"FINAL_LR_FRAC 0.0 -> 0.1. Decaying fully to zero wastes the last steps; a nonzero floor keeps them useful."},
+ {i:31, id:"a0372b4d", bpb:0.974677, p:85.9, s:1331, mfu:43.56, vram:66.5, short:"pattern SSSSSSSL", plan:"WINDOW_PATTERN SSSL -> SSSSSSSL: only 1 layer in 8 attends to full context instead of 2 in 4."},
+ {i:32, id:"f5ee9e18", bpb:0.972196, p:85.9, s:1314, mfu:44.6, vram:66.5, short:"embed LR 0.9", plan:"Fine-grained embedding LR probe at 0.9."},
+ {i:33, id:"6779eb52", bpb:0.972557, p:85.9, s:1315, mfu:44.61, vram:66.5, short:"warmdown 0.7", plan:"WARMDOWN_RATIO 0.5 -> 0.7 (MORE cooldown). Corrects a premature closure: I tested only 0.35, saw it lose, and declared 0.5 optimal from a one-sided te"},
+ {i:34, id:"080adced", bpb:0.972659, p:85.9, s:1316, mfu:44.65, vram:66.5, short:"unembed LR 0.008", plan:"UNEMBEDDING_LR 0.004 -> 0.008. Same family as the embedding LR, which was the campaign's clearest knob win."},
+ {i:35, id:"126f7484", bpb:0.970759, p:85.9, s:1323, mfu:44.9, vram:66.5, short:"RoPE base 50k", plan:"RoPE base frequency 10000 -> 50000. A longer rotary wavelength changes how positions are encoded across the 2048-token context; untouched so far and s"},
+ {i:36, id:"8ad9a8f0", bpb:0.972872, p:85.9, s:1333, mfu:43.64, vram:66.5, short:"pattern SSSSSSSL", plan:"WINDOW_PATTERN SSSL -> SSSSSSSL: only 1 layer in 8 attends to full context instead of 2 in 4."},
+ {i:37, id:"928ca8dd", bpb:0.970344, p:85.9, s:1321, mfu:44.81, vram:66.5, short:"embed LR 0.9", plan:"Fine-grained embedding LR probe at 0.9."},
+ {i:38, id:"366a7fa4", bpb:0.973744, p:85.9, s:1333, mfu:43.64, vram:66.5, short:"pattern SSSSSSSL", plan:"WINDOW_PATTERN SSSL -> SSSSSSSL: only 1 layer in 8 attends to full context instead of 2 in 4."},
+ {i:39, id:"17210a01", bpb:0.970855, p:85.9, s:1315, mfu:44.62, vram:66.5, short:"warmdown 0.7", plan:"WARMDOWN_RATIO 0.5 -> 0.7 (MORE cooldown). Corrects a premature closure: I tested only 0.35, saw it lose, and declared 0.5 optimal from a one-sided te"},
+ {i:40, id:"1fcf24ab", bpb:0.972104, p:85.9, s:1315, mfu:44.6, vram:66.5, short:"unembed LR 0.008", plan:"UNEMBEDDING_LR 0.004 -> 0.008. Same family as the embedding LR, which was the campaign's clearest knob win."},
+ {i:41, id:"ee0ff77f", bpb:0.971876, p:85.9, s:1314, mfu:44.58, vram:66.5, short:"RoPE base 100k", plan:"RoPE base frequency -> 100000, continuing the axis if 50000 pays."},
+ {i:42, id:"ca0da0c1", bpb:0.971583, p:85.9, s:1319, mfu:44.74, vram:66.5, short:"x0_lambda 0.05", plan:"x0_lambda init 0.1 -> 0.05. These per-layer scalars gate how much of the embedding output is re-injected at each block; the init sets where that mixin"},
+ {i:43, id:"91077332", bpb:0.971507, p:85.9, s:1315, mfu:44.61, vram:66.5, short:"weight decay 0.05", plan:"WEIGHT_DECAY 0.1 -> 0.05. 0.2 -> 0.1 won, so bracket below before closing the axis."},
+ {i:44, id:"18f11d35", bpb:0.970168, p:85.9, s:1314, mfu:44.58, vram:66.5, short:"weight decay 0.15", plan:"WEIGHT_DECAY 0.1 -> 0.15, filling in between the tested 0.1 and 0.2."},
+ {i:45, id:"726ab0f1", bpb:0.972037, p:85.9, s:1315, mfu:44.63, vram:66.5, short:"x0_lambda 0.05", plan:"x0_lambda init 0.1 -> 0.05. These per-layer scalars gate how much of the embedding output is re-injected at each block; the init sets where that mixin"},
+ {i:46, id:"99295329", bpb:0.975253, p:85.9, s:1316, mfu:44.64, vram:66.5, short:"scalar LR 0.3", plan:"SCALAR_LR 0.5 -> 0.3. Raising to 0.7 lost, so if the optimum moved it moved down."},
+ {i:47, id:"1aab41f8", bpb:0.972185, p:85.9, s:1317, mfu:44.7, vram:66.5, short:"x0_lambda 0.15", plan:"x0_lambda init 0.1 -> 0.15, bracketing the residual-gating init upward."},
+ {i:48, id:"44c84533", bpb:0.969635, p:85.9, s:1316, mfu:44.64, vram:66.5, short:"final LR 0.05", plan:"FINAL_LR_FRAC 0.0 -> 0.05, a gentler nonzero floor than 0.1."},
+ {i:49, id:"0681c8b7", bpb:0.971539, p:85.9, s:1289, mfu:43.74, vram:66.5, short:"weight decay 0.1", plan:"WEIGHT_DECAY 0.2 -> 0.1. The run is sub-single-epoch so there is little to regularise against; less decay may leave more capacity usable."},
+ {i:50, id:"4d3e0ae9", bpb:0.974919, p:85.9, s:1311, mfu:44.5, vram:66.5, short:"scalar LR 0.3", plan:"SCALAR_LR 0.5 -> 0.3. Raising to 0.7 lost, so if the optimum moved it moved down."},
+ {i:51, id:"146336db", bpb:0.971523, p:85.9, s:1314, mfu:44.59, vram:66.5, short:"x0_lambda 0.15", plan:"x0_lambda init 0.1 -> 0.15, bracketing the residual-gating init upward."},
+ {i:52, id:"a8240768", bpb:0.970797, p:85.9, s:1312, mfu:44.53, vram:66.5, short:"adam beta1 0.9", plan:"ADAM_BETAS beta1 0.8 -> 0.9. Both Adam-group LRs paid; the Adam momentum is untested."},
+ {i:53, id:"4a0817dc", bpb:0.973020, p:85.9, s:1292, mfu:43.84, vram:66.5, short:"adam beta1 0.7", plan:"ADAM_BETAS beta1 0.8 -> 0.7, bracketing Adam momentum downward."},
+ {i:54, id:"342d3821", bpb:0.971687, p:85.9, s:1285, mfu:43.59, vram:66.5, short:"unembed LR 0.005", plan:"UNEMBEDDING_LR 0.006 -> 0.005, refining between the tested 0.004 and 0.006."},
+ {i:55, id:"1000bc52", bpb:0.969807, p:85.9, s:1315, mfu:44.63, vram:66.5, short:"embed LR 0.85", plan:"EMBEDDING_LR fine probe at 0.85, between the 0.8 and 0.9 results."},
+ {i:56, id:"dd8e7a5b", bpb:0.970907, p:85.9, s:1313, mfu:44.56, vram:66.5, short:"matrix LR 0.03", plan:"MATRIX_LR 0.04 -> 0.035. Both 0.03 and 0.05 failed to beat 0.04; this probes finer."},
+ {i:57, id:"94ae5966", bpb:0.970422, p:85.9, s:1315, mfu:44.63, vram:66.5, short:"muon warmup 500", plan:"Muon momentum warmup stretched from 300 to 500 steps. The schedule was set for a ~1000-step run; this one does ~1310."},
+ {i:58, id:"c9015b04", bpb:0.969852, p:85.9, s:1315, mfu:44.61, vram:66.5, short:"muon warmup 150", plan:"Muon momentum warmup shortened to 150 steps, bracketing the schedule downward."},
+ {i:59, id:"5f8207b9", bpb:0.972399, p:85.9, s:1315, mfu:44.6, vram:66.5, short:"baseline", plan:"RoPE base 50000 -> 25000, refining between the winning 50000 and the baseline 10000."},
+ {i:60, id:"5b48cc39", bpb:0.970734, p:85.9, s:1314, mfu:44.59, vram:66.5, short:"RoPE base 75k", plan:"RoPE base 50000 -> 75000, refining between the winning 50000 and the losing 100000."},
+ {i:61, id:"eccb9e53", bpb:0.970014, p:85.9, s:1309, mfu:44.42, vram:66.5, short:"final LR 0.025", plan:"FINAL_LR_FRAC 0.05 -> 0.025. 0.05 beat both 0.0 and 0.1, so the optimum is inside (0, 0.1)."},
+ {i:62, id:"91031295", bpb:0.971535, p:80.9, s:1430, mfu:44.62, vram:60.5, short:"depth 9", plan:"DEPTH 10 -> 9. ASPECT_RATIO rounding keeps model_dim at 640, so this is a pure depth change at constant width - the one interior point the earlier swe"},
+ {i:63, id:"b79a77ea", bpb:0.973621, p:112.1, s:1287, mfu:43.67, vram:68.3, short:"value emb all layers", plan:"Value embeddings on every layer instead of alternating. Doubles VE coverage; the ResFormer value-residual path has never been varied."},
+ {i:64, id:"c664c3e8", bpb:0.995024, p:85.9, s:1230, mfu:41.7, vram:69.6, short:"baseline", plan:"MLP activation relu-squared -> gelu. The activation has been fixed since the baseline and is untested."},
+ {i:65, id:"56eddb52", bpb:0.970258, p:85.9, s:1303, mfu:44.21, vram:66.5, short:"rotary table 4x", plan:"Rotary table length 10x sequence_len -> 4x. Pairs with the RoPE base-frequency win; the table extent is a separate untested knob."},
+ {i:66, id:"87e5ba8e", bpb:0.969986, p:85.9, s:1313, mfu:44.55, vram:66.5, short:"final LR 0.075", plan:"FINAL_LR_FRAC 0.05 -> 0.075, bracketing the winner from above."},
+ {i:67, id:"6716348b", bpb:0.970303, p:85.9, s:1309, mfu:44.4, vram:66.5, short:"embed LR 0.95", plan:"EMBEDDING_LR 0.9 -> 0.95, refining between the winning 0.9 and the losing 1.0."},
+ {i:68, id:"2f9c8911", bpb:0.970723, p:85.9, s:1314, mfu:44.59, vram:66.5, short:"adam beta2 0.99", plan:"ADAM_BETAS beta2 0.95 -> 0.99. Only beta1 has been probed; beta2 is untouched."},
+ {i:69, id:"90e562b0", bpb:0.974136, p:85.9, s:1320, mfu:44.79, vram:66.5, short:"muon mom 0.90-0.98", plan:"Muon momentum range 0.85->0.95 raised to 0.90->0.98. The endpoints are untested; only the warmup length has been probed."},
+ {i:70, id:"4910ff00", bpb:0.970081, p:85.9, s:1312, mfu:44.53, vram:66.5, short:"muon mom 0.80-0.92", plan:"Muon momentum range lowered to 0.80->0.92, bracketing the endpoints downward."},
+ {i:71, id:"9bb20566", bpb:0.970326, p:85.9, s:1313, mfu:44.57, vram:66.5, short:"weight decay 0.2", plan:"WEIGHT_DECAY 0.15 -> 0.2 on the current lineage. Reverting to 0.1 lost 0.0019 here, which conflicts with the earlier flat reading; this probes the oth"},
+ {i:72, id:"5fc8be22", bpb:0.973186, p:77.7, s:1446, mfu:42.88, vram:62.4, short:"mlp 3x", plan:"MLP expansion 4x -> 3x. Cuts MLP FLOPs ~25%, trading capacity for steps - the capacity/throughput tradeoff at a different lever than DEPTH."},
+ {i:73, id:"5a796892", bpb:0.972615, p:94.0, s:1198, mfu:45.77, vram:76.9, short:"mlp 5x", plan:"MLP expansion 4x -> 5x, bracketing the ratio upward since DEPTH showed capacity pays here."},
+ {i:74, id:"e5eaf62e", bpb:0.972476, p:77.7, s:1448, mfu:42.92, vram:60.2, short:"mlp 3x", plan:"MLP expansion 4x -> 3x. Cuts MLP FLOPs ~25%, trading capacity for steps - the capacity/throughput tradeoff at a different lever than DEPTH."},
+ {i:75, id:"b9b7e7c0", bpb:0.984331, p:85.9, s:1364, mfu:46.29, vram:60.2, short:"no QK norm", plan:"Remove QK normalisation before attention. A load-bearing primitive like the relu-squared activation, never varied; worth knowing whether it earns its "},
+ {i:76, id:"a2ba9db4", bpb:0.979710, p:85.9, s:1312, mfu:44.52, vram:69.6, short:"activation relu^3", plan:"MLP activation relu-squared -> relu-cubed. GeLU lost 0.0254, so the squaring is doing real work; this probes whether the exponent itself is tuned."},
+ {i:77, id:"96c9459e", bpb:0.970903, p:85.9, s:1297, mfu:43.99, vram:35.4, short:"grad accum 2", plan:"DEVICE_BATCH_SIZE 128 -> 64 at unchanged TOTAL_BATCH_SIZE, so grad_accum_steps goes 1 -> 2. Same optimizer batch, different micro-batching: a pure thr"},
+ {i:78, id:"a07320f0", bpb:0.970103, p:85.9, s:1312, mfu:44.51, vram:70.9, short:"fp32 matmul highest", plan:"float32 matmul precision high -> highest. Trades throughput for numerical precision in the fp32 paths; untested."},
+ {i:79, id:"e460cd75", bpb:0.987549, p:85.9, s:662, mfu:44.56, vram:66.8, short:"retest batch 2^19", plan:"RETEST at the current operating point: TOTAL_BATCH_SIZE 2**18 -> 2**19. The batch optimum was fixed before the RoPE, embedding-LR, final-LR and weight"},
+ {i:80, id:"7ab2edea", bpb:0.974153, p:85.9, s:2561, mfu:43.62, vram:33.5, short:"retest batch 2^17", plan:"RETEST: TOTAL_BATCH_SIZE 2**18 -> 2**17 with DEVICE_BATCH_SIZE 64 to keep grad_accum at 1. Probes the other side of the batch axis at the current oper"},
+ {i:81, id:"1e2efedd", bpb:0.979108, p:135.3, s:866, mfu:47.22, vram:98.3, short:"retest depth 12", plan:"RETEST: DEPTH 10 -> 12 at the current operating point. Capacity lost at 135M when tested against the old configuration; the LR set has changed substan"},
+ {i:82, id:"07cffa19", bpb:0.974911, p:114.8, s:1015, mfu:47.53, vram:78.8, short:"retest depth 12", plan:"RETEST: width 640 -> 768 at DEPTH 10 and the current operating point. Lost by 0.0036 against the old configuration."},
+ {i:83, id:"8e2b73eb", bpb:0.974808, p:114.8, s:1016, mfu:47.55, vram:78.8, short:"retest depth 12", plan:"RETEST: width 640 -> 768 at DEPTH 10 and the current operating point. Lost by 0.0036 against the old configuration."},
+ {i:84, id:"680db4df", bpb:0.976169, p:121.1, s:962, mfu:45.38, vram:87.4, short:"mlp3 + depth12", plan:"CONSTANT-CAPACITY SHAPE: MLP 4x -> 3x with DEPTH 10 -> 12 (~91M vs 85.9M). Leaner MLP, more layers. Both changes lost alone; the question is whether t"},
+ {i:85, id:"3f3f3654", bpb:0.972248, p:88.3, s:1311, mfu:45.96, vram:66.2, short:"mlp5 + depth9", plan:"CONSTANT-CAPACITY SHAPE: MLP 4x -> 5x with DEPTH 10 -> 9 (~88M vs 85.9M, width stays 640). Fatter MLP, fewer layers - the opposite allocation to cmp_m"},
+ {i:86, id:"ffb6c87d", bpb:0.969663, p:85.9, s:1315, mfu:44.6, vram:66.5, short:"replicate", plan:"AUTO-REPLICATE of 44c84533 (no applicable untried lever). Adds a sample to the run-to-run noise estimate."},
+ {i:87, id:"7fcec1f0", bpb:0.969626, p:85.9, s:1314, mfu:44.57, vram:66.5, short:"replicate", plan:"AUTO-REPLICATE of 44c84533 (no applicable untried lever). Adds a sample to the run-to-run noise estimate."},
+ {i:88, id:"e9298573", bpb:0.974398, p:91.1, s:1237, mfu:42.37, vram:71.3, short:"mlp3 + depth12", plan:"CONSTANT-CAPACITY SHAPE (corrected): DEPTH 12 with ASPECT_RATIO 48 to hold model_dim at 640, plus MLP 4x -> 3x. ~91M vs 85.9M. Replaces cmp_mlp3_d12, "},
+ {i:89, id:"ecd181ff", bpb:0.969792, p:85.9, s:1315, mfu:44.63, vram:66.5, short:"replicate", plan:"AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate."},
+ {i:90, id:"bed88008", bpb:0.969889, p:85.9, s:1314, mfu:44.59, vram:66.5, short:"replicate", plan:"AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate."},
+ {i:91, id:"1721e365", bpb:0.969819, p:85.9, s:1313, mfu:44.56, vram:66.5, short:"replicate", plan:"AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate."},
+ {i:92, id:"2197088a", bpb:0.974595, p:91.1, s:1234, mfu:42.28, vram:71.3, short:"mlp3 + depth12", plan:"CONSTANT-CAPACITY SHAPE (corrected): DEPTH 12 with ASPECT_RATIO 48 to hold model_dim at 640, plus MLP 4x -> 3x. ~91M vs 85.9M. Replaces cmp_mlp3_d12, "},
+ {i:93, id:"bd73f21f", bpb:0.970007, p:85.9, s:1307, mfu:44.34, vram:66.5, short:"replicate", plan:"AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate."},
+ {i:94, id:"00edc0f1", bpb:0.969726, p:85.9, s:1310, mfu:44.46, vram:66.5, short:"replicate", plan:"AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate."},
+ {i:95, id:"aab87a43", bpb:0.969734, p:85.9, s:1310, mfu:44.46, vram:66.5, short:"replicate", plan:"AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate."},
+ {i:96, id:"d263a34d", bpb:0.969641, p:85.9, s:1315, mfu:44.6, vram:66.5, short:"replicate", plan:"AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate."},
+ {i:97, id:"a507160f", bpb:0.972412, p:85.9, s:1318, mfu:44.72, vram:66.5, short:"replicate", plan:"SEED VARIANCE MEASUREMENT (seed 43, not an improvement). Replicates so far hold the seed at 42 and capture only kernel nondeterminism and step jitter;"},
+ {i:98, id:"db7342cc", bpb:0.971373, p:85.9, s:1317, mfu:44.69, vram:66.5, short:"replicate", plan:"SEED VARIANCE MEASUREMENT (seed 137, not an improvement). Replicates so far hold the seed at 42 and capture only kernel nondeterminism and step jitter"},
+ {i:99, id:"143ceea2", bpb:0.972270, p:85.9, s:1314, mfu:44.58, vram:66.5, short:"replicate", plan:"SEED VARIANCE MEASUREMENT (seed 2024, not an improvement). Replicates so far hold the seed at 42 and capture only kernel nondeterminism and step jitte"},
+ {i:100, id:"42465468", bpb:0.969615, p:85.9, s:1316, mfu:44.66, vram:66.5, short:"replicate", plan:"AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate."},
+ {i:101, id:"eb0727f4", bpb:0.969654, p:85.9, s:1315, mfu:44.6, vram:66.5, short:"replicate", plan:"AUTO-REPLICATE of 42465468 (no applicable untried lever). Adds a sample to the run-to-run noise estimate."},
+ {i:102, id:"6d50fbc7", bpb:0.970127, p:85.9, s:1312, mfu:44.51, vram:66.5, short:"replicate", plan:"AUTO-REPLICATE of 42465468 (no applicable untried lever). Adds a sample to the run-to-run noise estimate."},
+ {i:105, id:"51333356", bpb:0.990118, p:50.3, s:1017, mfu:42.51, vram:44.0, short:"baseline", plan:"SEED-PAIRED BASELINE (seed 137, not an improvement). Pristine baseline at seed 137; third attempt - the first two were aborted by tenants arriving mid"},
+ {i:106, id:"137deafa", bpb:0.989440, p:50.3, s:1013, mfu:42.33, vram:44.0, short:"baseline", plan:"SEED-PAIRED BASELINE (seed 43, not an improvement). Pristine baseline at seed 43; third attempt - the first two were aborted by tenants arriving mid-r"},
+ {i:108, id:"586597ce", bpb:0.991566, p:50.3, s:1014, mfu:42.36, vram:44.0, short:"baseline", plan:"SEED-PAIRED BASELINE (seed 2024, not an improvement). Completes the seed-paired arm; 42/43/137 are measured."},
+ {i:109, id:"c5b3032b", bpb:0.970386, p:85.9, s:1306, mfu:44.32, vram:66.2, short:"replicate", plan:"AUTO-REPLICATE of 42465468 (rendezvous timeout fallback). Byte-identical source; adds a sample to the run-to-run noise estimate."},
+ {i:110, id:"2f36e383", bpb:0.971180, p:85.9, s:1305, mfu:44.26, vram:66.2, short:"ABLATION of 44c84533: revert FINAL", plan:"ABLATION of 44c84533: revert FINAL_LR_FRAC 0.05 -> 0.0. Upstream's stage 4 is systematic component analysis - remove each adopted change from the FINA"},
+ {i:111, id:"d3f0110e", bpb:0.970057, p:85.9, s:1310, mfu:44.46, vram:66.2, short:"replicate", plan:"AUTO-REPLICATE of 42465468 (rendezvous timeout fallback). Byte-identical source; adds a sample to the run-to-run noise estimate."},
+ {i:112, id:"b07eeb76", bpb:0.977734, p:50.3, s:2181, mfu:40.39, vram:48.5, short:"ABLATION of 44c84533: revert DEPTH", plan:"ABLATION of 44c84533: revert DEPTH 10 -> 8 (also reverts width 640 -> 512 via ASPECT_RATIO). Upstream's stage 4 is systematic component analysis - rem"},
+ {i:113, id:"8133a1a5", bpb:0.970862, p:85.9, s:1301, mfu:44.14, vram:66.2, short:"replicate", plan:"AUTO-REPLICATE of 42465468 (rendezvous timeout fallback). Byte-identical source; adds a sample to the run-to-run noise estimate."},
+ {i:114, id:"7bd5b482", bpb:0.972013, p:85.9, s:1267, mfu:42.99, vram:66.2, short:"max-autotune compile", plan:"ABLATION of 44c84533: revert max-autotune compile -> default. Upstream's stage 4 is systematic component analysis - remove each adopted change from th"},
+ {i:115, id:"5ca39067", bpb:0.969822, p:85.9, s:1310, mfu:44.44, vram:66.2, short:"replicate", plan:"AUTO-REPLICATE of 42465468 (rendezvous timeout fallback). Byte-identical source; adds a sample to the run-to-run noise estimate."},
+ {i:116, id:"003d6c02", bpb:0.977436, p:85.9, s:1237, mfu:46.42, vram:66.2, short:"ABLATION of 44c84533: revert short", plan:"ABLATION of 44c84533: revert short-attention span seq/8 -> seq/2. Re-run after tightening the contention threshold to 4GB - the first attempt passed t"},
+ {i:117, id:"aae46fa6", bpb:0.987332, p:85.9, s:663, mfu:44.6, vram:66.5, short:"batch 262K->524K", plan:"ABLATION of 44c84533: revert TOTAL_BATCH_SIZE 2**18 -> 2**19. Re-run after tightening the contention threshold to 4GB - the first attempt passed the o"},
 ];
 let run = Infinity;
 D.forEach(d => { d.keep = d.bpb < run; if (d.keep) run = d.bpb; d.best = run; });
@@ -219,7 +347,7 @@ document.getElementById("tiles").innerHTML = [
 /* ---- main progress chart, following analysis.ipynb conventions ---- */
 (function () {
   const svg = document.getElementById("progress");
-  const L=86, R=26, T=96, B=52, W=1140, H=560;
+  const L=92, R=34, T=104, B=58, W=2760, H=600;
   const pw=W-L-R, ph=H-T-B;
   // y-limits exactly as the notebook computes them.
   const margin = (BASE - BEST) * 0.15;
@@ -234,6 +362,9 @@ document.getElementById("tiles").innerHTML = [
     svg.appendChild(el("text", {x:L-11, y:y(g)+4, "text-anchor":"end", fill:"var(--ink-2)",
       "font-size":12, class:"mono"}, g.toFixed(4)));
   }
+  for (let i = 0; i < D.length; i += 5)
+    svg.appendChild(el("line", {x1:x(i), x2:x(i), y1:T, y2:T+ph,
+      stroke:"var(--grid)", "stroke-width":1, opacity:0.55}));
   svg.appendChild(el("rect", {x:L, y:T, width:pw, height:ph, fill:"none",
     stroke:"var(--spine)", "stroke-width":1}));
 
@@ -256,9 +387,14 @@ document.getElementById("tiles").innerHTML = [
     } else {
       svg.appendChild(el("circle", {cx:x(d.i), cy:y(d.bpb), r:3.4, fill:"var(--disc)"}));
     }
-    if (d.i % 2 === 0)
-      svg.appendChild(el("text", {x:x(d.i), y:H-30, "text-anchor":"middle", fill:"var(--ink-2)",
-        "font-size":12, class:"mono"}, d.i));
+    // Label every 5th experiment and tick every one: dense enough to locate a trial,
+    // sparse enough to read. At 115 points, labelling every 2 was illegible.
+    const major = d.i % 5 === 0;
+    svg.appendChild(el("line", {x1:x(d.i), x2:x(d.i), y1:T+ph, y2:T+ph+(major?7:3),
+      stroke:"var(--spine)", "stroke-width":major?1.2:0.7, opacity:major?0.9:0.45}));
+    if (major)
+      svg.appendChild(el("text", {x:x(d.i), y:H-32, "text-anchor":"middle", fill:"var(--ink-2)",
+        "font-size":12.5, class:"mono"}, d.i));
     const hit = el("rect", {x:x(d.i)-pw/(2*(D.length-1)), y:T, width:pw/(D.length-1), height:ph, class:"hit"});
     hit.addEventListener("mousemove", e => showTip(e, `<div class="t">#${d.i} · ${d.id} · ${
       d.keep ? "KEPT" : "discarded"}</div>${d.plan}<br>val_bpb <b>${N(d.bpb)}</b> · ${d.p}M params · ${
@@ -267,13 +403,13 @@ document.getElementById("tiles").innerHTML = [
     svg.appendChild(hit);
   });
 
-  svg.appendChild(el("text", {x:L+pw/2, y:H-8, "text-anchor":"middle", fill:"var(--ink)",
-    "font-size":13}, "Experiment #"));
+  svg.appendChild(el("text", {x:L+pw/2, y:H-9, "text-anchor":"middle", fill:"var(--ink)",
+    "font-size":13.5}, "Experiment #"));
   svg.appendChild(el("text", {x:-(T+ph/2), y:20, transform:"rotate(-90)", "text-anchor":"middle",
     fill:"var(--ink)", "font-size":13}, "Validation BPB (lower is better)"));
 
   // legend, inside the axes at upper right as in the notebook
-  const lx = L+pw-232, ly = T+14;
+  const lx = L+pw-244, ly = T+14;
   svg.appendChild(el("rect", {x:lx, y:ly, width:220, height:80, fill:"var(--panel)",
     stroke:"var(--rule)", "stroke-width":1, rx:3, opacity:.96}));
   svg.appendChild(el("circle", {cx:lx+18, cy:ly+17, r:3.4, fill:"var(--disc)"}));
@@ -295,7 +431,9 @@ function mini(id, key, lo, hi, ticks, fmt, colour, ylab) {
   const svg = document.getElementById(id);
   const L=62, R=20, T=20, B=48, W=560, H=320;
   const pw=W-L-R, ph=H-T-B;
-  const pts = [D[6], D[7], D[8], D[9]];
+  const byId = id => D.find(d => d.id === id);
+  // The DEPTH sweep, addressed by node id so a rebuilt journal cannot re-point these.
+  const pts = ["e28ccb85", "c7c8d842", "fd76db94", "3c3fa271"].map(byId).filter(Boolean);
   const px = p => L + (p-15)/(145-15)*pw;
   const py = v => T + (hi-v)/(hi-lo)*ph;
   ticks.forEach(g => {
@@ -325,6 +463,60 @@ function mini(id, key, lo, hi, ticks, fmt, colour, ylab) {
 mini("capacity","bpb", 0.9735, 1.0265, [0.98,0.99,1.00,1.01,1.02], v=>v.toFixed(2),
      "var(--kept)", "Validation BPB (lower is better)");
 mini("mfu","mfu", 24, 50, [25,30,35,40,45,50], v=>String(v), "var(--best)", "MFU (%)");
+
+
+/* ---- ablation: marginal contribution, introduction vs final config ---- */
+(function () {
+  const svg = document.getElementById("ablation");
+  if (!svg) return;
+  const A = [
+    {k:"TOTAL_BATCH_SIZE 2\u00b9\u2078", intro:0.00765, fin:0.01745},
+    {k:"shape: DEPTH 10 / width 640",     intro:0.00423, fin:0.00785},
+    {k:"attention span seq/8",            intro:0.00250, fin:0.00755},
+    {k:"max-autotune compile",            intro:0.00125, fin:0.00213},
+    {k:"FINAL_LR_FRAC 0.05",              intro:0.00053, fin:0.00129},
+  ];
+  const L=232, R=118, T=26, B=44, W=1140, H=300;
+  const pw=W-L-R, ph=H-T-B, band=ph/A.length, bh=band*0.30;
+  const max=0.019, x=v=>v/max*pw;
+
+  for (let g=0; g<=0.018; g+=0.005) {
+    svg.appendChild(el("line",{x1:L+x(g),x2:L+x(g),y1:T,y2:T+ph,stroke:"var(--grid)","stroke-width":1}));
+    svg.appendChild(el("text",{x:L+x(g),y:H-24,"text-anchor":"middle",fill:"var(--ink-2)",
+      "font-size":11.5,class:"mono"}, g.toFixed(3)));
+  }
+  // Total improvement: the line the marginals overshoot.
+  svg.appendChild(el("line",{x1:L+x(0.02131),x2:L+x(0.02131),y1:T,y2:T+ph,
+    stroke:"var(--anno)","stroke-width":2,"stroke-dasharray":"5 4"}));
+
+  A.forEach((d,i)=>{
+    const y0=T+i*band+band/2;
+    svg.appendChild(el("text",{x:L-11,y:y0+4,"text-anchor":"end",fill:"var(--ink)","font-size":12.5},d.k));
+    // 2px surface gap between the paired bars keeps them read as a pair, not a stack.
+    svg.appendChild(el("rect",{x:L,y:y0-bh-1,width:Math.max(2,x(d.intro)),height:bh,
+      fill:"var(--disc)",rx:3}));
+    svg.appendChild(el("rect",{x:L,y:y0+1,width:Math.max(2,x(d.fin)),height:bh,
+      fill:"var(--kept)",stroke:"var(--kept-edge)","stroke-width":1,rx:3}));
+    svg.appendChild(el("text",{x:L+x(d.fin)+8,y:y0+bh-1,fill:"var(--anno)","font-size":11.5,
+      "font-weight":600,class:"mono"}, d.fin.toFixed(5)+"  ("+(d.fin/d.intro).toFixed(1)+"x)"));
+    const hit=el("rect",{x:L,y:y0-band/2,width:pw,height:band,class:"hit"});
+    hit.addEventListener("mousemove",e=>showTip(e,
+      `<div class="t">${d.k}</div>at introduction <b>${d.intro.toFixed(5)}</b><br>` +
+      `in final config <b>${d.fin.toFixed(5)}</b> (${(d.fin/d.intro).toFixed(1)}x)`));
+    hit.addEventListener("mouseleave",hideTip);
+    svg.appendChild(hit);
+  });
+
+  svg.appendChild(el("rect",{x:L,y:T-18,width:13,height:6,fill:"var(--disc)",rx:2}));
+  svg.appendChild(el("text",{x:L+19,y:T-12,fill:"var(--ink-2)","font-size":12},"at introduction"));
+  svg.appendChild(el("rect",{x:L+140,y:T-18,width:13,height:6,fill:"var(--kept)",
+    stroke:"var(--kept-edge)","stroke-width":1,rx:2}));
+  svg.appendChild(el("text",{x:L+159,y:T-12,fill:"var(--ink-2)","font-size":12},"in final config"));
+  svg.appendChild(el("text",{x:L+x(0.02131)+7,y:T-12,fill:"var(--anno)","font-size":11.5},
+    "total improvement 0.0213"));
+  svg.appendChild(el("text",{x:L+pw/2,y:H-6,"text-anchor":"middle",fill:"var(--ink)","font-size":12},
+    "marginal contribution to val_bpb"));
+})();
 
 /* ---- table ---- */
 document.getElementById("tbl").innerHTML =

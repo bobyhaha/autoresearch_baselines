@@ -3,3 +3,123 @@ node_id	val_bpb	memory_gb	status	description
 fbec943f	0.988966	44.0	keep	Attention throughput: halve the SSSL short-attention span (seq/2=1024 -> seq/4=512). Compute-bound single-epoch regime, so cheaper attention should buy more optimizer steps in the fixed 300s.
 d05761a3	0.983545	43.9	keep	Optimizer cadence: halve TOTAL_BATCH_SIZE 2**19 -> 2**18, doubling optimizer steps per token at fixed token throughput.
 c89462a1	0.981576	43.9	keep	Stack the two confirmed levers from the other lineage: on top of TOTAL_BATCH_SIZE 2**18, halve the SSSL short-attention span seq/2 -> seq/4.
+edd151d9	0.987011	22.2	discard	Push the winning axis: halve the optimizer batch again, TOTAL_BATCH_SIZE 2**18 -> 2**17, with DEVICE_BATCH_SIZE 128 -> 64 to keep grad_accum_steps at 1 (the assert requires TOTAL_BATCH_SIZE %% tokens_
+c002e4a2	0.981310	43.9	keep	Continue the attention-span axis: short-attention span seq/4=512 -> seq/8=256. Tests whether span reduction has saturated.
+e28ccb85	1.024066	26.5	discard	Compute-optimal shape: DEPTH 8 -> 6. The run sees ~564M tokens at 50.3M params = 11 tokens/param, well under the ~20 that is compute-optimal at fixed FLOPs, so the model looks over-parameterised for t
+c7c8d842	0.980058	48.5	keep	Pure throughput, no model change: compile with mode=max-autotune-no-cudagraphs. MFU has drifted down to ~39.8 percent, so better kernel selection should buy steps at zero quality cost.
+fd76db94	0.975832	70.9	keep	Bracket the shape axis in the opposite direction: DEPTH 8 -> 10. DEPTH 6 lost badly (+0.043), which falsifies the tokens-per-param argument that predicted a smaller model would win, so capacity appear
+3c3fa271	0.979841	98.3	discard	Keep climbing the capacity axis: DEPTH 10 -> 12 (model_dim 640 -> 768, n_head 5 -> 6). DEPTH 10 won by 0.0042 with 71 percent more params and 40 percent fewer steps, and MFU rose 40.8 -> 45.0 because 
+c4cbd164	0.976128	66.2	discard	REPLICATE 1 of fd76db94 (byte-identical source). Measures run-to-run noise directly. Deliberately parented on the current best so it runs exactly when the search stalls, which is when the noise floor 
+860fa667	0.975999	66.2	discard	REPLICATE 2 of fd76db94 (byte-identical source). Measures run-to-run noise directly. Deliberately parented on the current best so it runs exactly when the search stalls, which is when the noise floor 
+b219d0f7	0.976931	66.2	discard	Re-tune the Muon LR for the new shape: MATRIX_LR 0.04 -> 0.05. The 0.04 default was tuned at model_dim 512; the winning model is 640 wide with 1325 steps instead of 2204, so the optimum has probably m
+5a90b3aa	0.987102	66.5	discard	Re-tune batch at the new capacity: TOTAL_BATCH_SIZE 2**18 -> 2**19. The 2**18 optimum was established at 50.3M params and 2000+ steps; critical batch size grows with model size, so at 85.9M params the
+8bed6ff2	0.978169	66.2	discard	Schedule shape: WARMDOWN_RATIO 0.5 -> 0.35. Half the budget spent decaying the LR is a lot, and it matters more now that the run is only 1325 steps rather than 2204.
+502959c2	0.974019	66.2	keep	Embedding LR probe: EMBEDDING_LR 0.6 -> 0.8. With far fewer optimizer steps than baseline, embeddings get less total movement, so a higher rate may compensate.
+8282a51e	0.974545	66.2	discard	Push the embedding-LR axis: 0.8 -> 1.0. Raising 0.6 -> 0.8 won 0.0018 (~12 sigma), the clearest knob result of the campaign, so the axis is live and worth bracketing before assuming 0.8 is the optimum
+9fee3cf3	0.980724	66.4	discard	Attention expressivity at constant FLOPs: HEAD_DIM 128 -> 64 doubles the head count at the same model_dim. Same parameter count, same matmul cost, more independent attention subspaces.
+b220b327	0.975628	66.2	discard	Attention span seq/8 -> seq/4. The span was tuned at the old 50.3M shape, and seq/8 was never established over seq/4 (1 sigma).
+e6d38dce	0.974240	66.2	discard	MATRIX_LR 0.04 -> 0.03. Raising to 0.05 lost 0.0011 (~7 sigma), so if the optimum moved it moved down.
+aaa966e6	0.977611	78.8	discard	Width sweep at fixed DEPTH 10, wider: model_dim 640 -> 768 (6 heads). Separates width from depth, which the DEPTH knob confounds via rounding.
+3182a773	0.976064	53.7	discard	Width sweep at fixed DEPTH 10, narrower: model_dim 640 -> 512 (4 heads). With the 768 probe this gives three points at constant depth.
+c3a62a53	0.972938	66.2	keep	UNEMBEDDING_LR 0.004 -> 0.006. The embedding LR responded strongly to being raised; the unembedding is the paired Adam group and may too.
+b6c0d04e	0.973128	66.2	discard	Continue the unembedding-LR axis: 0.006 -> 0.008. Raising 0.004 -> 0.006 won 0.0011 (~7 sigma), so the axis is live and needs bracketing above before it can be closed. Both Adam-group LRs have now pai
+d20fd8aa	0.986212	70.9	discard	Attention span seq/8 -> seq/16 (128 tokens). seq/8 beat seq/4 by ~11 sigma at this shape, so the axis is still live and needs bracketing from below.
+3027e6ae	0.977949	66.5	discard	WARMUP_RATIO 0.0 -> 0.05. No warmup at all is unusual; at a larger model and higher embedding LR a short warmup may stabilise early steps.
+4297ef27	0.973168	66.5	discard	Fine-grained embedding LR probe at 0.9.
+f08d1c89	0.973181	66.5	discard	GPU-MOVE VALIDATION: byte-identical replicate of c3a62a53, first run on GPU 0. c3a62a53 scored 0.972938 on GPU 2 with sd 0.000148 known from three replicates there. If this reproduces within noise the
+faac0edd	0.974859	66.5	discard	SCALAR_LR 0.5 -> 0.7. Same reasoning as the embedding LR: fewer total steps means each Adam group gets less total movement.
+4224e469	0.972890	66.5	keep	WEIGHT_DECAY 0.2 -> 0.1. The run is sub-single-epoch so there is little to regularise against; less decay may leave more capacity usable.
+32fb73bd	0.972139	66.5	keep	FINAL_LR_FRAC 0.0 -> 0.1. Decaying fully to zero wastes the last steps; a nonzero floor keeps them useful.
+a0372b4d	0.974677	66.5	discard	WINDOW_PATTERN SSSL -> SSSSSSSL: only 1 layer in 8 attends to full context instead of 2 in 4.
+f5ee9e18	0.972196	66.5	discard	Fine-grained embedding LR probe at 0.9.
+6779eb52	0.972557	66.5	discard	WARMDOWN_RATIO 0.5 -> 0.7 (MORE cooldown). Corrects a premature closure: I tested only 0.35, saw it lose, and declared 0.5 optimal from a one-sided test. The untested direction is up.
+080adced	0.972659	66.5	discard	UNEMBEDDING_LR 0.004 -> 0.008. Same family as the embedding LR, which was the campaign's clearest knob win.
+126f7484	0.970759	66.5	keep	RoPE base frequency 10000 -> 50000. A longer rotary wavelength changes how positions are encoded across the 2048-token context; untouched so far and structurally independent of every axis tested.
+8ad9a8f0	0.972872	66.5	discard	WINDOW_PATTERN SSSL -> SSSSSSSL: only 1 layer in 8 attends to full context instead of 2 in 4.
+928ca8dd	0.970344	66.5	keep	Fine-grained embedding LR probe at 0.9.
+366a7fa4	0.973744	66.5	discard	WINDOW_PATTERN SSSL -> SSSSSSSL: only 1 layer in 8 attends to full context instead of 2 in 4.
+17210a01	0.970855	66.5	discard	WARMDOWN_RATIO 0.5 -> 0.7 (MORE cooldown). Corrects a premature closure: I tested only 0.35, saw it lose, and declared 0.5 optimal from a one-sided test. The untested direction is up.
+1fcf24ab	0.972104	66.5	discard	UNEMBEDDING_LR 0.004 -> 0.008. Same family as the embedding LR, which was the campaign's clearest knob win.
+ee0ff77f	0.971876	66.5	discard	RoPE base frequency -> 100000, continuing the axis if 50000 pays.
+ca0da0c1	0.971583	66.5	discard	x0_lambda init 0.1 -> 0.05. These per-layer scalars gate how much of the embedding output is re-injected at each block; the init sets where that mixing starts.
+91077332	0.971507	66.5	discard	WEIGHT_DECAY 0.1 -> 0.05. 0.2 -> 0.1 won, so bracket below before closing the axis.
+18f11d35	0.970168	66.5	keep	WEIGHT_DECAY 0.1 -> 0.15, filling in between the tested 0.1 and 0.2.
+726ab0f1	0.972037	66.5	discard	x0_lambda init 0.1 -> 0.05. These per-layer scalars gate how much of the embedding output is re-injected at each block; the init sets where that mixing starts.
+99295329	0.975253	66.5	discard	SCALAR_LR 0.5 -> 0.3. Raising to 0.7 lost, so if the optimum moved it moved down.
+1aab41f8	0.972185	66.5	discard	x0_lambda init 0.1 -> 0.15, bracketing the residual-gating init upward.
+44c84533	0.969635	66.5	keep	FINAL_LR_FRAC 0.0 -> 0.05, a gentler nonzero floor than 0.1.
+0681c8b7	0.971539	66.5	discard	WEIGHT_DECAY 0.2 -> 0.1. The run is sub-single-epoch so there is little to regularise against; less decay may leave more capacity usable.
+4d3e0ae9	0.974919	66.5	discard	SCALAR_LR 0.5 -> 0.3. Raising to 0.7 lost, so if the optimum moved it moved down.
+146336db	0.971523	66.5	discard	x0_lambda init 0.1 -> 0.15, bracketing the residual-gating init upward.
+a8240768	0.970797	66.5	discard	ADAM_BETAS beta1 0.8 -> 0.9. Both Adam-group LRs paid; the Adam momentum is untested.
+4a0817dc	0.973020	66.5	discard	ADAM_BETAS beta1 0.8 -> 0.7, bracketing Adam momentum downward.
+342d3821	0.971687	66.5	discard	UNEMBEDDING_LR 0.006 -> 0.005, refining between the tested 0.004 and 0.006.
+1000bc52	0.969807	66.5	discard	EMBEDDING_LR fine probe at 0.85, between the 0.8 and 0.9 results.
+dd8e7a5b	0.970907	66.5	discard	MATRIX_LR 0.04 -> 0.035. Both 0.03 and 0.05 failed to beat 0.04; this probes finer.
+94ae5966	0.970422	66.5	discard	Muon momentum warmup stretched from 300 to 500 steps. The schedule was set for a ~1000-step run; this one does ~1310.
+c9015b04	0.969852	66.5	discard	Muon momentum warmup shortened to 150 steps, bracketing the schedule downward.
+5f8207b9	0.972399	66.5	discard	RoPE base 50000 -> 25000, refining between the winning 50000 and the baseline 10000.
+5b48cc39	0.970734	66.5	discard	RoPE base 50000 -> 75000, refining between the winning 50000 and the losing 100000.
+eccb9e53	0.970014	66.5	discard	FINAL_LR_FRAC 0.05 -> 0.025. 0.05 beat both 0.0 and 0.1, so the optimum is inside (0, 0.1).
+91031295	0.971535	60.5	discard	DEPTH 10 -> 9. ASPECT_RATIO rounding keeps model_dim at 640, so this is a pure depth change at constant width - the one interior point the earlier sweep skipped.
+b79a77ea	0.973621	68.3	discard	Value embeddings on every layer instead of alternating. Doubles VE coverage; the ResFormer value-residual path has never been varied.
+c664c3e8	0.995024	69.6	discard	MLP activation relu-squared -> gelu. The activation has been fixed since the baseline and is untested.
+56eddb52	0.970258	66.5	discard	Rotary table length 10x sequence_len -> 4x. Pairs with the RoPE base-frequency win; the table extent is a separate untested knob.
+87e5ba8e	0.969986	66.5	discard	FINAL_LR_FRAC 0.05 -> 0.075, bracketing the winner from above.
+6716348b	0.970303	66.5	discard	EMBEDDING_LR 0.9 -> 0.95, refining between the winning 0.9 and the losing 1.0.
+2f9c8911	0.970723	66.5	discard	ADAM_BETAS beta2 0.95 -> 0.99. Only beta1 has been probed; beta2 is untouched.
+90e562b0	0.974136	66.5	discard	Muon momentum range 0.85->0.95 raised to 0.90->0.98. The endpoints are untested; only the warmup length has been probed.
+4910ff00	0.970081	66.5	discard	Muon momentum range lowered to 0.80->0.92, bracketing the endpoints downward.
+9bb20566	0.970326	66.5	discard	WEIGHT_DECAY 0.15 -> 0.2 on the current lineage. Reverting to 0.1 lost 0.0019 here, which conflicts with the earlier flat reading; this probes the other side.
+5fc8be22	0.973186	62.4	discard	MLP expansion 4x -> 3x. Cuts MLP FLOPs ~25%, trading capacity for steps - the capacity/throughput tradeoff at a different lever than DEPTH.
+5a796892	0.972615	76.9	discard	MLP expansion 4x -> 5x, bracketing the ratio upward since DEPTH showed capacity pays here.
+e5eaf62e	0.972476	60.2	discard	MLP expansion 4x -> 3x. Cuts MLP FLOPs ~25%, trading capacity for steps - the capacity/throughput tradeoff at a different lever than DEPTH.
+b9b7e7c0	0.984331	60.2	discard	Remove QK normalisation before attention. A load-bearing primitive like the relu-squared activation, never varied; worth knowing whether it earns its cost.
+a2ba9db4	0.979710	69.6	discard	MLP activation relu-squared -> relu-cubed. GeLU lost 0.0254, so the squaring is doing real work; this probes whether the exponent itself is tuned.
+96c9459e	0.970903	35.4	discard	DEVICE_BATCH_SIZE 128 -> 64 at unchanged TOTAL_BATCH_SIZE, so grad_accum_steps goes 1 -> 2. Same optimizer batch, different micro-batching: a pure throughput/memory probe.
+a07320f0	0.970103	70.9	discard	float32 matmul precision high -> highest. Trades throughput for numerical precision in the fp32 paths; untested.
+e460cd75	0.987549	66.8	discard	RETEST at the current operating point: TOTAL_BATCH_SIZE 2**18 -> 2**19. The batch optimum was fixed before the RoPE, embedding-LR, final-LR and weight-decay wins existed; this is the campaign's larges
+7ab2edea	0.974153	33.5	discard	RETEST: TOTAL_BATCH_SIZE 2**18 -> 2**17 with DEVICE_BATCH_SIZE 64 to keep grad_accum at 1. Probes the other side of the batch axis at the current operating point.
+1e2efedd	0.979108	98.3	discard	RETEST: DEPTH 10 -> 12 at the current operating point. Capacity lost at 135M when tested against the old configuration; the LR set has changed substantially since.
+07cffa19	0.974911	78.8	discard	RETEST: width 640 -> 768 at DEPTH 10 and the current operating point. Lost by 0.0036 against the old configuration.
+8e2b73eb	0.974808	78.8	discard	RETEST: width 640 -> 768 at DEPTH 10 and the current operating point. Lost by 0.0036 against the old configuration.
+680db4df	0.976169	87.4	discard	CONSTANT-CAPACITY SHAPE: MLP 4x -> 3x with DEPTH 10 -> 12 (~91M vs 85.9M). Leaner MLP, more layers. Both changes lost alone; the question is whether the parameters are better spent on depth than on ML
+3f3f3654	0.972248	66.2	discard	CONSTANT-CAPACITY SHAPE: MLP 4x -> 5x with DEPTH 10 -> 9 (~88M vs 85.9M, width stays 640). Fatter MLP, fewer layers - the opposite allocation to cmp_mlp3_d12.
+ffb6c87d	0.969663	66.5	discard	AUTO-REPLICATE of 44c84533 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+7fcec1f0	0.969626	66.5	keep	AUTO-REPLICATE of 44c84533 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+e9298573	0.974398	71.3	discard	CONSTANT-CAPACITY SHAPE (corrected): DEPTH 12 with ASPECT_RATIO 48 to hold model_dim at 640, plus MLP 4x -> 3x. ~91M vs 85.9M. Replaces cmp_mlp3_d12, which unintentionally widened to 768 and landed at
+ecd181ff	0.969792	66.5	discard	AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+bed88008	0.969889	66.5	discard	AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+1721e365	0.969819	66.5	discard	AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+2197088a	0.974595	71.3	discard	CONSTANT-CAPACITY SHAPE (corrected): DEPTH 12 with ASPECT_RATIO 48 to hold model_dim at 640, plus MLP 4x -> 3x. ~91M vs 85.9M. Replaces cmp_mlp3_d12, which unintentionally widened to 768 and landed at
+bd73f21f	0.970007	66.5	discard	AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+00edc0f1	0.969726	66.5	discard	AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+aab87a43	0.969734	66.5	discard	AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+d263a34d	0.969641	66.5	discard	AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+a507160f	0.972412	66.5	discard	SEED VARIANCE MEASUREMENT (seed 43, not an improvement). Replicates so far hold the seed at 42 and capture only kernel nondeterminism and step jitter; this additionally varies initialisation and data 
+db7342cc	0.971373	66.5	discard	SEED VARIANCE MEASUREMENT (seed 137, not an improvement). Replicates so far hold the seed at 42 and capture only kernel nondeterminism and step jitter; this additionally varies initialisation and data
+143ceea2	0.972270	66.5	discard	SEED VARIANCE MEASUREMENT (seed 2024, not an improvement). Replicates so far hold the seed at 42 and capture only kernel nondeterminism and step jitter; this additionally varies initialisation and dat
+42465468	0.969615	66.5	keep	AUTO-REPLICATE of 7fcec1f0 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+eb0727f4	0.969654	66.5	discard	AUTO-REPLICATE of 42465468 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+6d50fbc7	0.970127	66.5	discard	AUTO-REPLICATE of 42465468 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+51333356	0.990118	44.0	discard	SEED-PAIRED BASELINE (seed 137, not an improvement). Pristine baseline at seed 137; third attempt - the first two were aborted by tenants arriving mid-run.
+137deafa	0.989440	44.0	discard	SEED-PAIRED BASELINE (seed 43, not an improvement). Pristine baseline at seed 43; third attempt - the first two were aborted by tenants arriving mid-run.
+586597ce	0.991566	44.0	discard	SEED-PAIRED BASELINE (seed 2024, not an improvement). Completes the seed-paired arm; 42/43/137 are measured.
+c5b3032b	0.970386	66.2	discard	AUTO-REPLICATE of 42465468 (rendezvous timeout fallback). Byte-identical source; adds a sample to the run-to-run noise estimate.
+2f36e383	0.971180	66.2	discard	ABLATION of 44c84533: revert FINAL_LR_FRAC 0.05 -> 0.0. Upstream's stage 4 is systematic component analysis - remove each adopted change from the FINAL configuration and measure its contribution there
+d3f0110e	0.970057	66.2	discard	AUTO-REPLICATE of 42465468 (rendezvous timeout fallback). Byte-identical source; adds a sample to the run-to-run noise estimate.
+b07eeb76	0.977734	48.5	discard	ABLATION of 44c84533: revert DEPTH 10 -> 8 (also reverts width 640 -> 512 via ASPECT_RATIO). Upstream's stage 4 is systematic component analysis - remove each adopted change from the FINAL configurati
+8133a1a5	0.970862	66.2	discard	AUTO-REPLICATE of 42465468 (rendezvous timeout fallback). Byte-identical source; adds a sample to the run-to-run noise estimate.
+7bd5b482	0.972013	66.2	discard	ABLATION of 44c84533: revert max-autotune compile -> default. Upstream's stage 4 is systematic component analysis - remove each adopted change from the FINAL configuration and measure its contribution
+5ca39067	0.969822	66.2	discard	AUTO-REPLICATE of 42465468 (rendezvous timeout fallback). Byte-identical source; adds a sample to the run-to-run noise estimate.
+003d6c02	0.977436	66.2	discard	ABLATION of 44c84533: revert short-attention span seq/8 -> seq/2. Re-run after tightening the contention threshold to 4GB - the first attempt passed the old 10GB bar at 4.6-7.8GB foreign and came back
+aae46fa6	0.987332	66.5	discard	ABLATION of 44c84533: revert TOTAL_BATCH_SIZE 2**18 -> 2**19. Re-run after tightening the contention threshold to 4GB - the first attempt passed the old 10GB bar at 4.6-7.8GB foreign and came back wit
+cc382eea	0.000000	66.2	crash	AUTO-REPLICATE of 42465468 (rendezvous timeout fallback). Byte-identical source; adds a sample to the run-to-run noise estimate.
+62685879	0.000000	0.0	crash	AUTO-REPLICATE of 44c84533 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+510719e1	0.000000	0.0	crash	AUTO-REPLICATE of 44c84533 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+6433f10a	0.000000	70.9	crash	AUTO-REPLICATE of 44c84533 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+c57e4d13	0.000000	66.2	crash	AUTO-REPLICATE of 44c84533 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+325efc6d	0.971068	66.2	discard	AUTO-REPLICATE of 44c84533 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+cc9f7a8b	0.000000	66.2	crash	AUTO-REPLICATE of 44c84533 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+3370b565	0.000000	0.0	crash	AUTO-REPLICATE of 44c84533 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.
+2fcfcf06	0.000000	66.2	crash	AUTO-REPLICATE of 44c84533 (no applicable untried lever). Adds a sample to the run-to-run noise estimate.

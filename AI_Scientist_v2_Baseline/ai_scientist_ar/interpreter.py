@@ -62,6 +62,17 @@ def parse_run_log(text: str) -> tuple[dict, int | None, str | None]:
             except ValueError:
                 pass
 
+    m = re.search(r"^RAN_ON_GPU=(\d+)\s*$", text, re.MULTILINE)
+    if m:
+        summary["ran_on_gpu"] = float(m.group(1))
+
+    m = re.search(r"^FOREIGN_PEAK_MB=(\d+)\s*$", text, re.MULTILINE)
+    if m:
+        summary["foreign_peak_mb"] = float(m.group(1))
+    m = re.search(r"^FOREIGN_GROWTH_MB=(-?\d+)\s*$", text, re.MULTILINE)
+    if m:
+        summary["foreign_growth_mb"] = float(m.group(1))
+
     exit_code = None
     m = re.search(r"^EXIT_CODE=(-?\d+)\s*$", text, re.MULTILINE)
     if m:

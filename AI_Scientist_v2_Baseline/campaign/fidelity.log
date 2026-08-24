@@ -1,0 +1,640 @@
+================ fidelity check 2026-08-24T02:59:21Z ================
+  WARN  upstream hash recorded (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 105 3 2 0
+  PASS  prepare.py pristine in all 110 trials
+-------- 12 pass, 0 fail, 1 warn --------
+================ fidelity check 2026-08-24T03:00:18Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 106 3 2 0
+  PASS  prepare.py pristine in all 111 trials
+-------- 13 pass, 0 fail, 0 warn --------
+================ fidelity check 2026-08-24T03:03:24Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 104 3 0 0
+  PASS  prepare.py pristine in all 112 trials
+-------- 16 pass, 0 fail, 0 warn --------
+================ fidelity check 2026-08-24T03:17:40Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  PASS  no scored trial ran under >10GB foreign memory
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 103 3 0 0
+  PASS  prepare.py pristine in all 114 trials
+-------- 20 pass, 0 fail, 0 warn --------
+================ fidelity check 2026-08-24T03:17:52Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  PASS  no scored trial ran under >10GB foreign memory
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 103 3 0 0
+  PASS  prepare.py pristine in all 114 trials
+-------- 20 pass, 0 fail, 0 warn --------
+================ fidelity check 2026-08-24T03:46:23Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  WARN  2 trial log(s) show heavy foreign memory — audit should have rejected them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 103 3 0 0
+  PASS  prepare.py pristine in all 116 trials
+-------- 19 pass, 0 fail, 1 warn --------
+================ fidelity check 2026-08-24T04:17:40Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  WARN  2 trial log(s) show heavy foreign memory — audit should have rejected them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 104 3 1 0
+  PASS  prepare.py pristine in all 121 trials
+-------- 19 pass, 0 fail, 1 warn --------
+================ fidelity check 2026-08-24T05:17:41Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  WARN  4 trial log(s) show heavy foreign memory — audit should have rejected them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 107 3 4 0
+  PASS  prepare.py pristine in all 123 trials
+-------- 19 pass, 0 fail, 1 warn --------
+================ fidelity check 2026-08-24T06:17:41Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  WARN  6 trial log(s) show heavy foreign memory — audit should have rejected them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 103 3 0 0
+  PASS  prepare.py pristine in all 126 trials
+-------- 19 pass, 0 fail, 1 warn --------
+================ fidelity check 2026-08-24T07:17:42Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  WARN  7 trial log(s) show heavy foreign memory — audit should have rejected them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 105 3 2 0
+  PASS  prepare.py pristine in all 128 trials
+-------- 19 pass, 0 fail, 1 warn --------
+================ fidelity check 2026-08-24T08:17:42Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  WARN  8 trial log(s) show heavy foreign memory — audit should have rejected them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 108 3 3 0
+  PASS  prepare.py pristine in all 131 trials
+-------- 19 pass, 0 fail, 1 warn --------
+================ fidelity check 2026-08-24T09:17:42Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  WARN  8 trial log(s) show heavy foreign memory — audit should have rejected them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 111 3 3 0
+  PASS  prepare.py pristine in all 133 trials
+-------- 19 pass, 0 fail, 1 warn --------
+================ fidelity check 2026-08-24T10:17:43Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  WARN  8 trial log(s) show heavy foreign memory — audit should have rejected them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 113 3 3 0
+  PASS  prepare.py pristine in all 135 trials
+-------- 19 pass, 0 fail, 1 warn --------
+================ fidelity check 2026-08-24T11:17:43Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  WARN  8 trial log(s) show heavy foreign memory — audit should have rejected them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 112 3 0 0
+  PASS  prepare.py pristine in all 138 trials
+-------- 19 pass, 0 fail, 1 warn --------
+================ fidelity check 2026-08-24T12:17:44Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  WARN  8 trial log(s) show heavy foreign memory — audit should have rejected them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 118 3 3 0
+  PASS  prepare.py pristine in all 142 trials
+-------- 19 pass, 0 fail, 1 warn --------
+================ fidelity check 2026-08-24T12:21:30Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  WARN  8 trial log(s) show heavy foreign memory — audit should have rejected them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 118 3 3 0
+  PASS  prepare.py pristine in all 142 trials
+-------- 19 pass, 0 fail, 1 warn --------
+================ fidelity check 2026-08-24T12:22:16Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  PASS  no SCORED trial ran under >10GB foreign memory
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 118 3 3 0
+  PASS  prepare.py pristine in all 142 trials
+-------- 20 pass, 0 fail, 0 warn --------
+================ fidelity check 2026-08-24T12:22:17Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  PASS  no SCORED trial ran under >10GB foreign memory
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 118 3 3 0
+  PASS  prepare.py pristine in all 142 trials
+-------- 20 pass, 0 fail, 0 warn --------
+================ fidelity check 2026-08-24T13:22:17Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  PASS  no SCORED trial ran under >10GB foreign memory
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 117 3 2 0
+  PASS  prepare.py pristine in all 144 trials
+-------- 20 pass, 0 fail, 0 warn --------
+================ fidelity check 2026-08-24T13:41:10Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  PASS  no SCORED trial ran under >10GB foreign memory
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 117 3 2 0
+  PASS  journal and archive are disjoint (no reverted purges)
+  PASS  prepare.py pristine in all 144 trials
+-------- 21 pass, 0 fail, 0 warn --------
+================ fidelity check 2026-08-24T13:41:11Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  PASS  no SCORED trial ran under >10GB foreign memory
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 117 3 2 0
+  PASS  journal and archive are disjoint (no reverted purges)
+  PASS  prepare.py pristine in all 144 trials
+-------- 21 pass, 0 fail, 0 warn --------
+================ fidelity check 2026-08-24T14:41:11Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  PASS  no SCORED trial ran under >10GB foreign memory
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 118 3 3 0
+  PASS  journal and archive are disjoint (no reverted purges)
+  PASS  prepare.py pristine in all 146 trials
+-------- 21 pass, 0 fail, 0 warn --------
+================ fidelity check 2026-08-24T15:41:12Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  FAIL  1 contended trial(s) were scored — audit failed to reject them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 123 3 7 0
+  PASS  journal and archive are disjoint (no reverted purges)
+  PASS  prepare.py pristine in all 154 trials
+-------- 20 pass, 1 fail, 0 warn --------
+FIDELITY REGRESSION: 1 failing check(s)
+================ fidelity check 2026-08-24T15:49:20Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  FAIL  1 contended trial(s) were scored — audit failed to reject them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 124 3 8 0
+  PASS  journal and archive are disjoint (no reverted purges)
+  PASS  prepare.py pristine in all 155 trials
+-------- 20 pass, 1 fail, 0 warn --------
+FIDELITY REGRESSION: 1 failing check(s)
+================ fidelity check 2026-08-24T15:49:33Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  FAIL  1 contended trial(s) were scored — audit failed to reject them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  PASS  running harness has the guard
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 124 3 8 0
+  PASS  journal and archive are disjoint (no reverted purges)
+  PASS  prepare.py pristine in all 155 trials
+-------- 20 pass, 1 fail, 0 warn --------
+FIDELITY REGRESSION: 1 failing check(s)
+================ fidelity check 2026-08-24T15:50:30Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  FAIL  1 contended trial(s) were scored — audit failed to reject them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  WARN  running harness lacks the guard (restart pending?)
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 123 3 8 0
+  PASS  journal and archive are disjoint (no reverted purges)
+  PASS  prepare.py pristine in all 155 trials
+-------- 19 pass, 1 fail, 1 warn --------
+FIDELITY REGRESSION: 1 failing check(s)
+================ fidelity check 2026-08-24T15:51:02Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  FAIL  3 contended trial(s) were scored — audit failed to reject them
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  WARN  running harness lacks the guard (restart pending?)
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 123 3 8 0
+  PASS  journal and archive are disjoint (no reverted purges)
+  PASS  prepare.py pristine in all 155 trials
+-------- 19 pass, 1 fail, 1 warn --------
+FIDELITY REGRESSION: 1 failing check(s)
+================ fidelity check 2026-08-24T15:51:36Z ================
+  PASS  upstream reference unchanged (a4617d4838942029)
+  PASS  max_debug_depth = 3 (upstream == port)
+  PASS  debug_prob = 0.5 (upstream == port)
+  PASS  num_drafts = 3 (upstream == port)
+  PASS  policy unit tests (significance guard, seed-eval exclusion, debug depth, persistence)
+  PASS  multi-seed evaluation present
+  PASS  _debug present
+  PASS  _draft present
+  PASS  significance guard present
+  PASS  audit whitelists the evaluation path
+  PASS  pre-trial contention gate installed
+  PASS  in-flight foreign sampling installed
+  PASS  audit rejects contended trials
+  PASS  no SCORED trial ran under >10GB foreign memory
+  PASS  launcher passes --min-improvement
+  PASS  launcher passes --num-seeds
+  WARN  running harness lacks the guard (restart pending?)
+  PASS  harness and restocker agree on incumbent
+  PASS  journal invariants (no seed-eval incumbent, debug depth bounded)
+  INFO  nodes/drafts/buggy/seed-eval: 123 3 8 0
+  PASS  journal and archive are disjoint (no reverted purges)
+  PASS  prepare.py pristine in all 155 trials
+-------- 20 pass, 0 fail, 1 warn --------

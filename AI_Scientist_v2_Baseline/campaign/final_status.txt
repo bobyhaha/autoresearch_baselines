@@ -1,0 +1,13 @@
+nodes: 123  buggy: 8  seed-eval: 0
+incumbent: 44c84533  n=17  min=0.969615  mean=0.969886  sd=0.000330
+  baseline 0.991192 -> improvement 0.021306 (2.15%)  [mean, not the lucky minimum]
+
+last 6 trials:
+  510719e1 BUGGY   steps=    0 foreign= 76486MB | AUTO-REPLICATE of 44c84533 (no applicable un
+  6433f10a BUGGY   steps= 1001 foreign= 46290MB | AUTO-REPLICATE of 44c84533 (no applicable un
+  c57e4d13 BUGGY   steps=  520 foreign= 52806MB | AUTO-REPLICATE of 44c84533 (no applicable un
+  cc9f7a8b BUGGY   steps=  623 foreign= 44380MB | AUTO-REPLICATE of 44c84533 (no applicable un
+  3370b565 BUGGY   steps=    0 foreign= 76486MB | AUTO-REPLICATE of 44c84533 (no applicable un
+  2fcfcf06 BUGGY   steps=  515 foreign= 50758MB | AUTO-REPLICATE of 44c84533 (no applicable un
+
+queue: 4  ablations: 0  seed-baselines: 0

@@ -1,0 +1,2 @@
+epoch,iso,elapsed_h,gpu,util_pct,mem_used_mb,mem_total_mb,our_trial_procs,foreign_mem_mb,verdict,journal_nodes,best_val_bpb,current_node
+1787539002.2451732,2026-08-24T02:36:42Z,0.00,7,0,4,143771,3,0,STARTUP_OR_EVAL,103,0.969615,92218b44

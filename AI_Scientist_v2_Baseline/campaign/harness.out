@@ -33,3 +33,1303 @@
 [backend] got response for 1787288239_173edd
 2026-08-21 12:57:58 INFO generated improve node edd151d9 from c89462a1
 2026-08-21 12:57:58 INFO running trial for node edd151d9 (improve)
+2026-08-21 13:05:51 INFO node edd151d9 -> val_bpb=0.987011 | val_bpb=0.987011 steps=4046.0 mfu=39.23% vram=22.2GB params=50.3M
+2026-08-21 13:05:51 INFO iteration 4 done in 512s | best so far: c89462a1 (0.981576)
+2026-08-21 13:05:51 INFO ----------------------------------------------------------------------
+2026-08-21 13:05:51 INFO iteration 5 (journal size 5)
+2026-08-21 13:05:51 INFO select: improve best node c89462a1 (Metric↓(val_bpb)(0.981576))
+[backend] queue hit for op=improve parent=c89462a1 (queue:1787288332_404106.json)
+2026-08-21 13:05:51 INFO generated improve node c002e4a2 from c89462a1
+2026-08-21 13:05:51 INFO running trial for node c002e4a2 (improve)
+2026-08-21 13:11:31 INFO node c002e4a2 -> val_bpb=0.981310 | val_bpb=0.981310 steps=2151.0 mfu=39.84% vram=43.9GB params=50.3M
+2026-08-21 13:11:31 INFO iteration 5 done in 340s | best so far: c002e4a2 (0.981310)
+2026-08-21 13:11:31 INFO ----------------------------------------------------------------------
+2026-08-21 13:11:31 INFO iteration 6 (journal size 6)
+2026-08-21 13:11:31 INFO select: improve best node c002e4a2 (Metric↓(val_bpb)(0.981310))
+[backend] BLOCKING on rendezvous request 1787289091_9c6e6c (op=improve, parent=c002e4a2)
+[backend] got response for 1787289091_9c6e6c
+2026-08-21 13:12:40 INFO generated improve node e28ccb85 from c002e4a2
+2026-08-21 13:12:40 INFO running trial for node e28ccb85 (improve)
+2026-08-21 13:20:34 INFO node e28ccb85 -> val_bpb=1.024066 | val_bpb=1.024066 steps=2841.0 mfu=26.54% vram=26.5GB params=26.3M
+2026-08-21 13:20:34 INFO iteration 6 done in 544s | best so far: c002e4a2 (0.981310)
+2026-08-21 13:20:34 INFO ----------------------------------------------------------------------
+2026-08-21 13:20:34 INFO iteration 7 (journal size 7)
+2026-08-21 13:20:34 INFO select: improve best node c002e4a2 (Metric↓(val_bpb)(0.981310))
+[backend] queue hit for op=improve parent=c002e4a2 (queue:1787289158_8ac9b9.json)
+2026-08-21 13:20:34 INFO generated improve node c7c8d842 from c002e4a2
+2026-08-21 13:20:34 INFO running trial for node c7c8d842 (improve)
+2026-08-21 13:30:51 INFO node c7c8d842 -> val_bpb=0.980058 | val_bpb=0.980058 steps=2204.0 mfu=40.83% vram=48.5GB params=50.3M
+2026-08-21 13:30:51 INFO iteration 7 done in 616s | best so far: c7c8d842 (0.980058)
+2026-08-21 13:30:51 INFO ----------------------------------------------------------------------
+2026-08-21 13:30:51 INFO iteration 8 (journal size 8)
+2026-08-21 13:30:51 INFO select: improve best node c7c8d842 (Metric↓(val_bpb)(0.980058))
+[backend] BLOCKING on rendezvous request 1787290251_cc6550 (op=improve, parent=c7c8d842)
+[backend] got response for 1787290251_cc6550
+2026-08-21 13:31:36 INFO generated improve node fd76db94 from c7c8d842
+2026-08-21 13:31:36 INFO running trial for node fd76db94 (improve)
+2026-08-21 13:42:13 INFO node fd76db94 -> val_bpb=0.975832 | val_bpb=0.975832 steps=1325.0 mfu=44.96% vram=70.9GB params=85.9M
+2026-08-21 13:42:13 INFO iteration 8 done in 682s | best so far: fd76db94 (0.975832)
+2026-08-21 13:42:13 INFO ----------------------------------------------------------------------
+2026-08-21 13:42:13 INFO iteration 9 (journal size 9)
+2026-08-21 13:42:13 INFO select: improve best node fd76db94 (Metric↓(val_bpb)(0.975832))
+[backend] BLOCKING on rendezvous request 1787290933_a3187d (op=improve, parent=fd76db94)
+[backend] got response for 1787290933_a3187d
+2026-08-21 13:42:58 INFO generated improve node 3c3fa271 from fd76db94
+2026-08-21 13:42:58 INFO running trial for node 3c3fa271 (improve)
+2026-08-21 13:54:15 INFO node 3c3fa271 -> val_bpb=0.979841 | val_bpb=0.979841 steps=870.0 mfu=47.48% vram=98.3GB params=135.3M
+2026-08-21 13:54:15 INFO iteration 9 done in 722s | best so far: fd76db94 (0.975832)
+2026-08-21 13:54:15 INFO ----------------------------------------------------------------------
+2026-08-21 13:54:15 INFO iteration 10 (journal size 10)
+2026-08-21 13:54:15 INFO select: improve best node fd76db94 (Metric↓(val_bpb)(0.975832))
+[backend] queue hit for op=improve parent=fd76db94 (queue:1787290975_a21271.json)
+2026-08-21 13:54:15 INFO generated improve node c4cbd164 from fd76db94
+2026-08-21 13:54:15 INFO running trial for node c4cbd164 (improve)
+2026-08-21 14:02:18 INFO node c4cbd164 -> val_bpb=0.976128 | val_bpb=0.976128 steps=1322.0 mfu=44.87% vram=66.2GB params=85.9M
+2026-08-21 14:02:18 INFO iteration 10 done in 483s | best so far: fd76db94 (0.975832)
+2026-08-21 14:02:18 INFO ----------------------------------------------------------------------
+2026-08-21 14:02:18 INFO iteration 11 (journal size 11)
+2026-08-21 14:02:18 INFO select: improve best node fd76db94 (Metric↓(val_bpb)(0.975832))
+[backend] queue hit for op=improve parent=fd76db94 (queue:1787290975_bd2d80.json)
+2026-08-21 14:02:18 INFO generated improve node 860fa667 from fd76db94
+2026-08-21 14:02:18 INFO running trial for node 860fa667 (improve)
+2026-08-21 14:10:21 INFO node 860fa667 -> val_bpb=0.975999 | val_bpb=0.975999 steps=1322.0 mfu=44.86% vram=66.2GB params=85.9M
+2026-08-21 14:10:21 INFO iteration 11 done in 483s | best so far: fd76db94 (0.975832)
+2026-08-21 14:10:21 INFO ----------------------------------------------------------------------
+2026-08-21 14:10:21 INFO iteration 12 (journal size 12)
+2026-08-21 14:10:21 INFO select: improve best node fd76db94 (Metric↓(val_bpb)(0.975832))
+[backend] queue hit for op=improve parent=fd76db94 (queue:1787292243_91678d.json)
+2026-08-21 14:10:21 INFO generated improve node b219d0f7 from fd76db94
+2026-08-21 14:10:21 INFO running trial for node b219d0f7 (improve)
+2026-08-21 14:18:22 INFO node b219d0f7 -> val_bpb=0.976931 | val_bpb=0.976931 steps=1322.0 mfu=44.87% vram=66.2GB params=85.9M
+2026-08-21 14:18:22 INFO iteration 12 done in 481s | best so far: fd76db94 (0.975832)
+2026-08-21 14:18:22 INFO ----------------------------------------------------------------------
+2026-08-21 14:18:22 INFO iteration 13 (journal size 13)
+2026-08-21 14:18:22 INFO select: improve best node fd76db94 (Metric↓(val_bpb)(0.975832))
+[backend] queue hit for op=improve parent=fd76db94 (queue:1787292243_06f273.json)
+2026-08-21 14:18:22 INFO generated improve node 5a90b3aa from fd76db94
+2026-08-21 14:18:22 INFO running trial for node 5a90b3aa (improve)
+2026-08-21 14:26:28 INFO node 5a90b3aa -> val_bpb=0.987102 | val_bpb=0.987102 steps=668.0 mfu=44.96% vram=66.5GB params=85.9M
+2026-08-21 14:26:28 INFO iteration 13 done in 486s | best so far: fd76db94 (0.975832)
+2026-08-21 14:26:28 INFO ----------------------------------------------------------------------
+2026-08-21 14:26:28 INFO iteration 14 (journal size 14)
+2026-08-21 14:26:28 INFO select: improve best node fd76db94 (Metric↓(val_bpb)(0.975832))
+[backend] queue hit for op=improve parent=fd76db94 (queue:1787292243_3541f2.json)
+2026-08-21 14:26:28 INFO generated improve node 8bed6ff2 from fd76db94
+2026-08-21 14:26:28 INFO running trial for node 8bed6ff2 (improve)
+2026-08-21 14:34:28 INFO node 8bed6ff2 -> val_bpb=0.978169 | val_bpb=0.978169 steps=1322.0 mfu=44.86% vram=66.2GB params=85.9M
+2026-08-21 14:34:28 INFO iteration 14 done in 480s | best so far: fd76db94 (0.975832)
+2026-08-21 14:34:28 INFO ----------------------------------------------------------------------
+2026-08-21 14:34:28 INFO iteration 15 (journal size 15)
+2026-08-21 14:34:28 INFO select: improve best node fd76db94 (Metric↓(val_bpb)(0.975832))
+[backend] queue hit for op=improve parent=fd76db94 (queue:1787292243_42810e.json)
+2026-08-21 14:34:28 INFO generated improve node 502959c2 from fd76db94
+2026-08-21 14:34:28 INFO running trial for node 502959c2 (improve)
+2026-08-21 14:42:31 INFO node 502959c2 -> val_bpb=0.974019 | val_bpb=0.974019 steps=1323.0 mfu=44.89% vram=66.2GB params=85.9M
+2026-08-21 14:42:31 INFO iteration 15 done in 483s | best so far: 502959c2 (0.974019)
+2026-08-21 14:42:31 INFO ----------------------------------------------------------------------
+2026-08-21 14:42:31 INFO iteration 16 (journal size 16)
+2026-08-21 14:42:31 INFO select: improve best node 502959c2 (Metric↓(val_bpb)(0.974019))
+[backend] BLOCKING on rendezvous request 1787294551_d70668 (op=improve, parent=502959c2)
+[backend] got response for 1787294551_d70668
+2026-08-21 14:43:07 INFO generated improve node 8282a51e from 502959c2
+2026-08-21 14:43:07 INFO running trial for node 8282a51e (improve)
+2026-08-21 14:51:08 INFO node 8282a51e -> val_bpb=0.974545 | val_bpb=0.974545 steps=1322.0 mfu=44.86% vram=66.2GB params=85.9M
+2026-08-21 14:51:08 INFO iteration 16 done in 517s | best so far: 502959c2 (0.974019)
+2026-08-21 14:51:08 INFO ----------------------------------------------------------------------
+2026-08-21 14:51:08 INFO iteration 17 (journal size 17)
+2026-08-21 14:51:08 INFO select: improve best node 502959c2 (Metric↓(val_bpb)(0.974019))
+[backend] queue hit for op=improve parent=502959c2 (queue:1787294647_2a274c.json)
+2026-08-21 14:51:08 INFO generated improve node 9fee3cf3 from 502959c2
+2026-08-21 14:51:08 INFO running trial for node 9fee3cf3 (improve)
+2026-08-21 15:00:33 INFO node 9fee3cf3 -> val_bpb=0.980724 | val_bpb=0.980724 steps=1270.0 mfu=43.08% vram=66.4GB params=85.9M
+2026-08-21 15:00:33 INFO iteration 17 done in 565s | best so far: 502959c2 (0.974019)
+2026-08-21 15:00:33 INFO ----------------------------------------------------------------------
+2026-08-21 15:00:33 INFO iteration 18 (journal size 18)
+2026-08-21 15:00:33 INFO select: improve best node 502959c2 (Metric↓(val_bpb)(0.974019))
+[backend] queue hit for op=improve parent=502959c2 (queue:1787294647_ea8596.json)
+2026-08-21 15:00:33 INFO generated improve node b220b327 from 502959c2
+2026-08-21 15:00:33 INFO running trial for node b220b327 (improve)
+2026-08-21 15:09:05 INFO node b220b327 -> val_bpb=0.975628 | val_bpb=0.975628 steps=1291.0 mfu=45.36% vram=66.2GB params=85.9M
+2026-08-21 15:09:05 INFO iteration 18 done in 512s | best so far: 502959c2 (0.974019)
+2026-08-21 15:09:05 INFO ----------------------------------------------------------------------
+2026-08-21 15:09:05 INFO iteration 19 (journal size 19)
+2026-08-21 15:09:05 INFO select: improve best node 502959c2 (Metric↓(val_bpb)(0.974019))
+[backend] queue hit for op=improve parent=502959c2 (queue:1787294647_3e3c81.json)
+2026-08-21 15:09:05 INFO generated improve node e6d38dce from 502959c2
+2026-08-21 15:09:05 INFO running trial for node e6d38dce (improve)
+2026-08-21 15:17:05 INFO node e6d38dce -> val_bpb=0.974240 | val_bpb=0.974240 steps=1314.0 mfu=44.6% vram=66.2GB params=85.9M
+2026-08-21 15:17:05 INFO iteration 19 done in 480s | best so far: 502959c2 (0.974019)
+2026-08-21 15:17:05 INFO ----------------------------------------------------------------------
+2026-08-21 15:17:05 INFO iteration 20 (journal size 20)
+2026-08-21 15:17:05 INFO select: improve best node 502959c2 (Metric↓(val_bpb)(0.974019))
+[backend] queue hit for op=improve parent=502959c2 (queue:1787294647_369e5a.json)
+2026-08-21 15:17:05 INFO generated improve node aaa966e6 from 502959c2
+2026-08-21 15:17:05 INFO running trial for node aaa966e6 (improve)
+2026-08-21 15:26:11 INFO node aaa966e6 -> val_bpb=0.977611 | val_bpb=0.977611 steps=1017.0 mfu=47.62% vram=78.8GB params=114.8M
+2026-08-21 15:26:11 INFO iteration 20 done in 546s | best so far: 502959c2 (0.974019)
+2026-08-21 15:26:11 INFO ----------------------------------------------------------------------
+2026-08-21 15:26:11 INFO iteration 21 (journal size 21)
+2026-08-21 15:26:11 INFO select: improve best node 502959c2 (Metric↓(val_bpb)(0.974019))
+[backend] queue hit for op=improve parent=502959c2 (queue:1787294647_07df11.json)
+2026-08-21 15:26:11 INFO generated improve node 3182a773 from 502959c2
+2026-08-21 15:26:11 INFO running trial for node 3182a773 (improve)
+2026-08-21 15:35:15 INFO node 3182a773 -> val_bpb=0.976064 | val_bpb=0.976064 steps=1808.0 mfu=41.69% vram=53.7GB params=60.8M
+2026-08-21 15:35:15 INFO iteration 21 done in 544s | best so far: 502959c2 (0.974019)
+2026-08-21 15:35:15 INFO ----------------------------------------------------------------------
+2026-08-21 15:35:15 INFO iteration 22 (journal size 22)
+2026-08-21 15:35:15 INFO select: improve best node 502959c2 (Metric↓(val_bpb)(0.974019))
+[backend] queue hit for op=improve parent=502959c2 (queue:1787294647_9b4664.json)
+2026-08-21 15:35:15 INFO generated improve node c3a62a53 from 502959c2
+2026-08-21 15:35:15 INFO running trial for node c3a62a53 (improve)
+2026-08-21 15:43:16 INFO node c3a62a53 -> val_bpb=0.972938 | val_bpb=0.972938 steps=1317.0 mfu=44.7% vram=66.2GB params=85.9M
+2026-08-21 15:43:16 INFO iteration 22 done in 481s | best so far: c3a62a53 (0.972938)
+2026-08-21 15:43:16 INFO ----------------------------------------------------------------------
+2026-08-21 15:43:16 INFO iteration 23 (journal size 23)
+2026-08-21 15:43:16 INFO select: improve best node c3a62a53 (Metric↓(val_bpb)(0.972938))
+[backend] BLOCKING on rendezvous request 1787298196_382984 (op=improve, parent=c3a62a53)
+[backend] got response for 1787298196_382984
+2026-08-21 15:44:01 INFO generated improve node b6c0d04e from c3a62a53
+2026-08-21 15:44:01 INFO running trial for node b6c0d04e (improve)
+2026-08-21 15:52:02 INFO node b6c0d04e -> val_bpb=0.973128 | val_bpb=0.973128 steps=1316.0 mfu=44.64% vram=66.2GB params=85.9M
+2026-08-21 15:52:02 INFO iteration 23 done in 526s | best so far: c3a62a53 (0.972938)
+2026-08-21 15:52:02 INFO ----------------------------------------------------------------------
+2026-08-21 15:52:02 INFO iteration 24 (journal size 24)
+2026-08-21 15:52:02 INFO select: improve best node c3a62a53 (Metric↓(val_bpb)(0.972938))
+[backend] queue hit for op=improve parent=c3a62a53 (queue:1787298240_812020.json)
+2026-08-21 15:52:02 INFO generated improve node 7037fb62 from c3a62a53
+2026-08-21 15:52:02 INFO running trial for node 7037fb62 (improve)
+2026-08-21 15:54:30 INFO node 7037fb62 -> BUGGY | INVALID: no training_seconds in summary (exc: torch.OutOfMemoryError)
+2026-08-21 15:54:30 INFO iteration 24 done in 148s | best so far: c3a62a53 (0.972938)
+2026-08-21 15:54:30 INFO ----------------------------------------------------------------------
+2026-08-21 15:54:30 INFO iteration 25 (journal size 25)
+2026-08-21 15:54:30 INFO select: improve best node c3a62a53 (Metric↓(val_bpb)(0.972938))
+[backend] queue hit for op=improve parent=c3a62a53 (queue:1787298240_63c648.json)
+2026-08-21 15:54:30 INFO generated improve node 088ab583 from c3a62a53
+2026-08-21 15:54:30 INFO running trial for node 088ab583 (improve)
+2026-08-21 15:56:58 INFO node 088ab583 -> BUGGY | INVALID: no training_seconds in summary (exc: torch.OutOfMemoryError)
+2026-08-21 15:56:58 INFO iteration 25 done in 148s | best so far: c3a62a53 (0.972938)
+2026-08-21 15:56:58 INFO ----------------------------------------------------------------------
+2026-08-21 15:56:58 INFO iteration 26 (journal size 26)
+2026-08-21 15:56:58 INFO select: improve best node c3a62a53 (Metric↓(val_bpb)(0.972938))
+[backend] queue hit for op=improve parent=c3a62a53 (queue:1787298240_5a98ba.json)
+2026-08-21 15:56:58 INFO generated improve node eca2d15d from c3a62a53
+2026-08-21 15:56:58 INFO running trial for node eca2d15d (improve)
+2026-08-21 16:13:18 INFO ======================================================================
+2026-08-21 16:13:18 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 0
+2026-08-21 16:13:18 INFO journal: 24 existing nodes
+2026-08-21 16:13:18 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-21 16:13:18 INFO ----------------------------------------------------------------------
+2026-08-21 16:13:18 INFO iteration 1 (journal size 24)
+2026-08-21 16:13:18 INFO select: improve best node c3a62a53 (Metric↓(val_bpb)(0.972938))
+[backend] queue hit for op=improve parent=c3a62a53 (queue:1787298240_3f2660.json)
+2026-08-21 16:13:18 INFO generated improve node d20fd8aa from c3a62a53
+2026-08-21 16:13:18 INFO running trial for node d20fd8aa (improve)
+2026-08-21 16:24:53 INFO node d20fd8aa -> val_bpb=0.986212 | val_bpb=0.986212 steps=1153.0 mfu=38.38% vram=70.9GB params=85.9M
+2026-08-21 16:24:53 INFO iteration 1 done in 695s | best so far: c3a62a53 (0.972938)
+2026-08-21 16:24:53 INFO ----------------------------------------------------------------------
+2026-08-21 16:24:53 INFO iteration 2 (journal size 25)
+2026-08-21 16:24:53 INFO select: improve best node c3a62a53 (Metric↓(val_bpb)(0.972938))
+[backend] queue hit for op=improve parent=c3a62a53 (queue:1787298240_79a246.json)
+2026-08-21 16:24:53 INFO generated improve node 3027e6ae from c3a62a53
+2026-08-21 16:24:53 INFO running trial for node 3027e6ae (improve)
+2026-08-21 16:33:37 INFO node 3027e6ae -> val_bpb=0.977949 | val_bpb=0.977949 steps=1241.0 mfu=42.08% vram=66.5GB params=85.9M
+2026-08-21 16:33:37 INFO iteration 2 done in 524s | best so far: c3a62a53 (0.972938)
+2026-08-21 16:33:37 INFO ----------------------------------------------------------------------
+2026-08-21 16:33:37 INFO iteration 3 (journal size 26)
+2026-08-21 16:33:37 INFO select: improve best node c3a62a53 (Metric↓(val_bpb)(0.972938))
+[backend] queue hit for op=improve parent=c3a62a53 (queue:1787298240_4df35f.json)
+2026-08-21 16:33:37 INFO generated improve node 4297ef27 from c3a62a53
+2026-08-21 16:33:37 INFO running trial for node 4297ef27 (improve)
+2026-08-21 16:41:42 INFO node 4297ef27 -> val_bpb=0.973168 | val_bpb=0.973168 steps=1311.0 mfu=44.49% vram=66.5GB params=85.9M
+2026-08-21 16:41:42 INFO iteration 3 done in 486s | best so far: c3a62a53 (0.972938)
+2026-08-21 16:41:42 INFO ----------------------------------------------------------------------
+2026-08-21 16:41:42 INFO iteration 4 (journal size 27)
+2026-08-21 16:41:42 INFO select: improve best node c3a62a53 (Metric↓(val_bpb)(0.972938))
+[backend] queue hit for op=improve parent=c3a62a53 (queue:1787301238_fc93b8.json)
+2026-08-21 16:41:42 INFO generated improve node f08d1c89 from c3a62a53
+2026-08-21 16:41:42 INFO running trial for node f08d1c89 (improve)
+2026-08-21 16:49:44 INFO node f08d1c89 -> val_bpb=0.973181 | val_bpb=0.973181 steps=1313.0 mfu=44.54% vram=66.5GB params=85.9M
+2026-08-21 16:49:44 INFO iteration 4 done in 481s | best so far: c3a62a53 (0.972938)
+2026-08-21 16:49:44 INFO ----------------------------------------------------------------------
+2026-08-21 16:49:44 INFO iteration 5 (journal size 28)
+2026-08-21 16:49:44 INFO select: improve best node c3a62a53 (Metric↓(val_bpb)(0.972938))
+[backend] queue hit for op=improve parent=c3a62a53 (queue:1787298240_a4ce2c.json)
+2026-08-21 16:49:44 INFO generated improve node faac0edd from c3a62a53
+2026-08-21 16:49:44 INFO running trial for node faac0edd (improve)
+2026-08-21 16:57:46 INFO node faac0edd -> val_bpb=0.974859 | val_bpb=0.974859 steps=1311.0 mfu=44.47% vram=66.5GB params=85.9M
+2026-08-21 16:57:46 INFO iteration 5 done in 482s | best so far: c3a62a53 (0.972938)
+2026-08-21 16:57:46 INFO ----------------------------------------------------------------------
+2026-08-21 16:57:46 INFO iteration 6 (journal size 29)
+2026-08-21 16:57:46 INFO select: improve best node c3a62a53 (Metric↓(val_bpb)(0.972938))
+[backend] queue hit for op=improve parent=c3a62a53 (queue:1787298240_5a8e93.json)
+2026-08-21 16:57:46 INFO generated improve node 4224e469 from c3a62a53
+2026-08-21 16:57:46 INFO running trial for node 4224e469 (improve)
+2026-08-21 17:05:47 INFO node 4224e469 -> val_bpb=0.972890 | val_bpb=0.972890 steps=1311.0 mfu=44.49% vram=66.5GB params=85.9M
+2026-08-21 17:05:47 INFO iteration 6 done in 481s | best so far: 4224e469 (0.972890)
+2026-08-21 17:05:47 INFO ----------------------------------------------------------------------
+2026-08-21 17:05:47 INFO iteration 7 (journal size 30)
+2026-08-21 17:05:47 INFO select: improve best node 4224e469 (Metric↓(val_bpb)(0.972890))
+[backend] BLOCKING on rendezvous request 1787303147_567112 (op=improve, parent=4224e469)
+2026-08-21 19:05:49 ERROR rendezvous timed out: no response for request 1787303147_567112 within 7200.0s — stopping
+2026-08-23 23:57:25 INFO ======================================================================
+2026-08-23 23:57:25 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 0
+2026-08-23 23:57:25 INFO journal: 30 existing nodes
+2026-08-23 23:57:25 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-23 23:57:25 INFO ----------------------------------------------------------------------
+2026-08-23 23:57:25 INFO iteration 1 (journal size 30)
+2026-08-23 23:57:25 INFO select: improve best node 4224e469 (Metric↓(val_bpb)(0.972890))
+[backend] queue hit for op=improve parent=4224e469 (queue:1787500619_391491.json)
+2026-08-23 23:57:25 INFO generated improve node 32fb73bd from 4224e469
+2026-08-23 23:57:25 INFO running trial for node 32fb73bd (improve)
+2026-08-24 00:05:28 INFO node 32fb73bd -> val_bpb=0.972139 | val_bpb=0.972139 steps=1315.0 mfu=44.63% vram=66.5GB params=85.9M
+2026-08-24 00:05:28 INFO iteration 1 done in 483s | best so far: 32fb73bd (0.972139)
+2026-08-24 00:05:28 INFO ----------------------------------------------------------------------
+2026-08-24 00:05:28 INFO iteration 2 (journal size 31)
+2026-08-24 00:05:28 INFO select: improve best node 32fb73bd (Metric↓(val_bpb)(0.972139))
+[backend] BLOCKING on rendezvous request 1787501128_47b0b6 (op=improve, parent=32fb73bd)
+[backend] request 1787501128_47b0b6 satisfied late by queue:1787501246_e3639a.json
+2026-08-24 00:07:28 INFO generated improve node a0372b4d from 32fb73bd
+2026-08-24 00:07:28 INFO running trial for node a0372b4d (improve)
+2026-08-24 00:16:00 INFO node a0372b4d -> val_bpb=0.974677 | val_bpb=0.974677 steps=1331.0 mfu=43.56% vram=66.5GB params=85.9M
+2026-08-24 00:16:00 INFO iteration 2 done in 632s | best so far: 32fb73bd (0.972139)
+2026-08-24 00:16:00 INFO ----------------------------------------------------------------------
+2026-08-24 00:16:00 INFO iteration 3 (journal size 32)
+2026-08-24 00:16:00 INFO select: improve best node 32fb73bd (Metric↓(val_bpb)(0.972139))
+[backend] queue hit for op=improve parent=32fb73bd (queue:1787501246_28850d.json)
+2026-08-24 00:16:00 INFO generated improve node f5ee9e18 from 32fb73bd
+2026-08-24 00:16:00 INFO running trial for node f5ee9e18 (improve)
+2026-08-24 00:24:00 INFO node f5ee9e18 -> val_bpb=0.972196 | val_bpb=0.972196 steps=1314.0 mfu=44.6% vram=66.5GB params=85.9M
+2026-08-24 00:24:00 INFO iteration 3 done in 480s | best so far: 32fb73bd (0.972139)
+2026-08-24 00:24:00 INFO ----------------------------------------------------------------------
+2026-08-24 00:24:00 INFO iteration 4 (journal size 33)
+2026-08-24 00:24:00 INFO select: improve best node 32fb73bd (Metric↓(val_bpb)(0.972139))
+[backend] queue hit for op=improve parent=32fb73bd (queue:1787501246_2933c2.json)
+2026-08-24 00:24:00 INFO generated improve node 6779eb52 from 32fb73bd
+2026-08-24 00:24:00 INFO running trial for node 6779eb52 (improve)
+2026-08-24 00:32:01 INFO node 6779eb52 -> val_bpb=0.972557 | val_bpb=0.972557 steps=1315.0 mfu=44.61% vram=66.5GB params=85.9M
+2026-08-24 00:32:01 INFO iteration 4 done in 481s | best so far: 32fb73bd (0.972139)
+2026-08-24 00:32:01 INFO ----------------------------------------------------------------------
+2026-08-24 00:32:01 INFO iteration 5 (journal size 34)
+2026-08-24 00:32:01 INFO select: improve best node 32fb73bd (Metric↓(val_bpb)(0.972139))
+[backend] queue hit for op=improve parent=32fb73bd (queue:1787501246_081d47.json)
+2026-08-24 00:32:01 INFO generated improve node 080adced from 32fb73bd
+2026-08-24 00:32:01 INFO running trial for node 080adced (improve)
+2026-08-24 00:40:04 INFO node 080adced -> val_bpb=0.972659 | val_bpb=0.972659 steps=1316.0 mfu=44.65% vram=66.5GB params=85.9M
+2026-08-24 00:40:04 INFO iteration 5 done in 483s | best so far: 32fb73bd (0.972139)
+2026-08-24 00:40:04 INFO ----------------------------------------------------------------------
+2026-08-24 00:40:04 INFO iteration 6 (journal size 35)
+2026-08-24 00:40:04 INFO select: improve best node 32fb73bd (Metric↓(val_bpb)(0.972139))
+[backend] queue hit for op=improve parent=32fb73bd (queue:1787501246_d5643d.json)
+2026-08-24 00:40:04 INFO generated improve node 126f7484 from 32fb73bd
+2026-08-24 00:40:04 INFO running trial for node 126f7484 (improve)
+2026-08-24 00:48:06 INFO node 126f7484 -> val_bpb=0.970759 | val_bpb=0.970759 steps=1323.0 mfu=44.9% vram=66.5GB params=85.9M
+2026-08-24 00:48:06 INFO iteration 6 done in 482s | best so far: 126f7484 (0.970759)
+2026-08-24 00:48:06 INFO ----------------------------------------------------------------------
+2026-08-24 00:48:06 INFO iteration 7 (journal size 36)
+2026-08-24 00:48:06 INFO select: improve best node 126f7484 (Metric↓(val_bpb)(0.970759))
+[backend] BLOCKING on rendezvous request 1787503686_9f1458 (op=improve, parent=126f7484)
+[backend] request 1787503686_9f1458 satisfied late by queue:1787503768_1dc286.json
+2026-08-24 00:49:30 INFO generated improve node 8ad9a8f0 from 126f7484
+2026-08-24 00:49:30 INFO running trial for node 8ad9a8f0 (improve)
+2026-08-24 00:57:30 INFO node 8ad9a8f0 -> val_bpb=0.972872 | val_bpb=0.972872 steps=1333.0 mfu=43.64% vram=66.5GB params=85.9M
+2026-08-24 00:57:30 INFO iteration 7 done in 564s | best so far: 126f7484 (0.970759)
+2026-08-24 00:57:30 INFO ----------------------------------------------------------------------
+2026-08-24 00:57:30 INFO iteration 8 (journal size 37)
+2026-08-24 00:57:30 INFO select: improve best node 126f7484 (Metric↓(val_bpb)(0.970759))
+[backend] queue hit for op=improve parent=126f7484 (queue:1787503768_3ca066.json)
+2026-08-24 00:57:30 INFO generated improve node 928ca8dd from 126f7484
+2026-08-24 00:57:30 INFO running trial for node 928ca8dd (improve)
+2026-08-24 01:05:30 INFO node 928ca8dd -> val_bpb=0.970344 | val_bpb=0.970344 steps=1321.0 mfu=44.81% vram=66.5GB params=85.9M
+2026-08-24 01:05:30 INFO iteration 8 done in 480s | best so far: 928ca8dd (0.970344)
+2026-08-24 01:05:30 INFO ----------------------------------------------------------------------
+2026-08-24 01:05:30 INFO iteration 9 (journal size 38)
+2026-08-24 01:05:30 INFO select: improve best node 928ca8dd (Metric↓(val_bpb)(0.970344))
+[backend] BLOCKING on rendezvous request 1787504730_8d9bca (op=improve, parent=928ca8dd)
+[backend] request 1787504730_8d9bca satisfied late by queue:1787504849_7461ca.json
+2026-08-24 01:07:31 INFO generated improve node 366a7fa4 from 928ca8dd
+2026-08-24 01:07:31 INFO running trial for node 366a7fa4 (improve)
+2026-08-24 01:15:32 INFO node 366a7fa4 -> val_bpb=0.973744 | val_bpb=0.973744 steps=1333.0 mfu=43.64% vram=66.5GB params=85.9M
+2026-08-24 01:15:32 INFO iteration 9 done in 601s | best so far: 928ca8dd (0.970344)
+2026-08-24 01:15:32 INFO ----------------------------------------------------------------------
+2026-08-24 01:15:32 INFO iteration 10 (journal size 39)
+2026-08-24 01:15:32 INFO select: improve best node 928ca8dd (Metric↓(val_bpb)(0.970344))
+[backend] queue hit for op=improve parent=928ca8dd (queue:1787504849_1b9a1c.json)
+2026-08-24 01:15:32 INFO generated improve node 17210a01 from 928ca8dd
+2026-08-24 01:15:32 INFO running trial for node 17210a01 (improve)
+2026-08-24 01:23:32 INFO node 17210a01 -> val_bpb=0.970855 | val_bpb=0.970855 steps=1315.0 mfu=44.62% vram=66.5GB params=85.9M
+2026-08-24 01:23:32 INFO iteration 10 done in 480s | best so far: 928ca8dd (0.970344)
+2026-08-24 01:23:32 INFO ----------------------------------------------------------------------
+2026-08-24 01:23:32 INFO iteration 11 (journal size 40)
+2026-08-24 01:23:32 INFO select: improve best node 928ca8dd (Metric↓(val_bpb)(0.970344))
+[backend] queue hit for op=improve parent=928ca8dd (queue:1787504849_e39250.json)
+2026-08-24 01:23:32 INFO generated improve node 1fcf24ab from 928ca8dd
+2026-08-24 01:23:32 INFO running trial for node 1fcf24ab (improve)
+2026-08-24 01:31:33 INFO node 1fcf24ab -> val_bpb=0.972104 | val_bpb=0.972104 steps=1315.0 mfu=44.6% vram=66.5GB params=85.9M
+2026-08-24 01:31:33 INFO iteration 11 done in 481s | best so far: 928ca8dd (0.970344)
+2026-08-24 01:31:33 INFO ----------------------------------------------------------------------
+2026-08-24 01:31:33 INFO iteration 12 (journal size 41)
+2026-08-24 01:31:33 INFO select: improve best node 928ca8dd (Metric↓(val_bpb)(0.970344))
+[backend] queue hit for op=improve parent=928ca8dd (queue:1787504849_2395ae.json)
+2026-08-24 01:31:33 INFO generated improve node ee0ff77f from 928ca8dd
+2026-08-24 01:31:33 INFO running trial for node ee0ff77f (improve)
+2026-08-24 01:39:33 INFO node ee0ff77f -> val_bpb=0.971876 | val_bpb=0.971876 steps=1314.0 mfu=44.58% vram=66.5GB params=85.9M
+2026-08-24 01:39:33 INFO iteration 12 done in 480s | best so far: 928ca8dd (0.970344)
+2026-08-24 01:39:33 INFO ----------------------------------------------------------------------
+2026-08-24 01:39:33 INFO iteration 13 (journal size 42)
+2026-08-24 01:39:33 INFO select: improve best node 928ca8dd (Metric↓(val_bpb)(0.970344))
+[backend] queue hit for op=improve parent=928ca8dd (queue:1787504849_258458.json)
+2026-08-24 01:39:33 INFO generated improve node ca0da0c1 from 928ca8dd
+2026-08-24 01:39:33 INFO running trial for node ca0da0c1 (improve)
+2026-08-24 01:47:35 INFO node ca0da0c1 -> val_bpb=0.971583 | val_bpb=0.971583 steps=1319.0 mfu=44.74% vram=66.5GB params=85.9M
+2026-08-24 01:47:35 INFO iteration 13 done in 481s | best so far: 928ca8dd (0.970344)
+2026-08-24 01:47:35 INFO ----------------------------------------------------------------------
+2026-08-24 01:47:35 INFO iteration 14 (journal size 43)
+2026-08-24 01:47:35 INFO select: improve best node 928ca8dd (Metric↓(val_bpb)(0.970344))
+[backend] queue hit for op=improve parent=928ca8dd (queue:1787504849_57c799.json)
+2026-08-24 01:47:35 INFO generated improve node 91077332 from 928ca8dd
+2026-08-24 01:47:35 INFO running trial for node 91077332 (improve)
+2026-08-24 01:55:35 INFO node 91077332 -> val_bpb=0.971507 | val_bpb=0.971507 steps=1315.0 mfu=44.61% vram=66.5GB params=85.9M
+2026-08-24 01:55:35 INFO iteration 14 done in 481s | best so far: 928ca8dd (0.970344)
+2026-08-24 01:55:35 INFO ----------------------------------------------------------------------
+2026-08-24 01:55:35 INFO iteration 15 (journal size 44)
+2026-08-24 01:55:35 INFO select: improve best node 928ca8dd (Metric↓(val_bpb)(0.970344))
+[backend] queue hit for op=improve parent=928ca8dd (queue:1787504849_560dea.json)
+2026-08-24 01:55:35 INFO generated improve node 18f11d35 from 928ca8dd
+2026-08-24 01:55:35 INFO running trial for node 18f11d35 (improve)
+2026-08-24 02:03:37 INFO node 18f11d35 -> val_bpb=0.970168 | val_bpb=0.970168 steps=1314.0 mfu=44.58% vram=66.5GB params=85.9M
+2026-08-24 02:03:37 INFO iteration 15 done in 482s | best so far: 18f11d35 (0.970168)
+2026-08-24 02:03:37 INFO ----------------------------------------------------------------------
+2026-08-24 02:03:37 INFO iteration 16 (journal size 45)
+2026-08-24 02:03:37 INFO select: improve best node 18f11d35 (Metric↓(val_bpb)(0.970168))
+[backend] BLOCKING on rendezvous request 1787508217_e9f9b0 (op=improve, parent=18f11d35)
+[backend] request 1787508217_e9f9b0 satisfied late by queue:1787508311_c31376.json
+2026-08-24 02:05:14 INFO generated improve node 726ab0f1 from 18f11d35
+2026-08-24 02:05:14 INFO running trial for node 726ab0f1 (improve)
+2026-08-24 02:13:14 INFO node 726ab0f1 -> val_bpb=0.972037 | val_bpb=0.972037 steps=1315.0 mfu=44.63% vram=66.5GB params=85.9M
+2026-08-24 02:13:14 INFO iteration 16 done in 576s | best so far: 18f11d35 (0.970168)
+2026-08-24 02:13:14 INFO ----------------------------------------------------------------------
+2026-08-24 02:13:14 INFO iteration 17 (journal size 46)
+2026-08-24 02:13:14 INFO select: improve best node 18f11d35 (Metric↓(val_bpb)(0.970168))
+[backend] queue hit for op=improve parent=18f11d35 (queue:1787508311_1cd6ef.json)
+2026-08-24 02:13:14 INFO generated improve node 99295329 from 18f11d35
+2026-08-24 02:13:14 INFO running trial for node 99295329 (improve)
+2026-08-24 02:21:17 INFO node 99295329 -> val_bpb=0.975253 | val_bpb=0.975253 steps=1316.0 mfu=44.64% vram=66.5GB params=85.9M
+2026-08-24 02:21:17 INFO iteration 17 done in 483s | best so far: 18f11d35 (0.970168)
+2026-08-24 02:21:17 INFO ----------------------------------------------------------------------
+2026-08-24 02:21:17 INFO iteration 18 (journal size 47)
+2026-08-24 02:21:17 INFO select: improve best node 18f11d35 (Metric↓(val_bpb)(0.970168))
+[backend] queue hit for op=improve parent=18f11d35 (queue:1787508312_2ee967.json)
+2026-08-24 02:21:17 INFO generated improve node 1aab41f8 from 18f11d35
+2026-08-24 02:21:17 INFO running trial for node 1aab41f8 (improve)
+2026-08-24 02:27:09 INFO node 1aab41f8 -> val_bpb=0.972185 | val_bpb=0.972185 steps=1317.0 mfu=44.7% vram=66.5GB params=85.9M
+2026-08-24 02:27:09 INFO iteration 18 done in 352s | best so far: 18f11d35 (0.970168)
+2026-08-24 02:27:09 INFO ----------------------------------------------------------------------
+2026-08-24 02:27:09 INFO iteration 19 (journal size 48)
+2026-08-24 02:27:09 INFO select: improve best node 18f11d35 (Metric↓(val_bpb)(0.970168))
+[backend] queue hit for op=improve parent=18f11d35 (queue:1787508312_7b0958.json)
+2026-08-24 02:27:09 INFO generated improve node 44c84533 from 18f11d35
+2026-08-24 02:27:09 INFO running trial for node 44c84533 (improve)
+2026-08-24 02:35:11 INFO node 44c84533 -> val_bpb=0.969635 | val_bpb=0.969635 steps=1316.0 mfu=44.64% vram=66.5GB params=85.9M
+2026-08-24 02:35:11 INFO iteration 19 done in 482s | best so far: 44c84533 (0.969635)
+2026-08-24 02:35:11 INFO ----------------------------------------------------------------------
+2026-08-24 02:35:11 INFO iteration 20 (journal size 49)
+2026-08-24 02:35:11 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] BLOCKING on rendezvous request 1787510111_bf05f8 (op=improve, parent=44c84533)
+[backend] request 1787510111_bf05f8 satisfied late by queue:1787510120_c5910b.json
+2026-08-24 02:35:23 INFO generated improve node 0681c8b7 from 44c84533
+2026-08-24 02:35:23 INFO running trial for node 0681c8b7 (improve)
+2026-08-24 02:43:27 INFO node 0681c8b7 -> val_bpb=0.971539 | val_bpb=0.971539 steps=1289.0 mfu=43.74% vram=66.5GB params=85.9M
+2026-08-24 02:43:27 INFO iteration 20 done in 496s | best so far: 44c84533 (0.969635)
+2026-08-24 02:43:27 INFO ----------------------------------------------------------------------
+2026-08-24 02:43:27 INFO iteration 21 (journal size 50)
+2026-08-24 02:43:27 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787510120_d43a26.json)
+2026-08-24 02:43:27 INFO generated improve node 4d3e0ae9 from 44c84533
+2026-08-24 02:43:27 INFO running trial for node 4d3e0ae9 (improve)
+2026-08-24 02:51:33 INFO node 4d3e0ae9 -> val_bpb=0.974919 | val_bpb=0.974919 steps=1311.0 mfu=44.5% vram=66.5GB params=85.9M
+2026-08-24 02:51:33 INFO iteration 21 done in 485s | best so far: 44c84533 (0.969635)
+2026-08-24 02:51:33 INFO ----------------------------------------------------------------------
+2026-08-24 02:51:33 INFO iteration 22 (journal size 51)
+2026-08-24 02:51:33 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787510120_b223ce.json)
+2026-08-24 02:51:33 INFO generated improve node 146336db from 44c84533
+2026-08-24 02:51:33 INFO running trial for node 146336db (improve)
+2026-08-24 02:59:37 INFO node 146336db -> val_bpb=0.971523 | val_bpb=0.971523 steps=1314.0 mfu=44.59% vram=66.5GB params=85.9M
+2026-08-24 02:59:37 INFO iteration 22 done in 484s | best so far: 44c84533 (0.969635)
+2026-08-24 02:59:37 INFO ----------------------------------------------------------------------
+2026-08-24 02:59:37 INFO iteration 23 (journal size 52)
+2026-08-24 02:59:37 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787510121_53fd84.json)
+2026-08-24 02:59:37 INFO generated improve node a8240768 from 44c84533
+2026-08-24 02:59:37 INFO running trial for node a8240768 (improve)
+2026-08-24 03:07:41 INFO node a8240768 -> val_bpb=0.970797 | val_bpb=0.970797 steps=1312.0 mfu=44.53% vram=66.5GB params=85.9M
+2026-08-24 03:07:41 INFO iteration 23 done in 484s | best so far: 44c84533 (0.969635)
+2026-08-24 03:07:41 INFO ----------------------------------------------------------------------
+2026-08-24 03:07:41 INFO iteration 24 (journal size 53)
+2026-08-24 03:07:41 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787510121_06f195.json)
+2026-08-24 03:07:41 INFO generated improve node 4a0817dc from 44c84533
+2026-08-24 03:07:41 INFO running trial for node 4a0817dc (improve)
+2026-08-24 03:15:44 INFO node 4a0817dc -> val_bpb=0.973020 | val_bpb=0.973020 steps=1292.0 mfu=43.84% vram=66.5GB params=85.9M
+2026-08-24 03:15:44 INFO iteration 24 done in 483s | best so far: 44c84533 (0.969635)
+2026-08-24 03:15:44 INFO ----------------------------------------------------------------------
+2026-08-24 03:15:44 INFO iteration 25 (journal size 54)
+2026-08-24 03:15:44 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787510121_5cd513.json)
+2026-08-24 03:15:44 INFO generated improve node 342d3821 from 44c84533
+2026-08-24 03:15:44 INFO running trial for node 342d3821 (improve)
+2026-08-24 03:23:48 INFO node 342d3821 -> val_bpb=0.971687 | val_bpb=0.971687 steps=1285.0 mfu=43.59% vram=66.5GB params=85.9M
+2026-08-24 03:23:48 INFO iteration 25 done in 484s | best so far: 44c84533 (0.969635)
+2026-08-24 03:23:48 INFO ----------------------------------------------------------------------
+2026-08-24 03:23:48 INFO iteration 26 (journal size 55)
+2026-08-24 03:23:48 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787510121_fbf738.json)
+2026-08-24 03:23:48 INFO generated improve node 1000bc52 from 44c84533
+2026-08-24 03:23:48 INFO running trial for node 1000bc52 (improve)
+2026-08-24 03:31:49 INFO node 1000bc52 -> val_bpb=0.969807 | val_bpb=0.969807 steps=1315.0 mfu=44.63% vram=66.5GB params=85.9M
+2026-08-24 03:31:49 INFO iteration 26 done in 481s | best so far: 44c84533 (0.969635)
+2026-08-24 03:31:49 INFO ----------------------------------------------------------------------
+2026-08-24 03:31:49 INFO iteration 27 (journal size 56)
+2026-08-24 03:31:49 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787510121_fa714d.json)
+2026-08-24 03:31:49 INFO generated improve node dd8e7a5b from 44c84533
+2026-08-24 03:31:49 INFO running trial for node dd8e7a5b (improve)
+2026-08-24 03:39:50 INFO node dd8e7a5b -> val_bpb=0.970907 | val_bpb=0.970907 steps=1313.0 mfu=44.56% vram=66.5GB params=85.9M
+2026-08-24 03:39:50 INFO iteration 27 done in 481s | best so far: 44c84533 (0.969635)
+2026-08-24 03:39:50 INFO ----------------------------------------------------------------------
+2026-08-24 03:39:50 INFO iteration 28 (journal size 57)
+2026-08-24 03:39:50 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787510121_edc869.json)
+2026-08-24 03:39:50 INFO generated improve node 94ae5966 from 44c84533
+2026-08-24 03:39:50 INFO running trial for node 94ae5966 (improve)
+2026-08-24 03:47:52 INFO node 94ae5966 -> val_bpb=0.970422 | val_bpb=0.970422 steps=1315.0 mfu=44.63% vram=66.5GB params=85.9M
+2026-08-24 03:47:52 INFO iteration 28 done in 482s | best so far: 44c84533 (0.969635)
+2026-08-24 03:47:52 INFO ----------------------------------------------------------------------
+2026-08-24 03:47:52 INFO iteration 29 (journal size 58)
+2026-08-24 03:47:52 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787510121_04dae4.json)
+2026-08-24 03:47:52 INFO generated improve node c9015b04 from 44c84533
+2026-08-24 03:47:52 INFO running trial for node c9015b04 (improve)
+2026-08-24 03:55:55 INFO node c9015b04 -> val_bpb=0.969852 | val_bpb=0.969852 steps=1315.0 mfu=44.61% vram=66.5GB params=85.9M
+2026-08-24 03:55:55 INFO iteration 29 done in 483s | best so far: 44c84533 (0.969635)
+2026-08-24 03:55:55 INFO ----------------------------------------------------------------------
+2026-08-24 03:55:55 INFO iteration 30 (journal size 59)
+2026-08-24 03:55:55 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787513123_6ff6ec.json)
+2026-08-24 03:55:55 INFO generated improve node 5f8207b9 from 44c84533
+2026-08-24 03:55:55 INFO running trial for node 5f8207b9 (improve)
+2026-08-24 04:03:57 INFO node 5f8207b9 -> val_bpb=0.972399 | val_bpb=0.972399 steps=1315.0 mfu=44.6% vram=66.5GB params=85.9M
+2026-08-24 04:03:57 INFO iteration 30 done in 482s | best so far: 44c84533 (0.969635)
+2026-08-24 04:03:57 INFO ----------------------------------------------------------------------
+2026-08-24 04:03:57 INFO iteration 31 (journal size 60)
+2026-08-24 04:03:57 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787513123_6fe4de.json)
+2026-08-24 04:03:57 INFO generated improve node 5b48cc39 from 44c84533
+2026-08-24 04:03:57 INFO running trial for node 5b48cc39 (improve)
+2026-08-24 04:12:00 INFO node 5b48cc39 -> val_bpb=0.970734 | val_bpb=0.970734 steps=1314.0 mfu=44.59% vram=66.5GB params=85.9M
+2026-08-24 04:12:00 INFO iteration 31 done in 483s | best so far: 44c84533 (0.969635)
+2026-08-24 04:12:00 INFO ----------------------------------------------------------------------
+2026-08-24 04:12:00 INFO iteration 32 (journal size 61)
+2026-08-24 04:12:00 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787513123_3e06f0.json)
+2026-08-24 04:12:00 INFO generated improve node eccb9e53 from 44c84533
+2026-08-24 04:12:00 INFO running trial for node eccb9e53 (improve)
+2026-08-24 04:20:04 INFO node eccb9e53 -> val_bpb=0.970014 | val_bpb=0.970014 steps=1309.0 mfu=44.42% vram=66.5GB params=85.9M
+2026-08-24 04:20:04 INFO iteration 32 done in 484s | best so far: 44c84533 (0.969635)
+2026-08-24 04:20:04 INFO ----------------------------------------------------------------------
+2026-08-24 04:20:04 INFO iteration 33 (journal size 62)
+2026-08-24 04:20:04 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787516113_7c42d5.json)
+2026-08-24 04:20:04 INFO generated improve node 91031295 from 44c84533
+2026-08-24 04:20:04 INFO running trial for node 91031295 (improve)
+2026-08-24 04:29:26 INFO node 91031295 -> val_bpb=0.971535 | val_bpb=0.971535 steps=1430.0 mfu=44.62% vram=60.5GB params=80.9M
+2026-08-24 04:29:26 INFO iteration 33 done in 562s | best so far: 44c84533 (0.969635)
+2026-08-24 04:29:26 INFO ----------------------------------------------------------------------
+2026-08-24 04:29:26 INFO iteration 34 (journal size 63)
+2026-08-24 04:29:26 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787516114_04b3f9.json)
+2026-08-24 04:29:26 INFO generated improve node b79a77ea from 44c84533
+2026-08-24 04:29:26 INFO running trial for node b79a77ea (improve)
+2026-08-24 04:38:52 INFO node b79a77ea -> val_bpb=0.973621 | val_bpb=0.973621 steps=1287.0 mfu=43.67% vram=68.3GB params=112.1M
+2026-08-24 04:38:52 INFO iteration 34 done in 566s | best so far: 44c84533 (0.969635)
+2026-08-24 04:38:52 INFO ----------------------------------------------------------------------
+2026-08-24 04:38:52 INFO iteration 35 (journal size 64)
+2026-08-24 04:38:52 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787516114_c51fab.json)
+2026-08-24 04:38:52 INFO generated improve node c664c3e8 from 44c84533
+2026-08-24 04:38:52 INFO running trial for node c664c3e8 (improve)
+2026-08-24 04:47:43 INFO node c664c3e8 -> val_bpb=0.995024 | val_bpb=0.995024 steps=1230.0 mfu=41.7% vram=69.6GB params=85.9M
+2026-08-24 04:47:43 INFO iteration 35 done in 531s | best so far: 44c84533 (0.969635)
+2026-08-24 04:47:43 INFO ----------------------------------------------------------------------
+2026-08-24 04:47:43 INFO iteration 36 (journal size 65)
+2026-08-24 04:47:43 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787516114_103aad.json)
+2026-08-24 04:47:43 INFO generated improve node 56eddb52 from 44c84533
+2026-08-24 04:47:43 INFO running trial for node 56eddb52 (improve)
+2026-08-24 04:56:16 INFO node 56eddb52 -> val_bpb=0.970258 | val_bpb=0.970258 steps=1303.0 mfu=44.21% vram=66.5GB params=85.9M
+2026-08-24 04:56:16 INFO iteration 36 done in 513s | best so far: 44c84533 (0.969635)
+2026-08-24 04:56:16 INFO ----------------------------------------------------------------------
+2026-08-24 04:56:16 INFO iteration 37 (journal size 66)
+2026-08-24 04:56:16 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787516114_acf071.json)
+2026-08-24 04:56:16 INFO generated improve node 87e5ba8e from 44c84533
+2026-08-24 04:56:16 INFO running trial for node 87e5ba8e (improve)
+2026-08-24 05:04:19 INFO node 87e5ba8e -> val_bpb=0.969986 | val_bpb=0.969986 steps=1313.0 mfu=44.55% vram=66.5GB params=85.9M
+2026-08-24 05:04:19 INFO iteration 37 done in 483s | best so far: 44c84533 (0.969635)
+2026-08-24 05:04:19 INFO ----------------------------------------------------------------------
+2026-08-24 05:04:19 INFO iteration 38 (journal size 67)
+2026-08-24 05:04:19 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787516114_856335.json)
+2026-08-24 05:04:19 INFO generated improve node 6716348b from 44c84533
+2026-08-24 05:04:19 INFO running trial for node 6716348b (improve)
+2026-08-24 05:12:22 INFO node 6716348b -> val_bpb=0.970303 | val_bpb=0.970303 steps=1309.0 mfu=44.4% vram=66.5GB params=85.9M
+2026-08-24 05:12:22 INFO iteration 38 done in 483s | best so far: 44c84533 (0.969635)
+2026-08-24 05:12:22 INFO ----------------------------------------------------------------------
+2026-08-24 05:12:22 INFO iteration 39 (journal size 68)
+2026-08-24 05:12:22 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787516114_37c053.json)
+2026-08-24 05:12:22 INFO generated improve node 2f9c8911 from 44c84533
+2026-08-24 05:12:22 INFO running trial for node 2f9c8911 (improve)
+2026-08-24 05:20:22 INFO node 2f9c8911 -> val_bpb=0.970723 | val_bpb=0.970723 steps=1314.0 mfu=44.59% vram=66.5GB params=85.9M
+2026-08-24 05:20:22 INFO iteration 39 done in 481s | best so far: 44c84533 (0.969635)
+2026-08-24 05:20:22 INFO ----------------------------------------------------------------------
+2026-08-24 05:20:22 INFO iteration 40 (journal size 69)
+2026-08-24 05:20:22 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787516114_79d962.json)
+2026-08-24 05:20:22 INFO generated improve node 90e562b0 from 44c84533
+2026-08-24 05:20:22 INFO running trial for node 90e562b0 (improve)
+2026-08-24 05:28:24 INFO node 90e562b0 -> val_bpb=0.974136 | val_bpb=0.974136 steps=1320.0 mfu=44.79% vram=66.5GB params=85.9M
+2026-08-24 05:28:24 INFO iteration 40 done in 481s | best so far: 44c84533 (0.969635)
+2026-08-24 05:28:24 INFO ----------------------------------------------------------------------
+2026-08-24 05:28:24 INFO iteration 41 (journal size 70)
+2026-08-24 05:28:24 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787516114_7da200.json)
+2026-08-24 05:28:24 INFO generated improve node 4910ff00 from 44c84533
+2026-08-24 05:28:24 INFO running trial for node 4910ff00 (improve)
+2026-08-24 05:36:24 INFO node 4910ff00 -> val_bpb=0.970081 | val_bpb=0.970081 steps=1312.0 mfu=44.53% vram=66.5GB params=85.9M
+2026-08-24 05:36:24 INFO iteration 41 done in 481s | best so far: 44c84533 (0.969635)
+2026-08-24 05:36:24 INFO ----------------------------------------------------------------------
+2026-08-24 05:36:24 INFO iteration 42 (journal size 71)
+2026-08-24 05:36:24 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787516114_4858dc.json)
+2026-08-24 05:36:24 INFO generated improve node 9bb20566 from 44c84533
+2026-08-24 05:36:24 INFO running trial for node 9bb20566 (improve)
+2026-08-24 05:44:24 INFO node 9bb20566 -> val_bpb=0.970326 | val_bpb=0.970326 steps=1313.0 mfu=44.57% vram=66.5GB params=85.9M
+2026-08-24 05:44:24 INFO iteration 42 done in 479s | best so far: 44c84533 (0.969635)
+2026-08-24 05:44:24 INFO ----------------------------------------------------------------------
+2026-08-24 05:44:24 INFO iteration 43 (journal size 72)
+2026-08-24 05:44:24 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787519597_f570a8.json)
+2026-08-24 05:44:24 INFO generated improve node 5fc8be22 from 44c84533
+2026-08-24 05:44:24 INFO running trial for node 5fc8be22 (improve)
+2026-08-24 05:53:55 INFO node 5fc8be22 -> val_bpb=0.973186 | val_bpb=0.973186 steps=1446.0 mfu=42.88% vram=62.4GB params=77.7M
+2026-08-24 05:53:55 INFO iteration 43 done in 572s | best so far: 44c84533 (0.969635)
+2026-08-24 05:53:55 INFO ----------------------------------------------------------------------
+2026-08-24 05:53:55 INFO iteration 44 (journal size 73)
+2026-08-24 05:53:55 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787519597_047aa4.json)
+2026-08-24 05:53:55 INFO generated improve node 5a796892 from 44c84533
+2026-08-24 05:53:55 INFO running trial for node 5a796892 (improve)
+2026-08-24 06:00:43 INFO node 5a796892 -> val_bpb=0.972615 | val_bpb=0.972615 steps=1198.0 mfu=45.77% vram=76.9GB params=94.0M
+2026-08-24 06:00:43 INFO iteration 44 done in 408s | best so far: 44c84533 (0.969635)
+2026-08-24 06:00:43 INFO ----------------------------------------------------------------------
+2026-08-24 06:00:43 INFO iteration 45 (journal size 74)
+2026-08-24 06:00:43 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787521519_5acc1f.json)
+2026-08-24 06:00:43 INFO generated improve node e5eaf62e from 44c84533
+2026-08-24 06:00:43 INFO running trial for node e5eaf62e (improve)
+2026-08-24 06:08:47 INFO node e5eaf62e -> val_bpb=0.972476 | val_bpb=0.972476 steps=1448.0 mfu=42.92% vram=60.2GB params=77.7M
+2026-08-24 06:08:47 INFO iteration 45 done in 484s | best so far: 44c84533 (0.969635)
+2026-08-24 06:08:47 INFO ----------------------------------------------------------------------
+2026-08-24 06:08:47 INFO iteration 46 (journal size 75)
+2026-08-24 06:08:47 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787521639_33a2ea.json)
+2026-08-24 06:08:47 INFO generated improve node b9b7e7c0 from 44c84533
+2026-08-24 06:08:47 INFO running trial for node b9b7e7c0 (improve)
+2026-08-24 06:17:16 INFO node b9b7e7c0 -> val_bpb=0.984331 | val_bpb=0.984331 steps=1364.0 mfu=46.29% vram=60.2GB params=85.9M
+2026-08-24 06:17:16 INFO iteration 46 done in 508s | best so far: 44c84533 (0.969635)
+2026-08-24 06:17:16 INFO ----------------------------------------------------------------------
+2026-08-24 06:17:16 INFO iteration 47 (journal size 76)
+2026-08-24 06:17:16 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787521639_af0161.json)
+2026-08-24 06:17:16 INFO generated improve node a2ba9db4 from 44c84533
+2026-08-24 06:17:16 INFO running trial for node a2ba9db4 (improve)
+2026-08-24 06:25:54 INFO node a2ba9db4 -> val_bpb=0.979710 | val_bpb=0.979710 steps=1312.0 mfu=44.52% vram=69.6GB params=85.9M
+2026-08-24 06:25:54 INFO iteration 47 done in 518s | best so far: 44c84533 (0.969635)
+2026-08-24 06:25:54 INFO ----------------------------------------------------------------------
+2026-08-24 06:25:54 INFO iteration 48 (journal size 77)
+2026-08-24 06:25:54 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787521639_51eb2c.json)
+2026-08-24 06:25:54 INFO generated improve node 96c9459e from 44c84533
+2026-08-24 06:25:54 INFO running trial for node 96c9459e (improve)
+2026-08-24 06:35:56 INFO node 96c9459e -> val_bpb=0.970903 | val_bpb=0.970903 steps=1297.0 mfu=43.99% vram=35.4GB params=85.9M
+2026-08-24 06:35:56 INFO iteration 48 done in 602s | best so far: 44c84533 (0.969635)
+2026-08-24 06:35:56 INFO ----------------------------------------------------------------------
+2026-08-24 06:35:56 INFO iteration 49 (journal size 78)
+2026-08-24 06:35:56 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787521639_500fcb.json)
+2026-08-24 06:35:56 INFO generated improve node a07320f0 from 44c84533
+2026-08-24 06:35:56 INFO running trial for node a07320f0 (improve)
+2026-08-24 06:45:50 INFO node a07320f0 -> val_bpb=0.970103 | val_bpb=0.970103 steps=1312.0 mfu=44.51% vram=70.9GB params=85.9M
+2026-08-24 06:45:50 INFO iteration 49 done in 594s | best so far: 44c84533 (0.969635)
+2026-08-24 06:45:50 INFO ----------------------------------------------------------------------
+2026-08-24 06:45:50 INFO iteration 50 (journal size 79)
+2026-08-24 06:45:50 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787523441_d797f0.json)
+2026-08-24 06:45:50 INFO generated improve node e460cd75 from 44c84533
+2026-08-24 06:45:50 INFO running trial for node e460cd75 (improve)
+2026-08-24 06:53:52 INFO node e460cd75 -> val_bpb=0.987549 | val_bpb=0.987549 steps=662.0 mfu=44.56% vram=66.8GB params=85.9M
+2026-08-24 06:53:52 INFO iteration 50 done in 482s | best so far: 44c84533 (0.969635)
+2026-08-24 06:53:52 INFO ----------------------------------------------------------------------
+2026-08-24 06:53:52 INFO iteration 51 (journal size 80)
+2026-08-24 06:53:52 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787523441_6682e6.json)
+2026-08-24 06:53:52 INFO generated improve node 7ab2edea from 44c84533
+2026-08-24 06:53:52 INFO running trial for node 7ab2edea (improve)
+2026-08-24 07:01:49 INFO node 7ab2edea -> val_bpb=0.974153 | val_bpb=0.974153 steps=2561.0 mfu=43.62% vram=33.5GB params=85.9M
+2026-08-24 07:01:49 INFO iteration 51 done in 477s | best so far: 44c84533 (0.969635)
+2026-08-24 07:01:49 INFO ----------------------------------------------------------------------
+2026-08-24 07:01:49 INFO iteration 52 (journal size 81)
+2026-08-24 07:01:49 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787523441_c58891.json)
+2026-08-24 07:01:49 INFO generated improve node 1e2efedd from 44c84533
+2026-08-24 07:01:49 INFO running trial for node 1e2efedd (improve)
+2026-08-24 07:13:06 INFO node 1e2efedd -> val_bpb=0.979108 | val_bpb=0.979108 steps=866.0 mfu=47.22% vram=98.3GB params=135.3M
+2026-08-24 07:13:06 INFO iteration 52 done in 677s | best so far: 44c84533 (0.969635)
+2026-08-24 07:13:06 INFO ----------------------------------------------------------------------
+2026-08-24 07:13:06 INFO iteration 53 (journal size 82)
+2026-08-24 07:13:06 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787523441_c243c5.json)
+2026-08-24 07:13:06 INFO generated improve node 07cffa19 from 44c84533
+2026-08-24 07:13:06 INFO running trial for node 07cffa19 (improve)
+2026-08-24 07:22:19 INFO node 07cffa19 -> val_bpb=0.974911 | val_bpb=0.974911 steps=1015.0 mfu=47.53% vram=78.8GB params=114.8M
+2026-08-24 07:22:19 INFO iteration 53 done in 553s | best so far: 44c84533 (0.969635)
+2026-08-24 07:22:19 INFO ----------------------------------------------------------------------
+2026-08-24 07:22:19 INFO iteration 54 (journal size 83)
+2026-08-24 07:22:19 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787526804_ecd799.json)
+2026-08-24 07:22:19 INFO generated improve node 8e2b73eb from 44c84533
+2026-08-24 07:22:19 INFO running trial for node 8e2b73eb (improve)
+2026-08-24 07:30:30 INFO node 8e2b73eb -> val_bpb=0.974808 | val_bpb=0.974808 steps=1016.0 mfu=47.55% vram=78.8GB params=114.8M
+2026-08-24 07:30:30 INFO iteration 54 done in 491s | best so far: 44c84533 (0.969635)
+2026-08-24 07:30:30 INFO ----------------------------------------------------------------------
+2026-08-24 07:30:30 INFO iteration 55 (journal size 84)
+2026-08-24 07:30:30 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787527044_42e748.json)
+2026-08-24 07:30:30 INFO generated improve node 680db4df from 44c84533
+2026-08-24 07:30:30 INFO running trial for node 680db4df (improve)
+2026-08-24 07:40:12 INFO node 680db4df -> val_bpb=0.976169 | val_bpb=0.976169 steps=962.0 mfu=45.38% vram=87.4GB params=121.1M
+2026-08-24 07:40:12 INFO iteration 55 done in 583s | best so far: 44c84533 (0.969635)
+2026-08-24 07:40:12 INFO ----------------------------------------------------------------------
+2026-08-24 07:40:12 INFO iteration 56 (journal size 85)
+2026-08-24 07:40:12 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787527044_092e83.json)
+2026-08-24 07:40:12 INFO generated improve node 3f3f3654 from 44c84533
+2026-08-24 07:40:12 INFO running trial for node 3f3f3654 (improve)
+2026-08-24 07:49:13 INFO node 3f3f3654 -> val_bpb=0.972248 | val_bpb=0.972248 steps=1311.0 mfu=45.96% vram=66.2GB params=88.3M
+2026-08-24 07:49:13 INFO iteration 56 done in 540s | best so far: 44c84533 (0.969635)
+2026-08-24 07:49:13 INFO ----------------------------------------------------------------------
+2026-08-24 07:49:13 INFO iteration 57 (journal size 86)
+2026-08-24 07:49:13 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787527044_5a461c.json)
+2026-08-24 07:49:13 INFO generated improve node ffb6c87d from 44c84533
+2026-08-24 07:49:13 INFO running trial for node ffb6c87d (improve)
+2026-08-24 07:57:12 INFO node ffb6c87d -> val_bpb=0.969663 | val_bpb=0.969663 steps=1315.0 mfu=44.6% vram=66.5GB params=85.9M
+2026-08-24 07:57:13 INFO iteration 57 done in 480s | best so far: 44c84533 (0.969635)
+2026-08-24 07:57:13 INFO ----------------------------------------------------------------------
+2026-08-24 07:57:13 INFO iteration 58 (journal size 87)
+2026-08-24 07:57:13 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787527405_e125f8.json)
+2026-08-24 07:57:13 INFO generated improve node 7fcec1f0 from 44c84533
+2026-08-24 07:57:13 INFO running trial for node 7fcec1f0 (improve)
+2026-08-24 08:05:13 INFO node 7fcec1f0 -> val_bpb=0.969626 | val_bpb=0.969626 steps=1314.0 mfu=44.57% vram=66.5GB params=85.9M
+2026-08-24 08:05:13 INFO iteration 58 done in 481s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 08:05:13 INFO ----------------------------------------------------------------------
+2026-08-24 08:05:13 INFO iteration 59 (journal size 88)
+2026-08-24 08:05:13 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] BLOCKING on rendezvous request 1787529913_c96ab8 (op=improve, parent=7fcec1f0)
+[backend] request 1787529913_c96ab8 satisfied late by queue:1787529927_d18131.json
+2026-08-24 08:05:28 INFO generated improve node e9298573 from 7fcec1f0
+2026-08-24 08:05:28 INFO running trial for node e9298573 (improve)
+2026-08-24 08:14:54 INFO node e9298573 -> val_bpb=0.974398 | val_bpb=0.974398 steps=1237.0 mfu=42.37% vram=71.3GB params=91.1M
+2026-08-24 08:14:54 INFO iteration 59 done in 581s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 08:14:54 INFO ----------------------------------------------------------------------
+2026-08-24 08:14:54 INFO iteration 60 (journal size 89)
+2026-08-24 08:14:54 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] queue hit for op=improve parent=7fcec1f0 (queue:1787529927_bbc2b2.json)
+2026-08-24 08:14:54 INFO generated improve node ecd181ff from 7fcec1f0
+2026-08-24 08:14:54 INFO running trial for node ecd181ff (improve)
+2026-08-24 08:22:55 INFO node ecd181ff -> val_bpb=0.969792 | val_bpb=0.969792 steps=1315.0 mfu=44.63% vram=66.5GB params=85.9M
+2026-08-24 08:22:55 INFO iteration 60 done in 481s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 08:22:55 INFO ----------------------------------------------------------------------
+2026-08-24 08:22:55 INFO iteration 61 (journal size 90)
+2026-08-24 08:22:55 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] queue hit for op=improve parent=7fcec1f0 (queue:1787529927_82edb4.json)
+2026-08-24 08:22:55 INFO generated improve node bed88008 from 7fcec1f0
+2026-08-24 08:22:55 INFO running trial for node bed88008 (improve)
+2026-08-24 08:30:55 INFO node bed88008 -> val_bpb=0.969889 | val_bpb=0.969889 steps=1314.0 mfu=44.59% vram=66.5GB params=85.9M
+2026-08-24 08:30:55 INFO iteration 61 done in 480s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 08:30:55 INFO ----------------------------------------------------------------------
+2026-08-24 08:30:55 INFO iteration 62 (journal size 91)
+2026-08-24 08:30:55 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] queue hit for op=improve parent=7fcec1f0 (queue:1787529927_9633a3.json)
+2026-08-24 08:30:55 INFO generated improve node 1721e365 from 7fcec1f0
+2026-08-24 08:30:55 INFO running trial for node 1721e365 (improve)
+2026-08-24 08:38:55 INFO node 1721e365 -> val_bpb=0.969819 | val_bpb=0.969819 steps=1313.0 mfu=44.56% vram=66.5GB params=85.9M
+2026-08-24 08:38:55 INFO iteration 62 done in 480s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 08:38:55 INFO ----------------------------------------------------------------------
+2026-08-24 08:38:55 INFO iteration 63 (journal size 92)
+2026-08-24 08:38:55 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] queue hit for op=improve parent=7fcec1f0 (queue:1787530047_31293d.json)
+2026-08-24 08:38:55 INFO generated improve node 2197088a from 7fcec1f0
+2026-08-24 08:38:55 INFO running trial for node 2197088a (improve)
+2026-08-24 08:44:56 INFO node 2197088a -> val_bpb=0.974595 | val_bpb=0.974595 steps=1234.0 mfu=42.28% vram=71.3GB params=91.1M
+2026-08-24 08:44:56 INFO iteration 63 done in 361s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 08:44:56 INFO ----------------------------------------------------------------------
+2026-08-24 08:44:56 INFO iteration 64 (journal size 93)
+2026-08-24 08:44:56 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] queue hit for op=improve parent=7fcec1f0 (queue:1787530528_011881.json)
+2026-08-24 08:44:56 INFO generated improve node bd73f21f from 7fcec1f0
+2026-08-24 08:44:56 INFO running trial for node bd73f21f (improve)
+2026-08-24 08:52:58 INFO node bd73f21f -> val_bpb=0.970007 | val_bpb=0.970007 steps=1307.0 mfu=44.34% vram=66.5GB params=85.9M
+2026-08-24 08:52:58 INFO iteration 64 done in 482s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 08:52:58 INFO ----------------------------------------------------------------------
+2026-08-24 08:52:58 INFO iteration 65 (journal size 94)
+2026-08-24 08:52:58 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] queue hit for op=improve parent=7fcec1f0 (queue:1787531008_1400ef.json)
+2026-08-24 08:52:58 INFO generated improve node 00edc0f1 from 7fcec1f0
+2026-08-24 08:52:58 INFO running trial for node 00edc0f1 (improve)
+2026-08-24 09:01:00 INFO node 00edc0f1 -> val_bpb=0.969726 | val_bpb=0.969726 steps=1310.0 mfu=44.46% vram=66.5GB params=85.9M
+2026-08-24 09:01:00 INFO iteration 65 done in 482s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 09:01:00 INFO ----------------------------------------------------------------------
+2026-08-24 09:01:00 INFO iteration 66 (journal size 95)
+2026-08-24 09:01:00 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] queue hit for op=improve parent=7fcec1f0 (queue:1787531489_59e5ae.json)
+2026-08-24 09:01:00 INFO generated improve node aab87a43 from 7fcec1f0
+2026-08-24 09:01:00 INFO running trial for node aab87a43 (improve)
+2026-08-24 09:09:00 INFO node aab87a43 -> val_bpb=0.969734 | val_bpb=0.969734 steps=1310.0 mfu=44.46% vram=66.5GB params=85.9M
+2026-08-24 09:09:00 INFO iteration 66 done in 480s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 09:09:00 INFO ----------------------------------------------------------------------
+2026-08-24 09:09:00 INFO iteration 67 (journal size 96)
+2026-08-24 09:09:00 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] queue hit for op=improve parent=7fcec1f0 (queue:1787531969_b1de0e.json)
+2026-08-24 09:09:00 INFO generated improve node d263a34d from 7fcec1f0
+2026-08-24 09:09:00 INFO running trial for node d263a34d (improve)
+2026-08-24 09:17:03 INFO node d263a34d -> val_bpb=0.969641 | val_bpb=0.969641 steps=1315.0 mfu=44.6% vram=66.5GB params=85.9M
+2026-08-24 09:17:03 INFO iteration 67 done in 483s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 09:17:03 INFO ----------------------------------------------------------------------
+2026-08-24 09:17:03 INFO iteration 68 (journal size 97)
+2026-08-24 09:17:03 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] queue hit for op=improve parent=7fcec1f0 (queue:1787532326_1a8206.json)
+2026-08-24 09:17:03 INFO generated improve node a507160f from 7fcec1f0
+2026-08-24 09:17:03 INFO running trial for node a507160f (improve)
+2026-08-24 09:25:03 INFO node a507160f -> val_bpb=0.972412 | val_bpb=0.972412 steps=1318.0 mfu=44.72% vram=66.5GB params=85.9M
+2026-08-24 09:25:03 INFO iteration 68 done in 480s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 09:25:03 INFO ----------------------------------------------------------------------
+2026-08-24 09:25:03 INFO iteration 69 (journal size 98)
+2026-08-24 09:25:03 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] queue hit for op=improve parent=7fcec1f0 (queue:1787532326_76b71f.json)
+2026-08-24 09:25:03 INFO generated improve node db7342cc from 7fcec1f0
+2026-08-24 09:25:03 INFO running trial for node db7342cc (improve)
+2026-08-24 09:33:04 INFO node db7342cc -> val_bpb=0.971373 | val_bpb=0.971373 steps=1317.0 mfu=44.69% vram=66.5GB params=85.9M
+2026-08-24 09:33:04 INFO iteration 69 done in 482s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 09:33:04 INFO ----------------------------------------------------------------------
+2026-08-24 09:33:04 INFO iteration 70 (journal size 99)
+2026-08-24 09:33:04 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] queue hit for op=improve parent=7fcec1f0 (queue:1787532326_f993fa.json)
+2026-08-24 09:33:04 INFO generated improve node 143ceea2 from 7fcec1f0
+2026-08-24 09:33:04 INFO running trial for node 143ceea2 (improve)
+2026-08-24 09:41:06 INFO node 143ceea2 -> val_bpb=0.972270 | val_bpb=0.972270 steps=1314.0 mfu=44.58% vram=66.5GB params=85.9M
+2026-08-24 09:41:06 INFO iteration 70 done in 481s | best so far: 7fcec1f0 (0.969626)
+2026-08-24 09:41:06 INFO ----------------------------------------------------------------------
+2026-08-24 09:41:06 INFO iteration 71 (journal size 100)
+2026-08-24 09:41:06 INFO select: improve best node 7fcec1f0 (Metric↓(val_bpb)(0.969626))
+[backend] queue hit for op=improve parent=7fcec1f0 (queue:1787533767_cf745f.json)
+2026-08-24 09:41:06 INFO generated improve node 42465468 from 7fcec1f0
+2026-08-24 09:41:06 INFO running trial for node 42465468 (improve)
+2026-08-24 09:49:06 INFO node 42465468 -> val_bpb=0.969615 | val_bpb=0.969615 steps=1316.0 mfu=44.66% vram=66.5GB params=85.9M
+2026-08-24 09:49:06 INFO iteration 71 done in 480s | best so far: 42465468 (0.969615)
+2026-08-24 09:49:06 INFO ----------------------------------------------------------------------
+2026-08-24 09:49:06 INFO iteration 72 (journal size 101)
+2026-08-24 09:49:06 INFO select: improve best node 42465468 (Metric↓(val_bpb)(0.969615))
+[backend] BLOCKING on rendezvous request 1787536146_411686 (op=improve, parent=42465468)
+[backend] request 1787536146_411686 satisfied late by queue:1787536170_a4995f.json
+2026-08-24 09:49:30 INFO generated improve node eb0727f4 from 42465468
+2026-08-24 09:49:30 INFO running trial for node eb0727f4 (improve)
+2026-08-24 09:57:31 INFO node eb0727f4 -> val_bpb=0.969654 | val_bpb=0.969654 steps=1315.0 mfu=44.6% vram=66.5GB params=85.9M
+2026-08-24 09:57:31 INFO iteration 72 done in 504s | best so far: 42465468 (0.969615)
+2026-08-24 09:57:31 INFO ----------------------------------------------------------------------
+2026-08-24 09:57:31 INFO iteration 73 (journal size 102)
+2026-08-24 09:57:31 INFO select: improve best node 42465468 (Metric↓(val_bpb)(0.969615))
+[backend] queue hit for op=improve parent=42465468 (queue:1787536170_26b23e.json)
+2026-08-24 09:57:31 INFO generated improve node 6d50fbc7 from 42465468
+2026-08-24 09:57:31 INFO running trial for node 6d50fbc7 (improve)
+2026-08-24 10:05:31 INFO node 6d50fbc7 -> val_bpb=0.970127 | val_bpb=0.970127 steps=1312.0 mfu=44.51% vram=66.5GB params=85.9M
+2026-08-24 10:05:31 INFO iteration 73 done in 481s | best so far: 42465468 (0.969615)
+2026-08-24 10:05:31 INFO ----------------------------------------------------------------------
+2026-08-24 10:05:31 INFO iteration 74 (journal size 103)
+2026-08-24 10:05:31 INFO select: improve best node 42465468 (Metric↓(val_bpb)(0.969615))
+[backend] queue hit for op=improve parent=42465468 (queue:1787536170_3c4edc.json)
+2026-08-24 10:05:31 INFO generated improve node 92218b44 from 42465468
+2026-08-24 10:05:31 INFO running trial for node 92218b44 (improve)
+2026-08-24 10:08:01 INFO node 92218b44 -> BUGGY | INVALID: no training_seconds in summary (exc: torch.OutOfMemoryError)
+2026-08-24 10:08:01 INFO iteration 74 done in 150s | best so far: 42465468 (0.969615)
+2026-08-24 10:08:01 INFO ----------------------------------------------------------------------
+2026-08-24 10:08:01 INFO iteration 75 (journal size 104)
+2026-08-24 10:08:01 INFO select: debug node 92218b44 (depth 0)
+[backend] BLOCKING on rendezvous request 1787537281_2aa5a7 (op=debug, parent=92218b44)
+2026-08-24 10:36:42 INFO ======================================================================
+2026-08-24 10:36:42 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 7
+2026-08-24 10:36:42 INFO journal: 103 existing nodes
+2026-08-24 10:36:42 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 10:36:42 INFO ----------------------------------------------------------------------
+2026-08-24 10:36:42 INFO iteration 1 (journal size 103)
+2026-08-24 10:36:42 INFO select: improve best node 42465468 (Metric↓(val_bpb)(0.969615))
+[backend] queue hit for op=improve parent=42465468 (queue:1787539002_81c44c.json)
+2026-08-24 10:36:42 INFO generated improve node 89ab1636 from 42465468
+2026-08-24 10:36:42 INFO running trial for node 89ab1636 (improve)
+2026-08-24 10:39:46 INFO node 89ab1636 -> BUGGY | INVALID: no training_seconds in summary (exc: torch.OutOfMemoryError)
+2026-08-24 10:39:46 INFO iteration 1 done in 185s | best so far: 42465468 (0.969615)
+2026-08-24 10:39:46 INFO ----------------------------------------------------------------------
+2026-08-24 10:39:46 INFO iteration 2 (journal size 104)
+2026-08-24 10:39:46 INFO select: improve best node 42465468 (Metric↓(val_bpb)(0.969615))
+[backend] queue hit for op=improve parent=42465468 (queue:1787539097_1974fd.json)
+2026-08-24 10:39:46 INFO generated improve node d6eaae8b from 42465468
+2026-08-24 10:39:46 INFO running trial for node d6eaae8b (improve)
+2026-08-24 10:42:13 INFO node d6eaae8b -> BUGGY | INVALID: no training_seconds in summary (exc: torch.OutOfMemoryError)
+2026-08-24 10:42:13 INFO iteration 2 done in 147s | best so far: 42465468 (0.969615)
+2026-08-24 10:42:13 INFO ----------------------------------------------------------------------
+2026-08-24 10:42:13 INFO iteration 3 (journal size 105)
+2026-08-24 10:42:13 INFO select: debug node d6eaae8b (depth 0)
+[backend] BLOCKING on rendezvous request 1787539333_ae3315 (op=debug, parent=d6eaae8b)
+2026-08-24 10:46:39 INFO ======================================================================
+2026-08-24 10:46:39 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 7
+2026-08-24 10:46:39 INFO journal: 105 existing nodes
+2026-08-24 10:46:39 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 10:46:39 INFO ----------------------------------------------------------------------
+2026-08-24 10:46:39 INFO iteration 1 (journal size 105)
+2026-08-24 10:46:39 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] BLOCKING on rendezvous request 1787539599_9a9751 (op=improve, parent=44c84533)
+2026-08-24 10:51:11 INFO ======================================================================
+2026-08-24 10:51:11 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 0
+2026-08-24 10:51:11 INFO journal: 105 existing nodes
+2026-08-24 10:51:11 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 10:51:11 INFO ----------------------------------------------------------------------
+2026-08-24 10:51:11 INFO iteration 1 (journal size 105)
+2026-08-24 10:51:11 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787539871_7956d3.json)
+2026-08-24 10:51:11 INFO generated improve node 8790cc82 from 44c84533
+2026-08-24 10:51:11 INFO running trial for node 8790cc82 (improve)
+2026-08-24 10:59:32 INFO node 8790cc82 -> val_bpb=0.981862 | val_bpb=0.981862 steps=1109.0 mfu=37.58% vram=66.5GB params=85.9M
+2026-08-24 10:59:32 INFO iteration 1 done in 501s | best so far: 44c84533 (0.969635)
+2026-08-24 10:59:32 INFO ----------------------------------------------------------------------
+2026-08-24 10:59:32 INFO iteration 2 (journal size 106)
+2026-08-24 10:59:32 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787539871_361626.json)
+2026-08-24 10:59:32 INFO generated improve node 83b09fe2 from 44c84533
+2026-08-24 10:59:32 INFO running trial for node 83b09fe2 (improve)
+2026-08-24 11:02:04 INFO ======================================================================
+2026-08-24 11:02:04 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 0
+2026-08-24 11:02:04 INFO journal: 104 existing nodes
+2026-08-24 11:02:04 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 11:02:04 INFO ----------------------------------------------------------------------
+2026-08-24 11:02:04 INFO iteration 1 (journal size 104)
+2026-08-24 11:02:04 INFO select: improve best node 42465468 (Metric↓(val_bpb)(0.969615))
+[backend] BLOCKING on rendezvous request 1787540524_f4565d (op=improve, parent=42465468)
+2026-08-24 11:03:06 INFO ======================================================================
+2026-08-24 11:03:06 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 0
+2026-08-24 11:03:06 INFO journal: 104 existing nodes
+2026-08-24 11:03:06 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 11:03:06 INFO ----------------------------------------------------------------------
+2026-08-24 11:03:06 INFO iteration 1 (journal size 104)
+2026-08-24 11:03:06 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787540524_147175.json)
+2026-08-24 11:03:06 INFO generated improve node 3a16b251 from 44c84533
+2026-08-24 11:03:06 INFO running trial for node 3a16b251 (improve)
+2026-08-24 11:11:25 INFO node 3a16b251 -> val_bpb=0.983875 | val_bpb=0.983875 steps=1115.0 mfu=37.78% vram=66.5GB params=85.9M
+2026-08-24 11:11:25 INFO iteration 1 done in 500s | best so far: 44c84533 (0.969635)
+2026-08-24 11:11:25 INFO ----------------------------------------------------------------------
+2026-08-24 11:11:25 INFO iteration 2 (journal size 105)
+2026-08-24 11:11:25 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787539871_95924b.json)
+2026-08-24 11:11:25 INFO generated improve node 26e235f1 from 44c84533
+2026-08-24 11:11:25 INFO running trial for node 26e235f1 (improve)
+2026-08-24 11:16:41 INFO ======================================================================
+2026-08-24 11:16:41 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 0
+2026-08-24 11:16:41 INFO journal: 103 existing nodes
+2026-08-24 11:16:41 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 11:16:41 INFO ----------------------------------------------------------------------
+2026-08-24 11:16:41 INFO iteration 1 (journal size 103)
+2026-08-24 11:16:41 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787539871_d0d11c.json)
+2026-08-24 11:16:41 INFO generated improve node c93e6c79 from 44c84533
+2026-08-24 11:16:41 INFO running trial for node c93e6c79 (improve)
+2026-08-24 11:24:57 INFO node c93e6c79 -> BUGGY | INVALID: GPU contended: peak foreign memory 88.2GB during the run; step count is depressed by another tenant, score not comparable
+2026-08-24 11:24:57 INFO iteration 1 done in 497s | best so far: 44c84533 (0.969635)
+2026-08-24 11:24:57 INFO ----------------------------------------------------------------------
+2026-08-24 11:24:57 INFO iteration 2 (journal size 104)
+2026-08-24 11:24:57 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787539991_79f65a.json)
+2026-08-24 11:24:57 INFO generated improve node 1813443c from 44c84533
+2026-08-24 11:24:57 INFO running trial for node 1813443c (improve)
+2026-08-24 11:34:21 INFO node 1813443c -> BUGGY | INVALID: GPU contended: peak foreign memory 39.8GB during the run; step count is depressed by another tenant, score not comparable
+2026-08-24 11:34:21 INFO iteration 2 done in 564s | best so far: 44c84533 (0.969635)
+2026-08-24 11:34:21 INFO ----------------------------------------------------------------------
+2026-08-24 11:34:21 INFO iteration 3 (journal size 105)
+2026-08-24 11:34:21 INFO select: debug node 1813443c (depth 0)
+[backend] BLOCKING on rendezvous request 1787542461_a00e8b (op=debug, parent=1813443c)
+2026-08-24 11:45:48 INFO ======================================================================
+2026-08-24 11:45:48 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 0
+2026-08-24 11:45:48 INFO journal: 103 existing nodes
+2026-08-24 11:45:48 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 11:45:48 INFO ----------------------------------------------------------------------
+2026-08-24 11:45:48 INFO iteration 1 (journal size 103)
+2026-08-24 11:45:48 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787540262_307eec.json)
+2026-08-24 11:45:48 INFO generated improve node 1b2640c1 from 44c84533
+2026-08-24 11:45:48 INFO running trial for node 1b2640c1 (improve)
+2026-08-24 11:54:00 INFO node 1b2640c1 -> val_bpb=0.979804 | val_bpb=0.979804 steps=1191.0 mfu=40.39% vram=66.5GB params=85.9M
+2026-08-24 11:54:00 INFO iteration 1 done in 492s | best so far: 44c84533 (0.969635)
+2026-08-24 11:54:00 INFO ----------------------------------------------------------------------
+2026-08-24 11:54:00 INFO iteration 2 (journal size 104)
+2026-08-24 11:54:00 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787540262_8b5654.json)
+2026-08-24 11:54:00 INFO generated improve node 9991485c from 44c84533
+2026-08-24 11:54:00 INFO running trial for node 9991485c (improve)
+2026-08-24 12:03:27 INFO node 9991485c -> val_bpb=0.994843 | val_bpb=0.994843 steps=979.0 mfu=36.66% vram=66.5GB params=85.9M
+2026-08-24 12:03:27 INFO iteration 2 done in 567s | best so far: 44c84533 (0.969635)
+2026-08-24 12:03:27 INFO ----------------------------------------------------------------------
+2026-08-24 12:03:27 INFO iteration 3 (journal size 105)
+2026-08-24 12:03:27 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787540262_ec22ac.json)
+2026-08-24 12:03:27 INFO generated improve node 9dc20adb from 44c84533
+2026-08-24 12:03:27 INFO running trial for node 9dc20adb (improve)
+2026-08-24 12:11:39 INFO node 9dc20adb -> val_bpb=1.001848 | val_bpb=1.001848 steps=568.0 mfu=38.15% vram=66.8GB params=85.9M
+2026-08-24 12:11:39 INFO iteration 3 done in 492s | best so far: 44c84533 (0.969635)
+2026-08-24 12:11:39 INFO ----------------------------------------------------------------------
+2026-08-24 12:11:39 INFO iteration 4 (journal size 106)
+2026-08-24 12:11:39 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787540262_c48b23.json)
+2026-08-24 12:11:39 INFO generated improve node a34cd4f6 from 44c84533
+2026-08-24 12:11:39 INFO running trial for node a34cd4f6 (improve)
+2026-08-24 12:15:34 INFO ======================================================================
+2026-08-24 12:15:34 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 0
+2026-08-24 12:15:34 INFO journal: 103 existing nodes
+2026-08-24 12:15:34 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 12:15:34 INFO ----------------------------------------------------------------------
+2026-08-24 12:15:34 INFO iteration 1 (journal size 103)
+2026-08-24 12:15:34 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787540262_795d1f.json)
+2026-08-24 12:15:34 INFO generated improve node ee1e7ba7 from 44c84533
+2026-08-24 12:15:34 INFO running trial for node ee1e7ba7 (improve)
+2026-08-24 12:16:59 INFO node ee1e7ba7 -> BUGGY | INVALID: GPU contended: peak foreign memory 6.1GB during the run; step count is depressed by another tenant, score not comparable (exc: NonZeroExit(143))
+2026-08-24 12:16:59 INFO iteration 1 done in 85s | best so far: 44c84533 (0.969635)
+2026-08-24 12:16:59 INFO ----------------------------------------------------------------------
+2026-08-24 12:16:59 INFO iteration 2 (journal size 104)
+2026-08-24 12:16:59 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787540262_f690e6.json)
+2026-08-24 12:16:59 INFO generated improve node 4355506c from 44c84533
+2026-08-24 12:16:59 INFO running trial for node 4355506c (improve)
+2026-08-24 12:21:53 INFO node 4355506c -> BUGGY | INVALID: GPU contended: peak foreign memory 4.4GB during the run; step count is depressed by another tenant, score not comparable (exc: NonZeroExit(143))
+2026-08-24 12:21:53 INFO iteration 2 done in 294s | best so far: 44c84533 (0.969635)
+2026-08-24 12:21:53 INFO ----------------------------------------------------------------------
+2026-08-24 12:21:53 INFO iteration 3 (journal size 105)
+2026-08-24 12:21:53 INFO select: debug node 4355506c (depth 0)
+[backend] BLOCKING on rendezvous request 1787545313_521881 (op=debug, parent=4355506c)
+2026-08-24 12:51:55 WARNING rendezvous timed out (no response for request 1787545313_521881 within 1800.0s) — falling back to a replicate
+2026-08-24 12:51:55 INFO timeout fallback: replicating best node 42465468
+2026-08-24 12:56:15 INFO node 2446b219 -> BUGGY | INVALID: GPU contended: peak foreign memory 36.9GB during the run; step count is depressed by another tenant, score not comparable (exc: NonZeroExit(143))
+2026-08-24 12:56:15 INFO iteration 3 done in 2062s | best so far: 44c84533 (0.969635)
+2026-08-24 12:56:15 INFO ----------------------------------------------------------------------
+2026-08-24 12:56:15 INFO iteration 4 (journal size 106)
+2026-08-24 12:56:15 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787546029_b79504.json)
+2026-08-24 12:56:15 INFO generated improve node e0cd4ba9 from 44c84533
+2026-08-24 12:56:15 INFO running trial for node e0cd4ba9 (improve)
+2026-08-24 13:04:18 INFO node e0cd4ba9 -> BUGGY | INVALID: GPU contended: peak foreign memory 43.9GB during the run; step count is depressed by another tenant, score not comparable (exc: NonZeroExit(143))
+2026-08-24 13:04:18 INFO iteration 4 done in 483s | best so far: 44c84533 (0.969635)
+2026-08-24 13:04:18 INFO ----------------------------------------------------------------------
+2026-08-24 13:04:18 INFO iteration 5 (journal size 107)
+2026-08-24 13:04:18 INFO select: debug node 2446b219 (depth 0)
+[backend] BLOCKING on rendezvous request 1787547858_d3ed8b (op=debug, parent=2446b219)
+2026-08-24 13:19:07 INFO ======================================================================
+2026-08-24 13:19:07 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 7
+2026-08-24 13:19:07 INFO journal: 103 existing nodes
+2026-08-24 13:19:07 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 13:19:07 INFO ----------------------------------------------------------------------
+2026-08-24 13:19:07 INFO iteration 1 (journal size 103)
+2026-08-24 13:19:07 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787546029_3170f7.json)
+2026-08-24 13:19:07 INFO generated improve node ddf5a8ee from 44c84533
+2026-08-24 13:19:07 INFO running trial for node ddf5a8ee (improve)
+2026-08-24 13:27:17 INFO node ddf5a8ee -> BUGGY | INVALID: GPU contended: foreign memory grew 50.4GB during the run; step count is depressed by another tenant, score not comparable
+2026-08-24 13:27:17 INFO iteration 1 done in 489s | best so far: 44c84533 (0.969635)
+2026-08-24 13:27:17 INFO ----------------------------------------------------------------------
+2026-08-24 13:27:17 INFO iteration 2 (journal size 104)
+2026-08-24 13:27:17 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787546029_240e04.json)
+2026-08-24 13:27:17 INFO generated improve node 841ece84 from 44c84533
+2026-08-24 13:27:17 INFO running trial for node 841ece84 (improve)
+2026-08-24 13:35:04 INFO node 841ece84 -> BUGGY | INVALID: GPU contended: foreign memory grew 44.4GB during the run; step count is depressed by another tenant, score not comparable
+2026-08-24 13:35:04 INFO iteration 2 done in 467s | best so far: 44c84533 (0.969635)
+2026-08-24 13:35:04 INFO ----------------------------------------------------------------------
+2026-08-24 13:35:04 INFO iteration 3 (journal size 105)
+2026-08-24 13:35:04 INFO select: debug node 841ece84 (depth 0)
+[backend] BLOCKING on rendezvous request 1787549704_143e33 (op=debug, parent=841ece84)
+2026-08-24 14:05:06 WARNING rendezvous timed out (no response for request 1787549704_143e33 within 1800.0s) — falling back to a replicate
+2026-08-24 14:05:06 INFO timeout fallback: replicating best node 42465468
+2026-08-24 14:38:02 INFO node 90e8cc33 -> BUGGY | INVALID: no training_seconds in summary (exc: torch.OutOfMemoryError)
+2026-08-24 14:38:02 INFO iteration 3 done in 3778s | best so far: 44c84533 (0.969635)
+2026-08-24 14:38:02 INFO ----------------------------------------------------------------------
+2026-08-24 14:38:02 INFO iteration 4 (journal size 106)
+2026-08-24 14:38:02 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787550294_db8f95.json)
+2026-08-24 14:38:02 INFO generated improve node 1151994a from 44c84533
+2026-08-24 14:38:02 INFO running trial for node 1151994a (improve)
+2026-08-24 15:15:27 INFO ======================================================================
+2026-08-24 15:15:27 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 3
+2026-08-24 15:15:27 INFO journal: 105 existing nodes
+2026-08-24 15:15:27 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 15:15:27 INFO ----------------------------------------------------------------------
+2026-08-24 15:15:27 INFO iteration 1 (journal size 105)
+2026-08-24 15:15:27 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787550294_72bcc3.json)
+2026-08-24 15:15:27 INFO generated improve node 51333356 from 44c84533
+2026-08-24 15:15:27 INFO running trial for node 51333356 (improve)
+2026-08-24 15:23:32 INFO node 51333356 -> val_bpb=0.990118 | val_bpb=0.990118 steps=1017.0 mfu=42.51% vram=44.0GB params=50.3M
+2026-08-24 15:23:32 INFO iteration 1 done in 485s | best so far: 44c84533 (0.969635)
+2026-08-24 15:23:32 INFO ----------------------------------------------------------------------
+2026-08-24 15:23:32 INFO iteration 2 (journal size 106)
+2026-08-24 15:23:32 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787550294_e657d2.json)
+2026-08-24 15:23:32 INFO generated improve node 137deafa from 44c84533
+2026-08-24 15:23:32 INFO running trial for node 137deafa (improve)
+2026-08-24 15:31:49 INFO node 137deafa -> val_bpb=0.989440 | val_bpb=0.989440 steps=1013.0 mfu=42.33% vram=44.0GB params=50.3M
+2026-08-24 15:31:49 INFO iteration 2 done in 497s | best so far: 44c84533 (0.969635)
+2026-08-24 15:31:49 INFO ----------------------------------------------------------------------
+2026-08-24 15:31:49 INFO iteration 3 (journal size 107)
+2026-08-24 15:31:49 INFO select: debug node 841ece84 (depth 0)
+[backend] BLOCKING on rendezvous request 1787556709_fbe101 (op=debug, parent=841ece84)
+2026-08-24 16:01:51 WARNING rendezvous timed out (no response for request 1787556709_fbe101 within 1800.0s) — falling back to a replicate
+2026-08-24 16:01:51 INFO timeout fallback: replicating best node 42465468
+2026-08-24 16:13:12 INFO node 14dab66c -> BUGGY | INVALID: GPU contended: foreign memory grew 12.0GB during the run; step count is depressed by another tenant, score not comparable
+2026-08-24 16:13:12 INFO iteration 3 done in 2483s | best so far: 44c84533 (0.969635)
+2026-08-24 16:13:12 INFO ----------------------------------------------------------------------
+2026-08-24 16:13:12 INFO iteration 4 (journal size 108)
+2026-08-24 16:13:12 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787557513_ec614c.json)
+2026-08-24 16:13:12 INFO generated improve node 586597ce from 44c84533
+2026-08-24 16:13:12 INFO running trial for node 586597ce (improve)
+2026-08-24 16:20:55 INFO node 586597ce -> val_bpb=0.991566 | val_bpb=0.991566 steps=1014.0 mfu=42.36% vram=44.0GB params=50.3M
+2026-08-24 16:20:55 INFO iteration 4 done in 463s | best so far: 44c84533 (0.969635)
+2026-08-24 16:20:55 INFO ----------------------------------------------------------------------
+2026-08-24 16:20:55 INFO iteration 5 (journal size 109)
+2026-08-24 16:20:55 INFO select: debug node 841ece84 (depth 0)
+[backend] BLOCKING on rendezvous request 1787559655_8639f3 (op=debug, parent=841ece84)
+2026-08-24 16:50:57 WARNING rendezvous timed out (no response for request 1787559655_8639f3 within 1800.0s) — falling back to a replicate
+2026-08-24 16:50:57 INFO timeout fallback: replicating best node 42465468
+2026-08-24 16:59:01 INFO node c5b3032b -> val_bpb=0.970386 | val_bpb=0.970386 steps=1306.0 mfu=44.32% vram=66.2GB params=85.9M
+2026-08-24 16:59:01 INFO iteration 5 done in 2286s | best so far: 44c84533 (0.969635)
+2026-08-24 16:59:01 INFO ----------------------------------------------------------------------
+2026-08-24 16:59:01 INFO iteration 6 (journal size 110)
+2026-08-24 16:59:01 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787540262_40023b.json)
+2026-08-24 16:59:01 INFO generated improve node 2f36e383 from 44c84533
+2026-08-24 16:59:01 INFO running trial for node 2f36e383 (improve)
+2026-08-24 17:07:15 INFO node 2f36e383 -> val_bpb=0.971180 | val_bpb=0.971180 steps=1305.0 mfu=44.26% vram=66.2GB params=85.9M
+2026-08-24 17:07:15 INFO iteration 6 done in 493s | best so far: 44c84533 (0.969635)
+2026-08-24 17:07:15 INFO ----------------------------------------------------------------------
+2026-08-24 17:07:15 INFO iteration 7 (journal size 111)
+2026-08-24 17:07:15 INFO select: debug node ddf5a8ee (depth 0)
+[backend] BLOCKING on rendezvous request 1787562435_a252e1 (op=debug, parent=ddf5a8ee)
+2026-08-24 17:37:17 WARNING rendezvous timed out (no response for request 1787562435_a252e1 within 1800.0s) — falling back to a replicate
+2026-08-24 17:37:17 INFO timeout fallback: replicating best node 42465468
+2026-08-24 17:45:16 INFO node d3f0110e -> val_bpb=0.970057 | val_bpb=0.970057 steps=1310.0 mfu=44.46% vram=66.2GB params=85.9M
+2026-08-24 17:45:16 INFO iteration 7 done in 2281s | best so far: 44c84533 (0.969635)
+2026-08-24 17:45:16 INFO ----------------------------------------------------------------------
+2026-08-24 17:45:16 INFO iteration 8 (journal size 112)
+2026-08-24 17:45:16 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787540262_1b6f26.json)
+2026-08-24 17:45:16 INFO generated improve node b07eeb76 from 44c84533
+2026-08-24 17:45:16 INFO running trial for node b07eeb76 (improve)
+2026-08-24 17:56:01 INFO node b07eeb76 -> val_bpb=0.977734 | val_bpb=0.977734 steps=2181.0 mfu=40.39% vram=48.5GB params=50.3M
+2026-08-24 17:56:01 INFO iteration 8 done in 645s | best so far: 44c84533 (0.969635)
+2026-08-24 17:56:01 INFO ----------------------------------------------------------------------
+2026-08-24 17:56:01 INFO iteration 9 (journal size 113)
+2026-08-24 17:56:01 INFO select: debug node ddf5a8ee (depth 0)
+[backend] BLOCKING on rendezvous request 1787565361_2b10f2 (op=debug, parent=ddf5a8ee)
+2026-08-24 18:26:03 WARNING rendezvous timed out (no response for request 1787565361_2b10f2 within 1800.0s) — falling back to a replicate
+2026-08-24 18:26:03 INFO timeout fallback: replicating best node 42465468
+2026-08-24 18:34:05 INFO node 8133a1a5 -> val_bpb=0.970862 | val_bpb=0.970862 steps=1301.0 mfu=44.14% vram=66.2GB params=85.9M
+2026-08-24 18:34:05 INFO iteration 9 done in 2284s | best so far: 44c84533 (0.969635)
+2026-08-24 18:34:05 INFO ----------------------------------------------------------------------
+2026-08-24 18:34:05 INFO iteration 10 (journal size 114)
+2026-08-24 18:34:05 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787540262_3c4e67.json)
+2026-08-24 18:34:05 INFO generated improve node 7bd5b482 from 44c84533
+2026-08-24 18:34:05 INFO running trial for node 7bd5b482 (improve)
+2026-08-24 18:42:11 INFO node 7bd5b482 -> val_bpb=0.972013 | val_bpb=0.972013 steps=1267.0 mfu=42.99% vram=66.2GB params=85.9M
+2026-08-24 18:42:11 INFO iteration 10 done in 487s | best so far: 44c84533 (0.969635)
+2026-08-24 18:42:11 INFO ----------------------------------------------------------------------
+2026-08-24 18:42:11 INFO iteration 11 (journal size 115)
+2026-08-24 18:42:11 INFO select: debug node 14dab66c (depth 0)
+[backend] BLOCKING on rendezvous request 1787568131_43ff1e (op=debug, parent=14dab66c)
+2026-08-24 19:12:14 WARNING rendezvous timed out (no response for request 1787568131_43ff1e within 1800.0s) — falling back to a replicate
+2026-08-24 19:12:14 INFO timeout fallback: replicating best node 42465468
+2026-08-24 19:18:21 INFO node 5ca39067 -> val_bpb=0.969822 | val_bpb=0.969822 steps=1310.0 mfu=44.44% vram=66.2GB params=85.9M
+2026-08-24 19:18:21 INFO iteration 11 done in 2170s | best so far: 44c84533 (0.969635)
+2026-08-24 19:18:21 INFO ----------------------------------------------------------------------
+2026-08-24 19:18:21 INFO iteration 12 (journal size 116)
+2026-08-24 19:18:21 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787544931_07bd0d.json)
+2026-08-24 19:18:21 INFO generated improve node 7b4087dd from 44c84533
+2026-08-24 19:18:21 INFO running trial for node 7b4087dd (improve)
+2026-08-24 19:27:04 INFO node 7b4087dd -> val_bpb=0.978682 | val_bpb=0.978682 steps=1218.0 mfu=41.28% vram=66.2GB params=85.9M
+2026-08-24 19:27:04 INFO iteration 12 done in 522s | best so far: 44c84533 (0.969635)
+2026-08-24 19:27:04 INFO ----------------------------------------------------------------------
+2026-08-24 19:27:04 INFO iteration 13 (journal size 117)
+2026-08-24 19:27:04 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787544931_75a8f7.json)
+2026-08-24 19:27:04 INFO generated improve node 003d6c02 from 44c84533
+2026-08-24 19:27:04 INFO running trial for node 003d6c02 (improve)
+2026-08-24 19:36:56 INFO node 003d6c02 -> val_bpb=0.977436 | val_bpb=0.977436 steps=1237.0 mfu=46.42% vram=66.2GB params=85.9M
+2026-08-24 19:36:56 INFO iteration 13 done in 592s | best so far: 44c84533 (0.969635)
+2026-08-24 19:36:56 INFO ----------------------------------------------------------------------
+2026-08-24 19:36:56 INFO iteration 14 (journal size 118)
+2026-08-24 19:36:56 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787544931_d7f923.json)
+2026-08-24 19:36:56 INFO generated improve node aae46fa6 from 44c84533
+2026-08-24 19:36:56 INFO running trial for node aae46fa6 (improve)
+2026-08-24 19:45:34 INFO node aae46fa6 -> val_bpb=0.987332 | val_bpb=0.987332 steps=663.0 mfu=44.6% vram=66.5GB params=85.9M
+2026-08-24 19:45:34 INFO iteration 14 done in 519s | best so far: 44c84533 (0.969635)
+2026-08-24 19:45:34 INFO ----------------------------------------------------------------------
+2026-08-24 19:45:34 INFO iteration 15 (journal size 119)
+2026-08-24 19:45:34 INFO select: debug node 14dab66c (depth 0)
+[backend] BLOCKING on rendezvous request 1787571934_a239a4 (op=debug, parent=14dab66c)
+2026-08-24 20:15:36 WARNING rendezvous timed out (no response for request 1787571934_a239a4 within 1800.0s) — falling back to a replicate
+2026-08-24 20:15:36 INFO timeout fallback: replicating best node 42465468
+2026-08-24 20:28:00 INFO node cc382eea -> BUGGY | INVALID: GPU contended: foreign memory grew 67.9GB during the run; step count is depressed by another tenant, score not comparable
+2026-08-24 20:28:00 INFO iteration 15 done in 2546s | best so far: 44c84533 (0.969635)
+2026-08-24 20:28:00 INFO ----------------------------------------------------------------------
+2026-08-24 20:28:00 INFO iteration 16 (journal size 120)
+2026-08-24 20:28:00 INFO select: debug node 14dab66c (depth 0)
+[backend] BLOCKING on rendezvous request 1787574480_8c2638 (op=debug, parent=14dab66c)
+2026-08-24 20:46:07 INFO ======================================================================
+2026-08-24 20:46:07 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 0
+2026-08-24 20:46:07 INFO journal: 116 existing nodes
+2026-08-24 20:46:07 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 20:46:07 INFO ----------------------------------------------------------------------
+2026-08-24 20:46:07 INFO iteration 1 (journal size 116)
+2026-08-24 20:46:07 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787567669_908293.json)
+2026-08-24 20:46:07 INFO generated improve node 62685879 from 44c84533
+2026-08-24 20:46:07 INFO running trial for node 62685879 (improve)
+2026-08-24 21:19:05 INFO node 62685879 -> BUGGY | INVALID: no training_seconds in summary (exc: torch.OutOfMemoryError)
+2026-08-24 21:19:05 INFO iteration 1 done in 1978s | best so far: 44c84533 (0.969635)
+2026-08-24 21:19:05 INFO ----------------------------------------------------------------------
+2026-08-24 21:19:05 INFO iteration 2 (journal size 117)
+2026-08-24 21:19:05 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787570311_cdb3e1.json)
+2026-08-24 21:19:05 INFO generated improve node 510719e1 from 44c84533
+2026-08-24 21:19:05 INFO running trial for node 510719e1 (improve)
+2026-08-24 21:52:01 INFO node 510719e1 -> BUGGY | INVALID: no training_seconds in summary (exc: torch.OutOfMemoryError)
+2026-08-24 21:52:01 INFO iteration 2 done in 1976s | best so far: 44c84533 (0.969635)
+2026-08-24 21:52:01 INFO ----------------------------------------------------------------------
+2026-08-24 21:52:01 INFO iteration 3 (journal size 118)
+2026-08-24 21:52:01 INFO select: debug node cc382eea (depth 0)
+[backend] BLOCKING on rendezvous request 1787579521_bc1038 (op=debug, parent=cc382eea)
+2026-08-24 22:07:44 INFO ======================================================================
+2026-08-24 22:07:44 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 0
+2026-08-24 22:07:44 INFO journal: 118 existing nodes
+2026-08-24 22:07:44 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 22:07:44 INFO ----------------------------------------------------------------------
+2026-08-24 22:07:44 INFO iteration 1 (journal size 118)
+2026-08-24 22:07:44 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787570912_cecb56.json)
+2026-08-24 22:07:44 INFO generated improve node a0254d69 from 44c84533
+2026-08-24 22:07:44 INFO running trial for node a0254d69 (improve)
+2026-08-24 22:39:01 INFO node a0254d69 -> BUGGY | INVALID: no training_seconds in summary
+2026-08-24 22:39:04 INFO ======================================================================
+2026-08-24 22:39:04 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 0
+2026-08-24 22:39:04 INFO journal: 118 existing nodes
+2026-08-24 22:39:04 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 22:39:04 INFO ----------------------------------------------------------------------
+2026-08-24 22:39:04 INFO iteration 1 (journal size 118)
+2026-08-24 22:39:04 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787571512_d8814d.json)
+2026-08-24 22:39:04 INFO generated improve node 6433f10a from 44c84533
+2026-08-24 22:39:04 INFO running trial for node 6433f10a (improve)
+2026-08-24 22:51:06 INFO node 6433f10a -> BUGGY | INVALID: GPU contended: foreign memory grew 43.2GB during the run; step count is depressed by another tenant, score not comparable
+2026-08-24 22:51:06 INFO iteration 1 done in 721s | best so far: 44c84533 (0.969635)
+2026-08-24 22:51:06 INFO ----------------------------------------------------------------------
+2026-08-24 22:51:06 INFO iteration 2 (journal size 119)
+2026-08-24 22:51:06 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787575596_bc5a0d.json)
+2026-08-24 22:51:06 INFO generated improve node 390fe3de from 44c84533
+2026-08-24 22:51:06 INFO running trial for node 390fe3de (improve)
+2026-08-24 22:59:27 INFO node 390fe3de -> val_bpb=0.988618 | val_bpb=0.988618 steps=1001.0 mfu=33.87% vram=66.8GB params=85.9M
+2026-08-24 22:59:27 INFO iteration 2 done in 501s | best so far: 44c84533 (0.969635)
+2026-08-24 22:59:27 INFO ----------------------------------------------------------------------
+2026-08-24 22:59:27 INFO iteration 3 (journal size 120)
+2026-08-24 22:59:27 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787577638_73e0a9.json)
+2026-08-24 22:59:27 INFO generated improve node 449f2acf from 44c84533
+2026-08-24 22:59:27 INFO running trial for node 449f2acf (improve)
+2026-08-24 23:07:36 INFO node 449f2acf -> val_bpb=0.988137 | val_bpb=0.988137 steps=1010.0 mfu=34.19% vram=66.8GB params=85.9M
+2026-08-24 23:07:36 INFO iteration 3 done in 490s | best so far: 44c84533 (0.969635)
+2026-08-24 23:07:36 INFO ----------------------------------------------------------------------
+2026-08-24 23:07:36 INFO iteration 4 (journal size 121)
+2026-08-24 23:07:36 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787580521_8c430b.json)
+2026-08-24 23:07:36 INFO generated improve node b0ea3795 from 44c84533
+2026-08-24 23:07:36 INFO running trial for node b0ea3795 (improve)
+2026-08-24 23:09:06 INFO ======================================================================
+2026-08-24 23:09:06 INFO AI-Scientist-v2 (autoresearch port) starting on GPU 0
+2026-08-24 23:09:06 INFO journal: 119 existing nodes
+2026-08-24 23:09:06 INFO pristine prepare.py sha256=4f2ba9cbb8ba8c4a
+2026-08-24 23:09:06 INFO ----------------------------------------------------------------------
+2026-08-24 23:09:06 INFO iteration 1 (journal size 119)
+2026-08-24 23:09:06 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787582398_82bb0d.json)
+2026-08-24 23:09:06 INFO generated improve node c57e4d13 from 44c84533
+2026-08-24 23:09:06 INFO running trial for node c57e4d13 (improve)
+2026-08-24 23:17:52 INFO node c57e4d13 -> BUGGY | INVALID: GPU contended: foreign memory grew 50.4GB during the run; step count is depressed by another tenant, score not comparable
+2026-08-24 23:17:52 INFO iteration 1 done in 526s | best so far: 44c84533 (0.969635)
+2026-08-24 23:17:52 INFO ----------------------------------------------------------------------
+2026-08-24 23:17:52 INFO iteration 2 (journal size 120)
+2026-08-24 23:17:52 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787583119_b983bd.json)
+2026-08-24 23:17:52 INFO generated improve node 325efc6d from 44c84533
+2026-08-24 23:17:52 INFO running trial for node 325efc6d (improve)
+2026-08-24 23:25:53 INFO node 325efc6d -> val_bpb=0.971068 | val_bpb=0.971068 steps=1290.0 mfu=43.76% vram=66.2GB params=85.9M
+2026-08-24 23:25:53 INFO iteration 2 done in 481s | best so far: 44c84533 (0.969635)
+2026-08-24 23:25:53 INFO ----------------------------------------------------------------------
+2026-08-24 23:25:53 INFO iteration 3 (journal size 121)
+2026-08-24 23:25:53 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787583600_65c351.json)
+2026-08-24 23:25:53 INFO generated improve node cc9f7a8b from 44c84533
+2026-08-24 23:25:53 INFO running trial for node cc9f7a8b (improve)
+2026-08-24 23:34:16 INFO node cc9f7a8b -> BUGGY | INVALID: GPU contended: foreign memory grew 42.3GB during the run; step count is depressed by another tenant, score not comparable
+2026-08-24 23:34:16 INFO iteration 3 done in 503s | best so far: 44c84533 (0.969635)
+2026-08-24 23:34:16 INFO ----------------------------------------------------------------------
+2026-08-24 23:34:16 INFO iteration 4 (journal size 122)
+2026-08-24 23:34:16 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787584080_7f558d.json)
+2026-08-24 23:34:16 INFO generated improve node 3370b565 from 44c84533
+2026-08-24 23:34:16 INFO running trial for node 3370b565 (improve)
+2026-08-24 23:36:50 INFO node 3370b565 -> BUGGY | INVALID: GPU contended: foreign memory grew 71.3GB during the run; step count is depressed by another tenant, score not comparable (exc: torch.OutOfMemoryError)
+2026-08-24 23:36:50 INFO iteration 4 done in 154s | best so far: 44c84533 (0.969635)
+2026-08-24 23:36:50 INFO ----------------------------------------------------------------------
+2026-08-24 23:36:50 INFO iteration 5 (journal size 123)
+2026-08-24 23:36:50 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787584200_7464b8.json)
+2026-08-24 23:36:50 INFO generated improve node 2fcfcf06 from 44c84533
+2026-08-24 23:36:50 INFO running trial for node 2fcfcf06 (improve)
+2026-08-24 23:45:33 INFO node 2fcfcf06 -> BUGGY | INVALID: GPU contended: foreign memory grew 48.4GB during the run; step count is depressed by another tenant, score not comparable
+2026-08-24 23:45:33 INFO iteration 5 done in 524s | best so far: 44c84533 (0.969635)
+2026-08-24 23:45:33 INFO ----------------------------------------------------------------------
+2026-08-24 23:45:33 INFO iteration 6 (journal size 124)
+2026-08-24 23:45:33 INFO select: improve best node 44c84533 (Metric↓(val_bpb)(0.969635))
+[backend] queue hit for op=improve parent=44c84533 (queue:1787584681_cb4aa4.json)
+2026-08-24 23:45:33 INFO generated improve node 270370c2 from 44c84533
+2026-08-24 23:45:33 INFO running trial for node 270370c2 (improve)

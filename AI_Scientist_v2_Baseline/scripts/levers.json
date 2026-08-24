@@ -1,40 +1,275 @@
 {
   "_comment": "Lever library. Each entry replaces a whole line matched by a unique prefix, so a lever stays valid as the winning train.py evolves and its current value changes. 'value' is substituted into 'line'.",
   "levers": {
+    "seed43": {
+      "subs": [
+        [
+          "torch.manual_seed(",
+          "torch.manual_seed(43)"
+        ],
+        [
+          "torch.cuda.manual_seed(",
+          "torch.cuda.manual_seed(43)"
+        ]
+      ],
+      "plan": "SEED VARIANCE MEASUREMENT (seed 43, not an improvement). Replicates so far hold the seed at 42 and capture only kernel nondeterminism and step jitter; this additionally varies initialisation and data order, which is the variance that decides whether a lever generalises. If this scores below the incumbent that is a lucky draw, NOT a win \u2014 the reference repo's own published run lists 'random seed 42->137' as a kept improvement, which is this exact failure mode.",
+      "measurement_only": true
+    },
+    "seed137": {
+      "subs": [
+        [
+          "torch.manual_seed(",
+          "torch.manual_seed(137)"
+        ],
+        [
+          "torch.cuda.manual_seed(",
+          "torch.cuda.manual_seed(137)"
+        ]
+      ],
+      "plan": "SEED VARIANCE MEASUREMENT (seed 137, not an improvement). Replicates so far hold the seed at 42 and capture only kernel nondeterminism and step jitter; this additionally varies initialisation and data order, which is the variance that decides whether a lever generalises. If this scores below the incumbent that is a lucky draw, NOT a win \u2014 the reference repo's own published run lists 'random seed 42->137' as a kept improvement, which is this exact failure mode.",
+      "measurement_only": true
+    },
+    "seed2024": {
+      "subs": [
+        [
+          "torch.manual_seed(",
+          "torch.manual_seed(2024)"
+        ],
+        [
+          "torch.cuda.manual_seed(",
+          "torch.cuda.manual_seed(2024)"
+        ]
+      ],
+      "plan": "SEED VARIANCE MEASUREMENT (seed 2024, not an improvement). Replicates so far hold the seed at 42 and capture only kernel nondeterminism and step jitter; this additionally varies initialisation and data order, which is the variance that decides whether a lever generalises. If this scores below the incumbent that is a lucky draw, NOT a win \u2014 the reference repo's own published run lists 'random seed 42->137' as a kept improvement, which is this exact failure mode.",
+      "measurement_only": true
+    },
+    "cmp_mlp5_d9": {
+      "subs": [
+        [
+          "        self.c_fc = nn.Linear(config.n_embd, ",
+          "        self.c_fc = nn.Linear(config.n_embd, 5 * config.n_embd, bias=False)"
+        ],
+        [
+          "        self.c_proj = nn.Linear(4 * config.n_embd",
+          "        self.c_proj = nn.Linear(5 * config.n_embd, config.n_embd, bias=False)"
+        ],
+        [
+          "DEPTH = ",
+          "DEPTH = 9               # number of transformer layers"
+        ]
+      ],
+      "plan": "CONSTANT-CAPACITY SHAPE: MLP 4x -> 5x with DEPTH 10 -> 9 (~88M vs 85.9M, width stays 640). Fatter MLP, fewer layers - the opposite allocation to cmp_mlp3_d12."
+    },
+    "cmp_deep_narrow": {
+      "subs": [
+        [
+          "        self.c_fc = nn.Linear(config.n_embd, ",
+          "        self.c_fc = nn.Linear(config.n_embd, 3 * config.n_embd, bias=False)"
+        ],
+        [
+          "        self.c_proj = nn.Linear(4 * config.n_embd",
+          "        self.c_proj = nn.Linear(3 * config.n_embd, config.n_embd, bias=False)"
+        ],
+        [
+          "DEPTH = ",
+          "DEPTH = 12              # number of transformer layers"
+        ],
+        [
+          "ASPECT_RATIO = ",
+          "ASPECT_RATIO = 48       # model_dim = depth * ASPECT_RATIO"
+        ]
+      ],
+      "plan": "CONSTANT-CAPACITY SHAPE (corrected): DEPTH 12 with ASPECT_RATIO 48 to hold model_dim at 640, plus MLP 4x -> 3x. ~91M vs 85.9M. Replaces cmp_mlp3_d12, which unintentionally widened to 768 and landed at 121M."
+    },
+    "cmp_mlp3_d12": {
+      "subs": [
+        [
+          "        self.c_fc = nn.Linear(config.n_embd, ",
+          "        self.c_fc = nn.Linear(config.n_embd, 3 * config.n_embd, bias=False)"
+        ],
+        [
+          "        self.c_proj = nn.Linear(4 * config.n_embd",
+          "        self.c_proj = nn.Linear(3 * config.n_embd, config.n_embd, bias=False)"
+        ],
+        [
+          "DEPTH = ",
+          "DEPTH = 12              # number of transformer layers"
+        ]
+      ],
+      "plan": "CONSTANT-CAPACITY SHAPE: MLP 4x -> 3x with DEPTH 10 -> 12 (~91M vs 85.9M). Leaner MLP, more layers. Both changes lost alone; the question is whether the parameters are better spent on depth than on MLP width at fixed total.",
+      "closed": true,
+      "closed_reason": "MIS-DESIGNED: landed at 121.1M, not the intended ~91M \u2014 DEPTH 12 also widens model_dim to 768 via ASPECT_RATIO. Lost +0.0065, but does not test what it claimed"
+    },
+    "qknorm_off": {
+      "prefix": "        q, k = norm(q), norm(k)",
+      "line": "        q, k = q, k",
+      "plan": "Remove QK normalisation before attention. A load-bearing primitive like the relu-squared activation, never varied; worth knowing whether it earns its cost.",
+      "closed": true,
+      "closed_reason": "removing QK norm lost +0.0147 despite +4% steps and higher MFU"
+    },
+    "relu_cubed": {
+      "prefix": "        x = F.relu(x).square()",
+      "line": "        x = F.relu(x).pow(3)",
+      "plan": "MLP activation relu-squared -> relu-cubed. GeLU lost 0.0254, so the squaring is doing real work; this probes whether the exponent itself is tuned.",
+      "closed": true,
+      "closed_reason": "relu-cubed lost +0.0101; with gelu at +0.0254, relu-squared is bracketed"
+    },
+    "dbs64": {
+      "prefix": "DEVICE_BATCH_SIZE = ",
+      "line": "DEVICE_BATCH_SIZE = 64  # per-device batch size (reduce if OOM)",
+      "plan": "DEVICE_BATCH_SIZE 128 -> 64 at unchanged TOTAL_BATCH_SIZE, so grad_accum_steps goes 1 -> 2. Same optimizer batch, different micro-batching: a pure throughput/memory probe.",
+      "closed": true,
+      "closed_reason": "grad_accum 2 lost +0.0013, but halved VRAM 69.6 -> 35.4GB"
+    },
+    "matmul_highest": {
+      "prefix": "torch.set_float32_matmul_precision(",
+      "line": "torch.set_float32_matmul_precision(\"highest\")",
+      "plan": "float32 matmul precision high -> highest. Trades throughput for numerical precision in the fp32 paths; untested.",
+      "closed": true,
+      "closed_reason": "'highest' lost +0.00047 (~3 sigma); 'high' stands"
+    },
+    "rt_batch19": {
+      "prefix": "TOTAL_BATCH_SIZE = ",
+      "line": "TOTAL_BATCH_SIZE = 2**19 # ~524K tokens per optimizer step",
+      "plan": "RETEST at the current operating point: TOTAL_BATCH_SIZE 2**18 -> 2**19. The batch optimum was fixed before the RoPE, embedding-LR, final-LR and weight-decay wins existed; this is the campaign's largest lever and the one most worth re-probing for interaction.",
+      "closed": true,
+      "closed_reason": "2**19 lost +0.0179 at the current operating point \u2014 no interaction, closure confirmed"
+    },
+    "rt_batch17": {
+      "subs": [
+        [
+          "TOTAL_BATCH_SIZE = ",
+          "TOTAL_BATCH_SIZE = 2**17 # ~131K tokens per optimizer step"
+        ],
+        [
+          "DEVICE_BATCH_SIZE = ",
+          "DEVICE_BATCH_SIZE = 64  # per-device batch size (reduce if OOM)"
+        ]
+      ],
+      "plan": "RETEST: TOTAL_BATCH_SIZE 2**18 -> 2**17 with DEVICE_BATCH_SIZE 64 to keep grad_accum at 1. Probes the other side of the batch axis at the current operating point.",
+      "closed": true,
+      "closed_reason": "2**17 lost +0.0045 at the current operating point \u2014 batch 2**18 bracketed again"
+    },
+    "rt_depth12": {
+      "prefix": "DEPTH = ",
+      "line": "DEPTH = 12              # number of transformer layers",
+      "plan": "RETEST: DEPTH 10 -> 12 at the current operating point. Capacity lost at 135M when tested against the old configuration; the LR set has changed substantially since.",
+      "closed": true,
+      "closed_reason": "DEPTH 12 lost +0.0095 at 135.3M \u2014 capacity ceiling confirmed post-RoPE"
+    },
+    "rt_width768": {
+      "prefix": "ASPECT_RATIO = ",
+      "line": "ASPECT_RATIO = 72       # model_dim = depth * ASPECT_RATIO",
+      "plan": "RETEST: width 640 -> 768 at DEPTH 10 and the current operating point. Lost by 0.0036 against the old configuration.",
+      "closed": true,
+      "closed_reason": "width 768 lost +0.0053 and +0.0052 on two runs at the current operating point"
+    },
+    "mlp3": {
+      "subs": [
+        [
+          "        self.c_fc = nn.Linear(config.n_embd, ",
+          "        self.c_fc = nn.Linear(config.n_embd, 3 * config.n_embd, bias=False)"
+        ],
+        [
+          "        self.c_proj = nn.Linear(4 * config.n_embd",
+          "        self.c_proj = nn.Linear(3 * config.n_embd, config.n_embd, bias=False)"
+        ]
+      ],
+      "plan": "MLP expansion 4x -> 3x. Cuts MLP FLOPs ~25%, trading capacity for steps - the capacity/throughput tradeoff at a different lever than DEPTH.",
+      "closed": true,
+      "closed_reason": "3x lost +0.0036 and +0.0028 on two parents despite +10% steps"
+    },
+    "mlp5": {
+      "subs": [
+        [
+          "        self.c_fc = nn.Linear(config.n_embd, ",
+          "        self.c_fc = nn.Linear(config.n_embd, 5 * config.n_embd, bias=False)"
+        ],
+        [
+          "        self.c_proj = nn.Linear(4 * config.n_embd",
+          "        self.c_proj = nn.Linear(5 * config.n_embd, config.n_embd, bias=False)"
+        ]
+      ],
+      "plan": "MLP expansion 4x -> 5x, bracketing the ratio upward since DEPTH showed capacity pays here.",
+      "closed": true,
+      "closed_reason": "5x lost +0.0030 at 94.0M params"
+    },
+    "depth9": {
+      "prefix": "DEPTH = ",
+      "line": "DEPTH = 9               # number of transformer layers",
+      "plan": "DEPTH 10 -> 9. ASPECT_RATIO rounding keeps model_dim at 640, so this is a pure depth change at constant width - the one interior point the earlier sweep skipped.",
+      "closed": true,
+      "closed_reason": "DEPTH 9 lost +0.0019 at 80.9M params; DEPTH 10 confirmed optimal at width 640"
+    },
+    "ve_all": {
+      "prefix": "    return layer_idx % 2 == (n_layer - 1) % 2",
+      "line": "    return True",
+      "plan": "Value embeddings on every layer instead of alternating. Doubles VE coverage; the ResFormer value-residual path has never been varied.",
+      "closed": true,
+      "closed_reason": "value embeddings on all layers lost +0.0040 and added 26M params (85.9 -> 112.1M)"
+    },
+    "act_gelu": {
+      "prefix": "        x = F.relu(x).square()",
+      "line": "        x = F.gelu(x)",
+      "plan": "MLP activation relu-squared -> gelu. The activation has been fixed since the baseline and is untested.",
+      "closed": true,
+      "closed_reason": "gelu lost +0.0254 \u2014 by far the largest loss of the campaign; relu-squared is load-bearing"
+    },
+    "rotary4": {
+      "prefix": "        self.rotary_seq_len = config.sequence_len * ",
+      "line": "        self.rotary_seq_len = config.sequence_len * 4",
+      "plan": "Rotary table length 10x sequence_len -> 4x. Pairs with the RoPE base-frequency win; the table extent is a separate untested knob.",
+      "closed": true,
+      "closed_reason": "rotary table 4x lost +0.00062; the 10x extent stands"
+    },
     "head64": {
       "prefix": "HEAD_DIM = ",
       "line": "HEAD_DIM = 64           # target head dimension for attention",
-      "plan": "Attention expressivity at constant FLOPs: HEAD_DIM 128 -> 64 doubles the head count at the same model_dim. Same parameter count, same matmul cost, more independent attention subspaces."
+      "plan": "Attention expressivity at constant FLOPs: HEAD_DIM 128 -> 64 doubles the head count at the same model_dim. Same parameter count, same matmul cost, more independent attention subspaces.",
+      "closed": true,
+      "closed_reason": "HEAD_DIM 64 lost 0.0067"
     },
     "span4": {
       "prefix": "        short_window = long_window //",
       "line": "        short_window = long_window // 4",
-      "plan": "Attention span seq/8 -> seq/4. The span was tuned at the old 50.3M shape, and seq/8 was never established over seq/4 (1 sigma)."
+      "plan": "Attention span seq/8 -> seq/4. The span was tuned at the old 50.3M shape, and seq/8 was never established over seq/4 (1 sigma).",
+      "closed": true,
+      "closed_reason": "seq/4 lost 0.0016"
     },
     "span2": {
       "prefix": "        short_window = long_window //",
       "line": "        short_window = long_window // 2",
-      "plan": "Attention span back to the original seq/2. Tests whether the span cut still pays at the larger shape with far fewer steps."
+      "plan": "Attention span back to the original seq/2. Tests whether the span cut still pays at the larger shape with far fewer steps.",
+      "closed": true,
+      "closed_reason": "seq/2 is the baseline span, superseded"
     },
     "mlr03": {
       "prefix": "MATRIX_LR = ",
       "line": "MATRIX_LR = 0.03        # learning rate for matrix parameters (Muon)",
-      "plan": "MATRIX_LR 0.04 -> 0.03. Raising to 0.05 lost 0.0011 (~7 sigma), so if the optimum moved it moved down."
+      "plan": "MATRIX_LR 0.04 -> 0.03. Raising to 0.05 lost 0.0011 (~7 sigma), so if the optimum moved it moved down.",
+      "closed": true,
+      "closed_reason": "tied 0.04 within noise"
     },
     "aspect72": {
       "prefix": "ASPECT_RATIO = ",
       "line": "ASPECT_RATIO = 72       # model_dim = depth * ASPECT_RATIO",
-      "plan": "Width sweep at fixed DEPTH 10, wider: model_dim 640 -> 768 (6 heads). Separates width from depth, which the DEPTH knob confounds via rounding."
+      "plan": "Width sweep at fixed DEPTH 10, wider: model_dim 640 -> 768 (6 heads). Separates width from depth, which the DEPTH knob confounds via rounding.",
+      "closed": true,
+      "closed_reason": "width 768 lost 0.0036"
     },
     "aspect48": {
       "prefix": "ASPECT_RATIO = ",
       "line": "ASPECT_RATIO = 48       # model_dim = depth * ASPECT_RATIO",
-      "plan": "Width sweep at fixed DEPTH 10, narrower: model_dim 640 -> 512 (4 heads). With the 768 probe this gives three points at constant depth."
+      "plan": "Width sweep at fixed DEPTH 10, narrower: model_dim 640 -> 512 (4 heads). With the 768 probe this gives three points at constant depth.",
+      "closed": true,
+      "closed_reason": "width 512 lost 0.0031"
     },
     "wd01": {
       "prefix": "WEIGHT_DECAY = ",
       "line": "WEIGHT_DECAY = 0.1      # cautious weight decay for Muon",
-      "plan": "WEIGHT_DECAY 0.2 -> 0.1. The run is sub-single-epoch so there is little to regularise against; less decay may leave more capacity usable."
+      "plan": "WEIGHT_DECAY 0.2 -> 0.1. The run is sub-single-epoch so there is little to regularise against; less decay may leave more capacity usable.",
+      "closed": true,
+      "closed_reason": "reverting 0.15 -> 0.1 lost +0.0019 on the current lineage"
     },
     "unemb006": {
       "prefix": "UNEMBEDDING_LR = ",
@@ -44,12 +279,16 @@
     "scalar07": {
       "prefix": "SCALAR_LR = ",
       "line": "SCALAR_LR = 0.7         # learning rate for per-layer scalars (Adam)",
-      "plan": "SCALAR_LR 0.5 -> 0.7. Same reasoning as the embedding LR: fewer total steps means each Adam group gets less total movement."
+      "plan": "SCALAR_LR 0.5 -> 0.7. Same reasoning as the embedding LR: fewer total steps means each Adam group gets less total movement.",
+      "closed": true,
+      "closed_reason": "SCALAR_LR 0.7 lost 0.0020"
     },
     "warmup005": {
       "prefix": "WARMUP_RATIO = ",
       "line": "WARMUP_RATIO = 0.05     # fraction of time budget for LR warmup",
-      "plan": "WARMUP_RATIO 0.0 -> 0.05. No warmup at all is unusual; at a larger model and higher embedding LR a short warmup may stabilise early steps."
+      "plan": "WARMUP_RATIO 0.0 -> 0.05. No warmup at all is unusual; at a larger model and higher embedding LR a short warmup may stabilise early steps.",
+      "closed": true,
+      "closed_reason": "5% warmup lost 0.005"
     },
     "finallr01": {
       "prefix": "FINAL_LR_FRAC = ",
@@ -59,12 +298,16 @@
     "pattern8": {
       "prefix": "WINDOW_PATTERN = ",
       "line": "WINDOW_PATTERN = \"SSSSSSSL\" # sliding window pattern: L=full, S=short context",
-      "plan": "WINDOW_PATTERN SSSL -> SSSSSSSL: only 1 layer in 8 attends to full context instead of 2 in 4."
+      "plan": "WINDOW_PATTERN SSSL -> SSSSSSSL: only 1 layer in 8 attends to full context instead of 2 in 4.",
+      "closed": true,
+      "closed_reason": "SSSSSSSL lost twice (+0.0025, +0.0025) on two different parents"
     },
     "emb12": {
       "prefix": "EMBEDDING_LR = ",
       "line": "EMBEDDING_LR = 1.2      # learning rate for token embeddings (Adam)",
-      "plan": "Push the embedding-LR axis further to 1.2."
+      "plan": "Push the embedding-LR axis further to 1.2.",
+      "closed": true,
+      "closed_reason": "EMBEDDING_LR optimum is near 0.8-0.9; 1.0 already overshot"
     },
     "emb09": {
       "prefix": "EMBEDDING_LR = ",
@@ -74,12 +317,16 @@
     "warmdown07": {
       "prefix": "WARMDOWN_RATIO = ",
       "line": "WARMDOWN_RATIO = 0.7    # fraction of time budget for LR warmdown",
-      "plan": "WARMDOWN_RATIO 0.5 -> 0.7 (MORE cooldown). Corrects a premature closure: I tested only 0.35, saw it lose, and declared 0.5 optimal from a one-sided test. The untested direction is up."
+      "plan": "WARMDOWN_RATIO 0.5 -> 0.7 (MORE cooldown). Corrects a premature closure: I tested only 0.35, saw it lose, and declared 0.5 optimal from a one-sided test. The untested direction is up.",
+      "closed": true,
+      "closed_reason": "0.7 lost +0.00042; with 0.35 also losing, 0.5 is bracketed"
     },
     "unemb008": {
       "prefix": "UNEMBEDDING_LR = ",
       "line": "UNEMBEDDING_LR = 0.008  # learning rate for lm_head (Adam)",
-      "plan": "UNEMBEDDING_LR 0.004 -> 0.008. Same family as the embedding LR, which was the campaign's clearest knob win."
+      "plan": "UNEMBEDDING_LR 0.004 -> 0.008. Same family as the embedding LR, which was the campaign's clearest knob win.",
+      "closed": true,
+      "closed_reason": "0.008 lost +0.00052; 0.006 stands"
     },
     "rope50k": {
       "prefix": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=",
@@ -89,17 +336,175 @@
     "rope100k": {
       "prefix": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=",
       "line": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=100000, device=None):",
-      "plan": "RoPE base frequency -> 100000, continuing the axis if 50000 pays."
+      "plan": "RoPE base frequency -> 100000, continuing the axis if 50000 pays.",
+      "closed": true,
+      "closed_reason": "100000 lost +0.00153 against the 50000 win; axis peaks at 50k"
     },
     "x0_005": {
       "prefix": "        self.x0_lambdas.fill_(",
       "line": "        self.x0_lambdas.fill_(0.05)",
-      "plan": "x0_lambda init 0.1 -> 0.05. These per-layer scalars gate how much of the embedding output is re-injected at each block; the init sets where that mixing starts."
+      "plan": "x0_lambda init 0.1 -> 0.05. These per-layer scalars gate how much of the embedding output is re-injected at each block; the init sets where that mixing starts.",
+      "closed": true,
+      "closed_reason": "0.05 lost on two parents (+0.00124, +0.00169); gating init does not want lowering"
     },
     "span16": {
       "prefix": "        short_window = long_window //",
       "line": "        short_window = long_window // 16",
-      "plan": "Attention span seq/8 -> seq/16 (128 tokens). seq/8 beat seq/4 by ~11 sigma at this shape, so the axis is still live and needs bracketing from below."
+      "plan": "Attention span seq/8 -> seq/16 (128 tokens). seq/8 beat seq/4 by ~11 sigma at this shape, so the axis is still live and needs bracketing from below.",
+      "closed": true,
+      "closed_reason": "seq/16 lost 0.0133"
+    },
+    "wd005": {
+      "prefix": "WEIGHT_DECAY = ",
+      "line": "WEIGHT_DECAY = 0.05     # cautious weight decay for Muon",
+      "plan": "WEIGHT_DECAY 0.1 -> 0.05. 0.2 -> 0.1 won, so bracket below before closing the axis.",
+      "closed": true,
+      "closed_reason": "0.05 lost +0.00116; weight decay does not want lowering below 0.1"
+    },
+    "wd015": {
+      "prefix": "WEIGHT_DECAY = ",
+      "line": "WEIGHT_DECAY = 0.15     # cautious weight decay for Muon",
+      "plan": "WEIGHT_DECAY 0.1 -> 0.15, filling in between the tested 0.1 and 0.2.",
+      "closed": true,
+      "closed_reason": "0.15 tied 0.1 within noise (+0.00018 = ~1.2 sigma); axis flat, incumbent stands"
+    },
+    "scalar03": {
+      "prefix": "SCALAR_LR = ",
+      "line": "SCALAR_LR = 0.3         # learning rate for per-layer scalars (Adam)",
+      "plan": "SCALAR_LR 0.5 -> 0.3. Raising to 0.7 lost, so if the optimum moved it moved down.",
+      "closed": true,
+      "closed_reason": "0.3 lost +0.0051; with 0.7 also losing, SCALAR_LR 0.5 is bracketed"
+    },
+    "rope200k": {
+      "prefix": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=",
+      "line": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=200000, device=None):",
+      "plan": "RoPE base frequency -> 200000, the far end of the axis.",
+      "closed": true,
+      "closed_reason": "further out than the losing 100000; not worth a trial"
+    },
+    "x0_015": {
+      "prefix": "        self.x0_lambdas.fill_(",
+      "line": "        self.x0_lambdas.fill_(0.15)",
+      "plan": "x0_lambda init 0.1 -> 0.15, bracketing the residual-gating init upward.",
+      "closed": true,
+      "closed_reason": "0.15 lost +0.0020; with 0.05 also losing, x0_lambda 0.1 is bracketed"
+    },
+    "finallr005": {
+      "prefix": "FINAL_LR_FRAC = ",
+      "line": "FINAL_LR_FRAC = 0.05    # final LR as fraction of initial",
+      "plan": "FINAL_LR_FRAC 0.0 -> 0.05, a gentler nonzero floor than 0.1."
+    },
+    "betas9": {
+      "prefix": "ADAM_BETAS = ",
+      "line": "ADAM_BETAS = (0.9, 0.95) # Adam beta1, beta2",
+      "plan": "ADAM_BETAS beta1 0.8 -> 0.9. Both Adam-group LRs paid; the Adam momentum is untested.",
+      "closed": true,
+      "closed_reason": "beta1 0.9 lost +0.0012"
+    },
+    "betas7": {
+      "prefix": "ADAM_BETAS = ",
+      "line": "ADAM_BETAS = (0.7, 0.95) # Adam beta1, beta2",
+      "plan": "ADAM_BETAS beta1 0.8 -> 0.7, bracketing Adam momentum downward.",
+      "closed": true,
+      "closed_reason": "beta1 0.7 lost +0.0034; with 0.9 also losing, beta1 0.8 is bracketed"
+    },
+    "unemb005": {
+      "prefix": "UNEMBEDDING_LR = ",
+      "line": "UNEMBEDDING_LR = 0.005  # learning rate for lm_head (Adam)",
+      "plan": "UNEMBEDDING_LR 0.006 -> 0.005, refining between the tested 0.004 and 0.006.",
+      "closed": true,
+      "closed_reason": "0.005 lost +0.0021; 0.006 stands"
+    },
+    "emb085": {
+      "prefix": "EMBEDDING_LR = ",
+      "line": "EMBEDDING_LR = 0.85     # learning rate for token embeddings (Adam)",
+      "plan": "EMBEDDING_LR fine probe at 0.85, between the 0.8 and 0.9 results.",
+      "closed": true,
+      "closed_reason": "0.85 tied 0.9 within noise (+0.00017 = ~1.2 sigma)"
+    },
+    "mlr035": {
+      "prefix": "MATRIX_LR = ",
+      "line": "MATRIX_LR = 0.035       # learning rate for matrix parameters (Muon)",
+      "plan": "MATRIX_LR 0.04 -> 0.035. Both 0.03 and 0.05 failed to beat 0.04; this probes finer.",
+      "closed": true,
+      "closed_reason": "0.035 lost +0.0013; MATRIX_LR 0.04 bracketed by 0.03/0.035/0.05"
+    },
+    "muon500": {
+      "prefix": "    frac = min(step / 300, 1)",
+      "line": "    frac = min(step / 500, 1)",
+      "plan": "Muon momentum warmup stretched from 300 to 500 steps. The schedule was set for a ~1000-step run; this one does ~1310.",
+      "closed": true,
+      "closed_reason": "warmup 500 lost +0.00079"
+    },
+    "muon150": {
+      "prefix": "    frac = min(step / 300, 1)",
+      "line": "    frac = min(step / 150, 1)",
+      "plan": "Muon momentum warmup shortened to 150 steps, bracketing the schedule downward.",
+      "closed": true,
+      "closed_reason": "warmup 150 tied within noise (+0.00022); default 300 stands"
+    },
+    "rope25k": {
+      "prefix": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=",
+      "line": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=25000, device=None):",
+      "plan": "RoPE base 50000 -> 25000, refining between the winning 50000 and the baseline 10000.",
+      "closed": true,
+      "closed_reason": "25000 lost +0.0028; RoPE peak is sharp at 50000"
+    },
+    "rope75k": {
+      "prefix": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=",
+      "line": "    def _precompute_rotary_embeddings(self, seq_len, head_dim, base=75000, device=None):",
+      "plan": "RoPE base 50000 -> 75000, refining between the winning 50000 and the losing 100000.",
+      "closed": true,
+      "closed_reason": "75000 lost +0.0011; 50000 bracketed by 25k/75k/100k"
+    },
+    "finallr0025": {
+      "prefix": "FINAL_LR_FRAC = ",
+      "line": "FINAL_LR_FRAC = 0.025   # final LR as fraction of initial",
+      "plan": "FINAL_LR_FRAC 0.05 -> 0.025. 0.05 beat both 0.0 and 0.1, so the optimum is inside (0, 0.1).",
+      "closed": true,
+      "closed_reason": "0.025 lost +0.00038 (~2.6 sigma); 0.05 stands"
+    },
+    "finallr0075": {
+      "prefix": "FINAL_LR_FRAC = ",
+      "line": "FINAL_LR_FRAC = 0.075   # final LR as fraction of initial",
+      "plan": "FINAL_LR_FRAC 0.05 -> 0.075, bracketing the winner from above.",
+      "closed": true,
+      "closed_reason": "0.075 lost +0.00035; FINAL_LR_FRAC 0.05 bracketed by 0.0/0.025/0.075/0.1"
+    },
+    "emb095": {
+      "prefix": "EMBEDDING_LR = ",
+      "line": "EMBEDDING_LR = 0.95     # learning rate for token embeddings (Adam)",
+      "plan": "EMBEDDING_LR 0.9 -> 0.95, refining between the winning 0.9 and the losing 1.0.",
+      "closed": true,
+      "closed_reason": "0.95 lost +0.00067; EMBEDDING_LR 0.9 bracketed by 0.85/0.95/1.0"
+    },
+    "betas299": {
+      "prefix": "ADAM_BETAS = ",
+      "line": "ADAM_BETAS = (0.8, 0.99) # Adam beta1, beta2",
+      "plan": "ADAM_BETAS beta2 0.95 -> 0.99. Only beta1 has been probed; beta2 is untouched.",
+      "closed": true,
+      "closed_reason": "beta2 0.99 lost +0.0011; 0.95 stands, both betas now bracketed"
+    },
+    "muonhi": {
+      "prefix": "    return (1 - frac) * 0.85 + frac * 0.95",
+      "line": "    return (1 - frac) * 0.90 + frac * 0.98",
+      "plan": "Muon momentum range 0.85->0.95 raised to 0.90->0.98. The endpoints are untested; only the warmup length has been probed.",
+      "closed": true,
+      "closed_reason": "momentum range 0.90-0.98 lost +0.0045"
+    },
+    "muonlo": {
+      "prefix": "    return (1 - frac) * 0.85 + frac * 0.95",
+      "line": "    return (1 - frac) * 0.80 + frac * 0.92",
+      "plan": "Muon momentum range lowered to 0.80->0.92, bracketing the endpoints downward.",
+      "closed": true,
+      "closed_reason": "momentum range 0.80-0.92 lost +0.00045; default 0.85-0.95 bracketed both sides"
+    },
+    "wd02": {
+      "prefix": "WEIGHT_DECAY = ",
+      "line": "WEIGHT_DECAY = 0.2      # cautious weight decay for Muon",
+      "plan": "WEIGHT_DECAY 0.15 -> 0.2 on the current lineage. Reverting to 0.1 lost 0.0019 here, which conflicts with the earlier flat reading; this probes the other side.",
+      "closed": true,
+      "closed_reason": "0.2 lost +0.00069; with 0.1 losing +0.0019, WEIGHT_DECAY 0.15 is bracketed on this lineage"
     }
   },
   "_prior_note": "Several lever choices below are informed by task/progress.png \u2014 the reference repo's own published example run, which is inside this workspace. It is a prior over WHICH levers to try first, not evidence: every claim rests on the measurement taken here. Directions it reports as kept: warmdown up to 0.7, 5% warmup, unembedding LR 0.008, SSSSL window pattern, RoPE base increases, x0_lambda init 0.05."

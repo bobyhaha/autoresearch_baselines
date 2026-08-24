@@ -1,0 +1,24 @@
+trial directories on disk        : 155
+  of which actually launched     : 155
+
+journal nodes (retained)         : 123
+  scored                         : 115
+  buggy (in-journal)             : 8
+archived environmental failures  : 26
+
+TOTAL trials executed            : 149
+
+retained scored nodes by kind:
+  lever experiment         76
+  replicate                18
+  interaction retest       5
+  ablation                 5
+  shape allocation         4
+  seed variance            3
+  seed-paired baseline     3
+  baseline                 1
+
+archived failures by cause:
+  contention               11
+  other                    9
+  OOM                      6

@@ -73,6 +73,12 @@ def cmd_enqueue(args) -> int:
         "plan": args.plan,
         "code": code,
         "queued": time.time(),
+        # Measurement trials (seed sweeps, paired baselines) carry fixed source that does
+        # not derive from any parent. The queue is keyed by parent, so when the frontier
+        # advances they would be swept as unreachable and the measurement silently lost —
+        # which is exactly what happened to the seed-paired baselines. Marked entries are
+        # re-parented onto the new best instead of discarded.
+        "reparent_ok": bool(args.measurement),
     }
     name = f"{int(time.time())}_{uuid.uuid4().hex[:6]}.json"
     path = _write(RV / "queue", payload, name)
@@ -134,6 +140,8 @@ def main() -> int:
     p.add_argument("--parent", default=None)
     p.add_argument("--plan", required=True)
     p.add_argument("--code-file", required=True)
+    p.add_argument("--measurement", action="store_true",
+                   help="source is parent-independent; re-parent rather than sweep")
     p.set_defaults(func=cmd_enqueue)
 
     p = sub.add_parser("status", help="campaign leaderboard and recent nodes")

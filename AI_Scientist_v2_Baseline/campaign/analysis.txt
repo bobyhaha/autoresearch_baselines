@@ -1,0 +1,159 @@
+==========================================================================
+POOLED NOISE ESTIMATE over 7 groups, 23 dof: sd = 0.000303
+  => 2-sigma = 0.00061; treat smaller differences as unresolved at n=1
+  => a 0.001 effect is 3.3 sigma
+
+PER-GROUP (each is a 1-2 dof estimate; do not quote these individually)
+  9078f28d3846  n=3  mean=0.975986  sd=0.000148
+      val_bpb: 0.975832, 0.976128, 0.975999
+      steps:   1325, 1322, 1322
+      => differences below ~0.00030 bpb are not resolvable at n=1
+  f59edb29d622  n=2  mean=0.973059  sd=0.000172
+      val_bpb: 0.972938, 0.973181
+      steps:   1317, 1313
+      => differences below ~0.00034 bpb are not resolvable at n=1
+  4f3224f42f30  n=17  mean=0.969886  sd=0.000330
+      val_bpb: 0.969635, 0.969663, 0.969626, 0.969792, 0.969889, 0.969819, 0.970007, 0.969726, 0.969734, 0.969641, 0.969615, 0.969654, 0.970127, 0.970386, 0.970057, 0.970862, 0.969822
+      steps:   1316, 1315, 1314, 1315, 1314, 1313, 1307, 1310, 1310, 1315, 1316, 1315, 1312, 1306, 1310, 1301, 1310
+      => differences below ~0.00066 bpb are not resolvable at n=1
+  36033d39378f  n=2  mean=0.972831  sd=0.000502
+      val_bpb: 0.973186, 0.972476
+      steps:   1446, 1448
+      => differences below ~0.00100 bpb are not resolvable at n=1
+  cfd3f82ff49f  n=2  mean=0.987440  sd=0.000153
+      val_bpb: 0.987549, 0.987332
+      steps:   662, 663
+      => differences below ~0.00031 bpb are not resolvable at n=1
+  459c068ad04e  n=2  mean=0.974859  sd=0.000073
+      val_bpb: 0.974911, 0.974808
+      steps:   1015, 1016
+      => differences below ~0.00015 bpb are not resolvable at n=1
+  6ec0721a642f  n=2  mean=0.974496  sd=0.000139
+      val_bpb: 0.974398, 0.974595
+      steps:   1237, 1234
+      => differences below ~0.00028 bpb are not resolvable at n=1
+==========================================================================
+
+capacity groups (num_params_M): 26.3M x1, 50.3M x11, 60.8M x1, 77.7M x2, 80.9M x1, 85.9M x88, 88.3M x1, 91.1M x2, 94.0M x1, 112.1M x1, 114.8M x3, 121.1M x1, 135.3M x2
+fitting the step law within the 85.9M group only (88 trials); capacity changes are NOT comparable this way.
+
+step law (85.9M): val_bpb = 1.094916 + (-0.016983) * ln(num_steps)
+  an e-fold more steps is worth -0.01698 bpb
+  residual spread: 0.004086  (between-intervention variation, NOT noise)
+
+id          params  steps    mfu    val_bpb  plan
+42465468     85.9M   1316   44.7   0.969615  AUTO-REPLICATE of 7fcec1f0 (no applicable untrie
+7fcec1f0     85.9M   1314   44.6   0.969626  AUTO-REPLICATE of 44c84533 (no applicable untrie
+44c84533     85.9M   1316   44.6   0.969635  FINAL_LR_FRAC 0.0 -> 0.05, a gentler nonzero flo
+d263a34d     85.9M   1315   44.6   0.969641  AUTO-REPLICATE of 7fcec1f0 (no applicable untrie
+eb0727f4     85.9M   1315   44.6   0.969654  AUTO-REPLICATE of 42465468 (no applicable untrie
+ffb6c87d     85.9M   1315   44.6   0.969663  AUTO-REPLICATE of 44c84533 (no applicable untrie
+00edc0f1     85.9M   1310   44.5   0.969726  AUTO-REPLICATE of 7fcec1f0 (no applicable untrie
+aab87a43     85.9M   1310   44.5   0.969734  AUTO-REPLICATE of 7fcec1f0 (no applicable untrie
+ecd181ff     85.9M   1315   44.6   0.969792  AUTO-REPLICATE of 7fcec1f0 (no applicable untrie
+1000bc52     85.9M   1315   44.6   0.969807  EMBEDDING_LR fine probe at 0.85, between the 0.8
+1721e365     85.9M   1313   44.6   0.969819  AUTO-REPLICATE of 7fcec1f0 (no applicable untrie
+5ca39067     85.9M   1310   44.4   0.969822  AUTO-REPLICATE of 42465468 (rendezvous timeout f
+c9015b04     85.9M   1315   44.6   0.969852  Muon momentum warmup shortened to 150 steps, bra
+bed88008     85.9M   1314   44.6   0.969889  AUTO-REPLICATE of 7fcec1f0 (no applicable untrie
+87e5ba8e     85.9M   1313   44.5   0.969986  FINAL_LR_FRAC 0.05 -> 0.075, bracketing the winn
+bd73f21f     85.9M   1307   44.3   0.970007  AUTO-REPLICATE of 7fcec1f0 (no applicable untrie
+eccb9e53     85.9M   1309   44.4   0.970014  FINAL_LR_FRAC 0.05 -> 0.025. 0.05 beat both 0.0 
+d3f0110e     85.9M   1310   44.5   0.970057  AUTO-REPLICATE of 42465468 (rendezvous timeout f
+4910ff00     85.9M   1312   44.5   0.970081  Muon momentum range lowered to 0.80->0.92, brack
+a07320f0     85.9M   1312   44.5   0.970103  float32 matmul precision high -> highest. Trades
+6d50fbc7     85.9M   1312   44.5   0.970127  AUTO-REPLICATE of 42465468 (no applicable untrie
+18f11d35     85.9M   1314   44.6   0.970168  WEIGHT_DECAY 0.1 -> 0.15, filling in between the
+56eddb52     85.9M   1303   44.2   0.970258  Rotary table length 10x sequence_len -> 4x. Pair
+6716348b     85.9M   1309   44.4   0.970303  EMBEDDING_LR 0.9 -> 0.95, refining between the w
+9bb20566     85.9M   1313   44.6   0.970326  WEIGHT_DECAY 0.15 -> 0.2 on the current lineage.
+928ca8dd     85.9M   1321   44.8   0.970344  Fine-grained embedding LR probe at 0.9.
+c5b3032b     85.9M   1306   44.3   0.970386  AUTO-REPLICATE of 42465468 (rendezvous timeout f
+94ae5966     85.9M   1315   44.6   0.970422  Muon momentum warmup stretched from 300 to 500 s
+2f9c8911     85.9M   1314   44.6   0.970723  ADAM_BETAS beta2 0.95 -> 0.99. Only beta1 has be
+5b48cc39     85.9M   1314   44.6   0.970734  RoPE base 50000 -> 75000, refining between the w
+126f7484     85.9M   1323   44.9   0.970759  RoPE base frequency 10000 -> 50000. A longer rot
+a8240768     85.9M   1312   44.5   0.970797  ADAM_BETAS beta1 0.8 -> 0.9. Both Adam-group LRs
+17210a01     85.9M   1315   44.6   0.970855  WARMDOWN_RATIO 0.5 -> 0.7 (MORE cooldown). Corre
+8133a1a5     85.9M   1301   44.1   0.970862  AUTO-REPLICATE of 42465468 (rendezvous timeout f
+96c9459e     85.9M   1297   44.0   0.970903  DEVICE_BATCH_SIZE 128 -> 64 at unchanged TOTAL_B
+dd8e7a5b     85.9M   1313   44.6   0.970907  MATRIX_LR 0.04 -> 0.035. Both 0.03 and 0.05 fail
+2f36e383     85.9M   1305   44.3   0.971180  ABLATION of 44c84533: revert FINAL_LR_FRAC 0.05 
+db7342cc     85.9M   1317   44.7   0.971373  SEED VARIANCE MEASUREMENT (seed 137, not an impr
+91077332     85.9M   1315   44.6   0.971507  WEIGHT_DECAY 0.1 -> 0.05. 0.2 -> 0.1 won, so bra
+146336db     85.9M   1314   44.6   0.971523  x0_lambda init 0.1 -> 0.15, bracketing the resid
+91031295     80.9M   1430   44.6   0.971535  DEPTH 10 -> 9. ASPECT_RATIO rounding keeps model
+0681c8b7     85.9M   1289   43.7   0.971539  WEIGHT_DECAY 0.2 -> 0.1. The run is sub-single-e
+ca0da0c1     85.9M   1319   44.7   0.971583  x0_lambda init 0.1 -> 0.05. These per-layer scal
+342d3821     85.9M   1285   43.6   0.971687  UNEMBEDDING_LR 0.006 -> 0.005, refining between 
+ee0ff77f     85.9M   1314   44.6   0.971876  RoPE base frequency -> 100000, continuing the ax
+7bd5b482     85.9M   1267   43.0   0.972013  ABLATION of 44c84533: revert max-autotune compil
+726ab0f1     85.9M   1315   44.6   0.972037  x0_lambda init 0.1 -> 0.05. These per-layer scal
+1fcf24ab     85.9M   1315   44.6   0.972104  UNEMBEDDING_LR 0.004 -> 0.008. Same family as th
+32fb73bd     85.9M   1315   44.6   0.972139  FINAL_LR_FRAC 0.0 -> 0.1. Decaying fully to zero
+1aab41f8     85.9M   1317   44.7   0.972185  x0_lambda init 0.1 -> 0.15, bracketing the resid
+f5ee9e18     85.9M   1314   44.6   0.972196  Fine-grained embedding LR probe at 0.9.
+3f3f3654     88.3M   1311   46.0   0.972248  CONSTANT-CAPACITY SHAPE: MLP 4x -> 5x with DEPTH
+143ceea2     85.9M   1314   44.6   0.972270  SEED VARIANCE MEASUREMENT (seed 2024, not an imp
+5f8207b9     85.9M   1315   44.6   0.972399  RoPE base 50000 -> 25000, refining between the w
+a507160f     85.9M   1318   44.7   0.972412  SEED VARIANCE MEASUREMENT (seed 43, not an impro
+e5eaf62e     77.7M   1448   42.9   0.972476  MLP expansion 4x -> 3x. Cuts MLP FLOPs ~25%, tra
+6779eb52     85.9M   1315   44.6   0.972557  WARMDOWN_RATIO 0.5 -> 0.7 (MORE cooldown). Corre
+5a796892     94.0M   1198   45.8   0.972615  MLP expansion 4x -> 5x, bracketing the ratio upw
+080adced     85.9M   1316   44.6   0.972659  UNEMBEDDING_LR 0.004 -> 0.008. Same family as th
+8ad9a8f0     85.9M   1333   43.6   0.972872  WINDOW_PATTERN SSSL -> SSSSSSSL: only 1 layer in
+4224e469     85.9M   1311   44.5   0.972890  WEIGHT_DECAY 0.2 -> 0.1. The run is sub-single-e
+c3a62a53     85.9M   1317   44.7   0.972938  UNEMBEDDING_LR 0.004 -> 0.006. The embedding LR 
+4a0817dc     85.9M   1292   43.8   0.973020  ADAM_BETAS beta1 0.8 -> 0.7, bracketing Adam mom
+b6c0d04e     85.9M   1316   44.6   0.973128  Continue the unembedding-LR axis: 0.006 -> 0.008
+4297ef27     85.9M   1311   44.5   0.973168  Fine-grained embedding LR probe at 0.9.
+f08d1c89     85.9M   1313   44.5   0.973181  GPU-MOVE VALIDATION: byte-identical replicate of
+5fc8be22     77.7M   1446   42.9   0.973186  MLP expansion 4x -> 3x. Cuts MLP FLOPs ~25%, tra
+b79a77ea    112.1M   1287   43.7   0.973621  Value embeddings on every layer instead of alter
+366a7fa4     85.9M   1333   43.6   0.973744  WINDOW_PATTERN SSSL -> SSSSSSSL: only 1 layer in
+502959c2     85.9M   1323   44.9   0.974019  Embedding LR probe: EMBEDDING_LR 0.6 -> 0.8. Wit
+90e562b0     85.9M   1320   44.8   0.974136  Muon momentum range 0.85->0.95 raised to 0.90->0
+7ab2edea     85.9M   2561   43.6   0.974153  RETEST: TOTAL_BATCH_SIZE 2**18 -> 2**17 with DEV
+e6d38dce     85.9M   1314   44.6   0.974240  MATRIX_LR 0.04 -> 0.03. Raising to 0.05 lost 0.0
+e9298573     91.1M   1237   42.4   0.974398  CONSTANT-CAPACITY SHAPE (corrected): DEPTH 12 wi
+8282a51e     85.9M   1322   44.9   0.974545  Push the embedding-LR axis: 0.8 -> 1.0. Raising 
+2197088a     91.1M   1234   42.3   0.974595  CONSTANT-CAPACITY SHAPE (corrected): DEPTH 12 wi
+a0372b4d     85.9M   1331   43.6   0.974677  WINDOW_PATTERN SSSL -> SSSSSSSL: only 1 layer in
+8e2b73eb    114.8M   1016   47.5   0.974808  RETEST: width 640 -> 768 at DEPTH 10 and the cur
+faac0edd     85.9M   1311   44.5   0.974859  SCALAR_LR 0.5 -> 0.7. Same reasoning as the embe
+07cffa19    114.8M   1015   47.5   0.974911  RETEST: width 640 -> 768 at DEPTH 10 and the cur
+4d3e0ae9     85.9M   1311   44.5   0.974919  SCALAR_LR 0.5 -> 0.3. Raising to 0.7 lost, so if
+99295329     85.9M   1316   44.6   0.975253  SCALAR_LR 0.5 -> 0.3. Raising to 0.7 lost, so if
+b220b327     85.9M   1291   45.4   0.975628  Attention span seq/8 -> seq/4. The span was tune
+fd76db94     85.9M   1325   45.0   0.975832  Bracket the shape axis in the opposite direction
+860fa667     85.9M   1322   44.9   0.975999  REPLICATE 2 of fd76db94 (byte-identical source).
+3182a773     60.8M   1808   41.7   0.976064  Width sweep at fixed DEPTH 10, narrower: model_d
+c4cbd164     85.9M   1322   44.9   0.976128  REPLICATE 1 of fd76db94 (byte-identical source).
+680db4df    121.1M    962   45.4   0.976169  CONSTANT-CAPACITY SHAPE: MLP 4x -> 3x with DEPTH
+b219d0f7     85.9M   1322   44.9   0.976931  Re-tune the Muon LR for the new shape: MATRIX_LR
+003d6c02     85.9M   1237   46.4   0.977436  ABLATION of 44c84533: revert short-attention spa
+aaa966e6    114.8M   1017   47.6   0.977611  Width sweep at fixed DEPTH 10, wider: model_dim 
+b07eeb76     50.3M   2181   40.4   0.977734  ABLATION of 44c84533: revert DEPTH 10 -> 8 (also
+3027e6ae     85.9M   1241   42.1   0.977949  WARMUP_RATIO 0.0 -> 0.05. No warmup at all is un
+8bed6ff2     85.9M   1322   44.9   0.978169  Schedule shape: WARMDOWN_RATIO 0.5 -> 0.35. Half
+1e2efedd    135.3M    866   47.2   0.979108  RETEST: DEPTH 10 -> 12 at the current operating 
+a2ba9db4     85.9M   1312   44.5   0.979710  MLP activation relu-squared -> relu-cubed. GeLU 
+3c3fa271    135.3M    870   47.5   0.979841  Keep climbing the capacity axis: DEPTH 10 -> 12 
+c7c8d842     50.3M   2204   40.8   0.980058  Pure throughput, no model change: compile with m
+9fee3cf3     85.9M   1270   43.1   0.980724  Attention expressivity at constant FLOPs: HEAD_D
+c002e4a2     50.3M   2151   39.8   0.981310  Continue the attention-span axis: short-attentio
+c89462a1     50.3M   2099   40.6   0.981576  Stack the two confirmed levers from the other li
+d05761a3     50.3M   2020   42.4   0.983545  Optimizer cadence: halve TOTAL_BATCH_SIZE 2**19 
+b9b7e7c0     85.9M   1364   46.3   0.984331  Remove QK normalisation before attention. A load
+d20fd8aa     85.9M   1153   38.4   0.986212  Attention span seq/8 -> seq/16 (128 tokens). seq
+edd151d9     50.3M   4046   39.2   0.987011  Push the winning axis: halve the optimizer batch
+5a90b3aa     85.9M    668   45.0   0.987102  Re-tune batch at the new capacity: TOTAL_BATCH_S
+aae46fa6     85.9M    663   44.6   0.987332  ABLATION of 44c84533: revert TOTAL_BATCH_SIZE 2*
+e460cd75     85.9M    662   44.6   0.987549  RETEST at the current operating point: TOTAL_BAT
+fbec943f     50.3M   1059   40.8   0.988966  Attention throughput: halve the SSSL short-atten
+137deafa     50.3M   1013   42.3   0.989440  SEED-PAIRED BASELINE (seed 43, not an improvemen
+51333356     50.3M   1017   42.5   0.990118  SEED-PAIRED BASELINE (seed 137, not an improveme
+6d0ccd43     50.3M   1017   42.5   0.991192  baseline (pristine karpathy/autoresearch train.p
+586597ce     50.3M   1014   42.4   0.991566  SEED-PAIRED BASELINE (seed 2024, not an improvem
+c664c3e8     85.9M   1230   41.7   0.995024  MLP activation relu-squared -> gelu. The activat
+e28ccb85     26.3M   2841   26.5   1.024066  Compute-optimal shape: DEPTH 8 -> 6. The run see

@@ -75,7 +75,23 @@ def main() -> int:
     reps = {h: v for h, v in by_code.items() if len(v) > 1}
     print("=" * 74)
     if reps:
-        print("REPLICATES (identical source run more than once) — true noise estimate")
+        # Pool across groups. A single group's sd is a 1-2 dof estimate and swings wildly
+        # (observed range here: 0.000019 to 0.000502, a 26x spread). Quoting whichever
+        # group happens to be at hand understates or overstates the floor depending on
+        # which one it is. The pooled estimate is sqrt(sum(SS) / sum(dof)) and is what
+        # every significance claim in the log should be judged against.
+        ss = dof = 0.0
+        for group in reps.values():
+            vals = [g["_bpb"] for g in group]
+            mu = sum(vals) / len(vals)
+            ss += sum((v - mu) ** 2 for v in vals)
+            dof += len(vals) - 1
+        pooled = math.sqrt(ss / dof) if dof else float("nan")
+        print(f"POOLED NOISE ESTIMATE over {len(reps)} groups, {int(dof)} dof: "
+              f"sd = {pooled:.6f}")
+        print(f"  => 2-sigma = {2*pooled:.5f}; treat smaller differences as unresolved at n=1")
+        print(f"  => a 0.001 effect is {0.001/pooled:.1f} sigma\n")
+        print("PER-GROUP (each is a 1-2 dof estimate; do not quote these individually)")
         for h, group in reps.items():
             vals = [g["_bpb"] for g in group]
             steps = [g["_steps"] for g in group]

@@ -72,6 +72,11 @@ def main() -> int:
     ap.add_argument("--hard-timeout", type=int, default=900)
     ap.add_argument("--rendezvous-timeout", type=float, default=7200.0)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--max-hours", type=float, default=0.0, help="0 = no deadline")
+    ap.add_argument("--min-improvement", type=float, default=0.0,
+                    help="challenger must beat the incumbent by this to displace it (2 sigma)")
+    ap.add_argument("--num-seeds", type=int, default=0,
+                    help="re-evaluate each newly confirmed best at N seeds (upstream multi_seed_eval)")
     args = ap.parse_args()
 
     base = Path(args.base_dir)
@@ -108,11 +113,18 @@ def main() -> int:
         ),
         gpu=args.gpu,
         hard_timeout=args.hard_timeout,
+        min_improvement=args.min_improvement,
+        num_seeds=args.num_seeds,
     )
     agent = Agent(cfg, journal, backend, runner, task_memo, baseline_code, pristine_prepare_sha)
 
     it = 0
+    last_best_id = None
+    deadline = time.time() + args.max_hours * 3600 if args.max_hours > 0 else None
     while args.max_iters == 0 or it < args.max_iters:
+        if deadline is not None and time.time() >= deadline:
+            logging.info("reached --max-hours=%.1f deadline, stopping", args.max_hours)
+            break
         it += 1
         logging.info("-" * 70)
         logging.info("iteration %d (journal size %d)", it, len(journal))
@@ -120,8 +132,15 @@ def main() -> int:
         try:
             node = agent.step()
         except RendezvousTimeout as exc:
-            logging.error("rendezvous timed out: %s — stopping", exc)
-            return 2
+            # Never exit on timeout. An idle GPU is strictly worse than a replicate,
+            # which at least sharpens the noise floor and keeps the search alive.
+            logging.warning("rendezvous timed out (%s) — falling back to a replicate", exc)
+            try:
+                node = agent.step_replicate()
+            except Exception:
+                logging.exception("replicate fallback failed; pausing 60s")
+                time.sleep(60)
+                continue
         except KeyboardInterrupt:
             logging.info("interrupted by operator")
             return 0
@@ -131,9 +150,25 @@ def main() -> int:
             continue
 
         journal.save(journal_path)
-        write_results_tsv(journal, campaign / "results.tsv", [])
 
-        best = journal.get_best_node()
+        # Upstream runs multi-seed evaluation on the best node at each stage boundary.
+        # This port has no stages, so the equivalent trigger is a confirmed change of
+        # incumbent: that is when a claim is about to be made, and therefore when the
+        # variance behind it needs measuring.
+        best = journal.get_best_node(min_improvement=args.min_improvement)
+        if args.num_seeds and best is not None and best.id != last_best_id:
+            if last_best_id is not None:
+                logging.info("incumbent changed %s -> %s; running %d-seed evaluation",
+                             last_best_id, best.id, args.num_seeds)
+                try:
+                    agent.run_seed_eval(best)
+                    journal.save(journal_path)
+                except Exception:
+                    logging.exception("seed evaluation failed; continuing")
+            last_best_id = best.id
+
+        write_results_tsv(journal, campaign / "results.tsv", [])
+        best = journal.get_best_node(min_improvement=args.min_improvement)
         status = {
             "iteration": it,
             "journal_size": len(journal),
