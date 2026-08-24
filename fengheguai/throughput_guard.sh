@@ -16,6 +16,7 @@ set -uo pipefail
 CAMPAIGN="${CAMPAIGN:?set CAMPAIGN}"
 FLOOR="${FLOOR:-8.0}"
 MFU_FLOOR="${MFU_FLOOR:-34.0}"
+MFU_SEVERE="${MFU_SEVERE:-25.0}"  # abort at this level even if the device cannot be identified
 # ...but low MFU ALONE is not contention. A narrow model has intrinsically worse occupancy:
 # 21 layers at width 384 ran a healthy 32.9% because small GEMMs use the tensor cores badly,
 # and the guard aborted it. Nor does a within-run DROP work -- t0451 and t0453 were contended
@@ -66,6 +67,17 @@ while :; do
   if [ -n "$rl" ]; then
     age=$(( $(date +%s) - $(stat -c %Y "$rl" 2>/dev/null || echo 0) ))
     if [ "$age" -gt "${FRESH:-90}" ]; then sleep "$INTERVAL"; continue; fi
+
+    # The newest log is not necessarily the RUNNING trial's. t0497 was compiling with zero step
+    # lines while t0496's log -- from a trial already killed -- still held 114 steps at 17.6%
+    # MFU. The guard judged t0496's occupancy, resolved the device from the live controller, and
+    # would have killed whatever was running on it. Same attribution error I made by hand twice
+    # today: reading one component's numbers and acting on another's.
+    # Only judge a log whose own node still has a live process.
+    node=$(basename "$(dirname "$rl")"); node="${node%-r*}"
+    if ! pgrep -u "$(id -u)" -f "$CAMPAIGN/nodes/$node/" >/dev/null 2>&1; then
+      sleep "$INTERVAL"; continue
+    fi
     verdict=$(CAMPAIGN="$CAMPAIGN" FLOOR="$FLOOR" MFU_FLOOR="$MFU_FLOOR" GRACE="$GRACE" python3 - "$rl" <<'PYEOF'
 import os, re, sys
 txt = open(sys.argv[1], errors="replace").read()
@@ -98,8 +110,21 @@ PYEOF
     if [ -n "$verdict" ]; then
       set -- $verdict
       g=$(our_gpu); ct=$(cotenant_on "$g")
-      if [ "${ct:-0}" -eq 0 ]; then
-        say "low MFU $3% on gpu ${g:-?} but no co-tenant — treating as an intrinsically slower model, not aborting"
+      # If the device cannot be identified -- the controller restarting leaves the pidfile
+      # briefly stale -- cotenant_on returns 0 and the co-tenant test would silently pass
+      # everything. That fails OPEN: the guard stops protecting exactly when it cannot see.
+      # Fall back to a severe absolute floor, set below the 32.6% a legitimately narrow model
+      # reaches but above nothing else observed: contended runs sat at 28.8-29.1%, and the run
+      # that exposed this was at 17.9%.
+      if [ -z "$g" ]; then
+        if awk -v m="$3" -v t="$MFU_SEVERE" 'BEGIN{exit !(m<t)}'; then
+          say "device unidentified and MFU $3% below severe floor $MFU_SEVERE% — aborting anyway"
+        else
+          say "low MFU $3% but device unidentified and above severe floor — not aborting"
+          sleep "$INTERVAL"; continue
+        fi
+      elif [ "${ct:-0}" -eq 0 ]; then
+        say "low MFU $3% on gpu $g but no co-tenant — treating as an intrinsically slower model, not aborting"
         sleep "$INTERVAL"; continue
       fi
       for pid in $(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null); do

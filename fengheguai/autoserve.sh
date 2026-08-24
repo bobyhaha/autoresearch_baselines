@@ -72,8 +72,15 @@ while :; do
           # champion-parented node. Skip it for this trial, but leave it in the queue.
           say "$tid: $(basename "$entry") does not apply to this node — skipping, trying next"
         done
-        [ "$served" -eq 0 ] && say "$tid: NO QUEUE ENTRY APPLIED — refill $Q"
-        last="$tid"
+        if [ "$served" -eq 0 ]; then
+          # Do NOT mark this trial handled. Nothing applied because the queue was empty or every
+          # entry refused this node -- both are conditions I can fix from here, and the request
+          # stays open for its full 840s. Marking it handled meant t0502 sat pending with 327s
+          # left while a freshly stocked queue was ignored, because `last` had already moved on.
+          say "$tid: NO QUEUE ENTRY APPLIED — refill $Q (will retry while the request is open)"
+        else
+          last="$tid"
+        fi
       fi
     fi
   fi

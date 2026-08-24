@@ -271,3 +271,413 @@ t0485 served: train.py 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b2131
 2026-08-24T19:44:03Z SSH unreachable (rc=255) — cannot see pending requests; they will expire
 2026-08-24T19:44:52Z autoserve starting (interval 20s, queue 2 entries)
 2026-08-24T19:44:54Z t0489: deadline already passed (8606s ago); not serving a stale request
+2026-08-24T20:02:10Z t0490: serving 010-bf16-plus-autotune 
+t0490: lm_head cast to bf16
+t0490 served: train.py 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b21317f5c811 -> b04f624cde8d6ba7d41f18107bbca969e8135d0bb7863760ac1f8ee2c26c828e, result published
+2026-08-24T20:02:24Z t0490: served ok, 1 entries left
+2026-08-24T20:02:47Z t0491: serving 999-rerun-parent 
+t0491: re-running inherited configuration under a fresh hash
+t0491 served: train.py 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b21317f5c811 -> c5c26413730ee035f3520edc6a50eb51814a17525ad103236426ee119e3f04e8, result published
+2026-08-24T20:03:01Z t0491: served ok, 0 entries left
+2026-08-24T20:11:49Z t0492: serving 012-bf16-autotune-attempt2 
+t0492: lm_head cast to bf16
+t0492 served: train.py 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b21317f5c811 -> 68713d47c949d39c5bb9d61f6f4200fa37f0d0c980f0a8aa087e2a1cb8c6c6dd, result published
+2026-08-24T20:12:04Z t0492: served ok, 1 entries left
+2026-08-24T20:15:55Z t0493: serving 999-rerun-parent 
+t0493: re-running inherited configuration under a fresh hash
+t0493 served: train.py 68713d47c949d39c5bb9d61f6f4200fa37f0d0c980f0a8aa087e2a1cb8c6c6dd -> 8bdf557ca9b23d2042735e3ebe38348664165f1837f4fc3be29362f464dc0151, result published
+2026-08-24T20:16:09Z t0493: served ok, 0 entries left
+2026-08-24T20:20:23Z t0494: serving 014-bf16-autotune-attempt3 
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+AssertionError: lm_head already cast
+2026-08-24T20:20:29Z t0494: 014-bf16-autotune-attempt3 does not apply to this node — skipping, trying next
+2026-08-24T20:20:29Z t0494: serving 999-rerun-parent 
+t0494: re-running inherited configuration under a fresh hash
+t0494 served: train.py 68713d47c949d39c5bb9d61f6f4200fa37f0d0c980f0a8aa087e2a1cb8c6c6dd -> b8817a58beb5c77741cabd338c89656e4e6b1f7b617e08122d86995d78389369, result published
+2026-08-24T20:20:44Z t0494: served ok, 1 entries left
+2026-08-24T20:23:47Z t0495: serving 014-bf16-autotune-attempt3 
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+AssertionError: lm_head already cast
+2026-08-24T20:23:53Z t0495: 014-bf16-autotune-attempt3 does not apply to this node — skipping, trying next
+2026-08-24T20:23:53Z t0495: serving 999-rerun-parent 
+t0495: re-running inherited configuration under a fresh hash
+t0495 served: train.py 68713d47c949d39c5bb9d61f6f4200fa37f0d0c980f0a8aa087e2a1cb8c6c6dd -> 4641cab8e48529af4896ab97deab0bafaefb034ff09a50bfe152a6b76ae4c8e2, result published
+2026-08-24T20:24:07Z t0495: served ok, 1 entries left
+2026-08-24T20:26:27Z reaper: recovered 1 lost bet(s)
+2026-08-24T20:31:24Z t0496: serving 014-bf16-autotune-attempt3 
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+AssertionError: lm_head already cast
+2026-08-24T20:31:30Z t0496: 014-bf16-autotune-attempt3 does not apply to this node — skipping, trying next
+2026-08-24T20:31:30Z t0496: serving 999-rerun-parent 
+t0496: re-running inherited configuration under a fresh hash
+t0496 served: train.py 68713d47c949d39c5bb9d61f6f4200fa37f0d0c980f0a8aa087e2a1cb8c6c6dd -> 17378087e094ffb3d08afbf5e2e1c4de522f843ad4b77ce3f1f06c6b1c48947c, result published
+2026-08-24T20:31:45Z t0496: served ok, 1 entries left
+2026-08-24T20:32:34Z reaper: recovered 1 lost bet(s)
+2026-08-24T20:36:45Z t0497: serving 014-bf16-autotune-attempt3 
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+AssertionError: lm_head already cast
+2026-08-24T20:36:50Z t0497: 014-bf16-autotune-attempt3 does not apply to this node — skipping, trying next
+2026-08-24T20:36:50Z t0497: serving 999-rerun-parent 
+t0497: re-running inherited configuration under a fresh hash
+t0497 served: train.py 68713d47c949d39c5bb9d61f6f4200fa37f0d0c980f0a8aa087e2a1cb8c6c6dd -> c746bf80991a67a3a37f330080ef6f17ae2e0c03d0405f5a9ce5110201651667, result published
+2026-08-24T20:37:05Z t0497: served ok, 1 entries left
+2026-08-24T20:38:39Z reaper: recovered 1 lost bet(s)
+2026-08-24T20:43:59Z t0498: serving 014-bf16-autotune-attempt3 
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+AssertionError: lm_head already cast
+2026-08-24T20:44:05Z t0498: 014-bf16-autotune-attempt3 does not apply to this node — skipping, trying next
+2026-08-24T20:44:05Z t0498: serving 999-rerun-parent 
+t0498: re-running inherited configuration under a fresh hash
+t0498 served: train.py 68713d47c949d39c5bb9d61f6f4200fa37f0d0c980f0a8aa087e2a1cb8c6c6dd -> bf34ce41e24de9a73dc3901303637512e9318789bf4f711bf4cc09c4b77ab4d9, result published
+2026-08-24T20:44:20Z t0498: served ok, 1 entries left
+2026-08-24T20:44:46Z reaper: recovered 1 lost bet(s)
+2026-08-24T20:47:03Z t0499: serving 014-bf16-autotune-attempt3 
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+AssertionError: lm_head already cast
+2026-08-24T20:47:09Z t0499: 014-bf16-autotune-attempt3 does not apply to this node — skipping, trying next
+2026-08-24T20:47:09Z t0499: serving 999-rerun-parent 
+t0499: re-running inherited configuration under a fresh hash
+t0499 served: train.py 68713d47c949d39c5bb9d61f6f4200fa37f0d0c980f0a8aa087e2a1cb8c6c6dd -> 5281cf07c7f5f03d062c090846e5d07538baa69e0357d65951249af8cefd0425, result published
+2026-08-24T20:47:23Z t0499: served ok, 1 entries left
+2026-08-24T20:50:51Z reaper: recovered 1 lost bet(s)
+2026-08-24T20:54:17Z t0500: serving 014-bf16-autotune-attempt3 
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+AssertionError: lm_head already cast
+2026-08-24T20:54:23Z t0500: 014-bf16-autotune-attempt3 does not apply to this node — skipping, trying next
+2026-08-24T20:54:23Z t0500: serving 999-rerun-parent 
+t0500: re-running inherited configuration under a fresh hash
+t0500 served: train.py 68713d47c949d39c5bb9d61f6f4200fa37f0d0c980f0a8aa087e2a1cb8c6c6dd -> bf55341b0a2fbeaf17ab5035770fc195073b2d9c92174a96f30d46ecf39b7b7b, result published
+2026-08-24T20:54:37Z t0500: served ok, 1 entries left
+2026-08-24T20:56:57Z reaper: recovered 1 lost bet(s)
+2026-08-24T21:12:17Z t0501: serving 014-bf16-autotune-attempt3 
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+AssertionError: lm_head already cast
+2026-08-24T21:12:23Z t0501: 014-bf16-autotune-attempt3 does not apply to this node — skipping, trying next
+2026-08-24T21:12:23Z t0501: serving 999-rerun-parent 
+t0501: re-running inherited configuration under a fresh hash
+t0501 served: train.py bf55341b0a2fbeaf17ab5035770fc195073b2d9c92174a96f30d46ecf39b7b7b -> e592156dfe90623599c5ab1d5032ed81f215c77e64b493aa8e18ab5f50c0ef57, result published
+2026-08-24T21:12:37Z t0501: served ok, 1 entries left
+2026-08-24T21:21:28Z t0502: serving 014-bf16-autotune-attempt3 
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+AssertionError: lm_head already cast
+2026-08-24T21:21:33Z t0502: 014-bf16-autotune-attempt3 does not apply to this node — skipping, trying next
+2026-08-24T21:21:33Z t0502: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue
+2026-08-24T21:30:37Z autoserve starting (interval 20s, queue 1 entries)
+2026-08-24T21:33:42Z t0503: serving 999-rerun-parent 
+t0503: re-running inherited configuration under a fresh hash
+t0503 served: train.py 7fe9b7c1f56755dd637bd1bb04bc6158f970fe4f1d00ac4469e84fbab3fecb0e -> eebb3eec8be1c6143a0bd4f5085531c31a27e0bf2104f2e56b379c968528ce67, result published
+2026-08-24T21:33:56Z t0503: served ok, 0 entries left
+2026-08-24T21:36:39Z t0504: serving 030-logits-bf16 
+t0504: dropped the fp32 logits upcast (softcap now in bf16)
+t0504 served: train.py bf55341b0a2fbeaf17ab5035770fc195073b2d9c92174a96f30d46ecf39b7b7b -> aeddd02580c658e000e08867e7bd2483742202dc8afe5a8160a141e7f5757b74, result published
+2026-08-24T21:36:53Z t0504: served ok, 1 entries left
+2026-08-24T21:48:00Z t0505: serving 999-rerun-parent 
+t0505: re-running inherited configuration under a fresh hash
+t0505 served: train.py aeddd02580c658e000e08867e7bd2483742202dc8afe5a8160a141e7f5757b74 -> d299038eeec729d8a80606183601d344f8b99159fc534ecce3a61fd29f51d731, result published
+2026-08-24T21:48:15Z t0505: served ok, 0 entries left
+2026-08-24T21:57:07Z t0506: serving 999-rerun-parent 
+t0506: re-running inherited configuration under a fresh hash
+t0506 served: train.py bf55341b0a2fbeaf17ab5035770fc195073b2d9c92174a96f30d46ecf39b7b7b -> ffe30d319e19db74acb41a4940feb5fe64f69cfb6c18c570089d50f635dc3fed, result published
+2026-08-24T21:57:21Z t0506: served ok, 0 entries left
+2026-08-24T22:15:03Z t0507: serving 040-grad-clip [1.0]
+t0507: clip_grad_norm_(1.0) on AdamW groups only
+t0507 served: train.py ffe30d319e19db74acb41a4940feb5fe64f69cfb6c18c570089d50f635dc3fed -> 2bfe458632d5c73e5f90747f1e8a96185cbb107098d2e6e7d0f1587127082850, result published
+2026-08-24T22:15:18Z t0507: served ok, 1 entries left
+2026-08-24T22:24:09Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:24:15Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:24:15Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:24:38Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:24:44Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:24:44Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:25:07Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:25:12Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:25:12Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:25:35Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:25:41Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:25:41Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:26:04Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:26:10Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:26:10Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:26:33Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:26:39Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:26:39Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:27:02Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:27:08Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:27:08Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:27:31Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:27:37Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:27:37Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:28:00Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:28:06Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:28:06Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:28:28Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:28:34Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:28:34Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:28:57Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:29:03Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:29:03Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:29:26Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:29:32Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:29:32Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:29:55Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:30:01Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:30:01Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:30:24Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:30:30Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:30:30Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:30:56Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:31:02Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:31:02Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:31:25Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:31:31Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:31:31Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:31:53Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:31:59Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:31:59Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:32:22Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:32:28Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:32:28Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:32:51Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:32:57Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:32:57Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:33:20Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:33:26Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:33:26Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:33:49Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:33:55Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:33:55Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:34:18Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:34:24Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:34:24Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:34:46Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:34:52Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:34:52Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:35:15Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:35:21Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:35:21Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:35:44Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:35:51Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:35:51Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:36:49Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:36:55Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:36:55Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:37:18Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:37:24Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:37:24Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:37:47Z t0508: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:37:53Z t0508: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:37:53Z t0508: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:38:16Z t0509: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:38:22Z t0509: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:38:22Z t0509: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:38:48Z t0509: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:38:54Z t0509: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:38:54Z t0509: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:39:17Z t0509: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T22:39:23Z t0509: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T22:39:23Z t0509: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T22:39:46Z t0509: serving 050-label-smoothing [0.02]
+t0509: label_smoothing=0.02
+t0509 served: train.py ffe30d319e19db74acb41a4940feb5fe64f69cfb6c18c570089d50f635dc3fed -> ba2b178220d3293a2565fc763f15a7869dce23a905000a249b45642b7e056a8b, result published
+2026-08-24T22:40:01Z t0509: served ok, 1 entries left
+2026-08-24T22:51:09Z t0510: serving 999-rerun-parent 
+t0510: re-running inherited configuration under a fresh hash
+t0510 served: train.py ba2b178220d3293a2565fc763f15a7869dce23a905000a249b45642b7e056a8b -> d25a618e9bd63e30ebefca3be15854ca1aa151b28796fc4f2dcbac918fb4612b, result published
+2026-08-24T22:51:24Z t0510: served ok, 0 entries left
+2026-08-24T23:00:34Z t0511: serving 055-label-smoothing-warm [0.02]
+t0511: label_smoothing=0.02
+t0511 served: train.py ffe30d319e19db74acb41a4940feb5fe64f69cfb6c18c570089d50f635dc3fed -> acfe1dd7988e907a0af558efc5189e90f07630a6d3f7e54a20eadcb3699bf353, result published
+2026-08-24T23:00:48Z t0511: served ok, 1 entries left
+2026-08-24T23:10:02Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:10:08Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:10:08Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:10:31Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:10:37Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:10:37Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:11:00Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:11:06Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:11:06Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:11:29Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:11:35Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:11:35Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:11:58Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:12:04Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:12:04Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:12:27Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:12:33Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:12:33Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:12:56Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:13:02Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:13:02Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:13:25Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:13:31Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:13:31Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:13:54Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:14:00Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:14:00Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:14:22Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:14:28Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:14:28Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:14:51Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:14:57Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:14:57Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:15:23Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:15:29Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:15:29Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:15:52Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:15:58Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:15:58Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:16:20Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:16:26Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:16:26Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:16:49Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:16:55Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:16:55Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:17:18Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:17:24Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:17:24Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:17:47Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:17:53Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:17:53Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:18:16Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:18:22Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:18:22Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:18:45Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:18:51Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:18:51Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:19:14Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:19:20Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:19:20Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:19:43Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:19:49Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:19:49Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:20:11Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:20:18Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:20:18Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:20:40Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:20:46Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:20:46Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:21:09Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:21:15Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:21:15Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:21:38Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:21:44Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:21:44Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:22:07Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:22:13Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:22:13Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:22:39Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:22:45Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:22:45Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:23:08Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:23:14Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:23:14Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:23:37Z t0512: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:23:43Z t0512: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:23:43Z t0512: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:24:06Z t0513: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:24:12Z t0513: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:24:12Z t0513: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:24:34Z t0513: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:24:40Z t0513: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:24:40Z t0513: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:25:03Z t0513: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:25:09Z t0513: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:25:09Z t0513: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:25:32Z t0513: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:25:38Z t0513: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:25:38Z t0513: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:26:01Z t0513: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0500, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:26:07Z t0513: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:26:07Z t0513: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:26:29Z t0513: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0506, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:26:35Z t0513: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:26:35Z t0513: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:26:58Z t0513: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:27:04Z t0513: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:27:04Z t0513: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:27:27Z t0513: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0501, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:27:33Z t0513: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:27:33Z t0513: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:27:56Z t0513: serving 999-rerun-parent 
+refusing: this configuration is byte-identical (modulo comments) to t0484, which already has a completed measurement. Re-measuring a scored config is a ratchet on noise, not an experiment.
+2026-08-24T23:28:02Z t0513: 999-rerun-parent does not apply to this node — skipping, trying next
+2026-08-24T23:28:02Z t0513: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue (will retry while the request is open)
+2026-08-24T23:28:25Z t0513: serving 999-rerun-parent 

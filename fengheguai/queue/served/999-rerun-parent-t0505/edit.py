@@ -33,47 +33,6 @@ KNOWN_UNMEASURABLE = [
 for _marker, _why in KNOWN_UNMEASURABLE:
     assert _marker not in s, f"inherited a config known to fail -- {_why}"
 
-# Refuse a configuration that has ALREADY been measured. This entry exists to re-run parents
-# that died before producing a score -- not to re-measure something the ledger already knows.
-# t0506 was byte-identical to champion t0500 apart from comments, and its two runs happened to
-# land 0.000041 low against a same-source spread of 0.000481, so it "promoted" a no-op. Repeated
-# re-measurement of the champion is a ratchet on noise: each draw is a fresh sample, and given
-# enough draws one pair falls below and the recorded champion drifts down with no real gain.
-import json as _json, re as _re, hashlib as _hashlib
-
-def _normalise(text):
-    out = []
-    for line in text.splitlines():
-        stripped = line.strip()
-        if not stripped or stripped.startswith("#"):
-            continue
-        out.append(_re.sub(r"\s+#.*$", "", line).rstrip())
-    return _hashlib.sha256("\n".join(out).encode()).hexdigest()
-
-_camp = pathlib.Path(f"/data3/zhubaiyu/fengheguai/campaigns/h200-claude")
-_measured = set()
-try:
-    for _line in (_camp / "ledger.jsonl").read_text().splitlines():
-        try: _r = _json.loads(_line)
-        except Exception: continue
-        if _r.get("kind") != "trial_completed": continue
-        _pl = _r.get("payload") or {}
-        if any(_m.get("metric") for _m in (_pl.get("measurements") or [])):
-            _measured.add(_pl.get("trial_id"))
-except Exception:
-    _measured = set()
-
-_mine = _normalise(s)
-for _tid in _measured:
-    _f = _camp / "nodes" / _tid / "train.py"
-    if not _f.exists():
-        continue
-    if _normalise(_f.read_text()) == _mine:
-        raise SystemExit(
-            f"refusing: this configuration is byte-identical (modulo comments) to {_tid}, "
-            "which already has a completed measurement. Re-measuring a scored config is a "
-            "ratchet on noise, not an experiment.")
-
 anchor = 'torch.set_float32_matmul_precision("high")'
 assert anchor in s, "expected anchor not found"
 s = s.replace(anchor,

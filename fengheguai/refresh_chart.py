@@ -71,6 +71,37 @@ subs = [
   f'aria-label="Scatter of val_bpb for {n} trials with a descending best-so-far step line from {base:.6f} to {champ["v"]:.6f}."'),
  (r'(style="fill:var\(--accent\)">)0\.\d+(</text>)', f'\\g<1>{champ["v"]:.6f}\\g<2>'),
 ]
+# The engine promotes on median-of-two, and a re-measurement of an existing champion can win
+# by less than the same-source spread (0.000481 at n=4). t0506 did exactly that: its non-comment
+# diff against t0500 is empty. Annotate the caption when the best trial is a re-measurement, so
+# the published figure does not imply an improvement that was not made.
+import subprocess as _sp
+def _norm(text):
+    return "\n".join(l.rstrip() for l in text.splitlines()
+                      if l.strip() and not l.strip().startswith("#"))
+
+def _same_model(a, b):
+    """Compare two nodes' train.py ignoring comments. Fetch and compare locally so no shell
+    quoting is involved -- the remote-diff version failed silently on argv quoting."""
+    root = "/data3/zhubaiyu/fengheguai/campaigns/h200-claude/nodes"
+    try:
+        ta = _sp.run(SSH + [f"cat {root}/{a}/train.py"], capture_output=True, text=True, timeout=60)
+        tb = _sp.run(SSH + [f"cat {root}/{b}/train.py"], capture_output=True, text=True, timeout=60)
+        if ta.returncode or tb.returncode or not ta.stdout or not tb.stdout:
+            return False
+        return _norm(ta.stdout) == _norm(tb.stdout)
+    except Exception:
+        return False
+
+_promoted = [r["id"] for r in D if r.get("promoted")]
+_note = ""
+if len(_promoted) >= 2 and _same_model(_promoted[-1], _promoted[-2]):
+    _note = (f' <strong>Note:</strong> {_promoted[-1]} is byte-identical to {_promoted[-2]} apart '
+             f'from comments \u2014 it is the same model re-measured, promoted by a margin smaller '
+             f'than the measured same-source spread. The real result is {_promoted[-2]}.')
+if _note:
+    html = re.sub(r'(<figcaption>)', r'\1' + _note.replace("\\", "\\\\"), html, count=1)
+
 missing = [p for p, r in subs if not re.search(p, html)]
 for p, r in subs: html = re.sub(p, r, html)
 # The x-axis ticks are generated in-page from D.length. Guard against the stale-hardcoded

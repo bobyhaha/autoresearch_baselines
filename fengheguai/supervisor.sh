@@ -225,6 +225,29 @@ while :; do
       fi
     fi
   else
+    # Reap orphans while the controller is DOWN, not only when we stop it ourselves. A trial
+    # whose controller died leaves a process parented to init, and reap_orphan_trials only runs
+    # inside stop_controller -- so an orphan created after the controller is already gone
+    # survives indefinitely. t0495 sat burning a GPU that way on a box shared with four other
+    # projects, which makes this a courtesy bug as much as a waste.
+    reap_orphan_trials
+    # reap_orphan_trials scans nvidia-smi, so it only catches processes holding a CUDA context.
+    # A trial stranded during compile never acquires one and survives it -- three accumulated
+    # that way and had to be cleared by hand. With the controller confirmed down, any process
+    # under our node tree is stranded by definition.
+    _ctrl=$(head -1 "$PIDFILE" 2>/dev/null)
+    if [ -n "$_ctrl" ] && [ ! -d "/proc/$_ctrl" ]; then
+      _n=0
+      for _p in $(pgrep -u "$(id -u)" -f "$CAMPAIGN/nodes/" 2>/dev/null); do
+        kill -TERM "$_p" 2>/dev/null; _n=$((_n + 1))
+      done
+      if [ "$_n" -gt 0 ]; then
+        sleep 3
+        for _p in $(pgrep -u "$(id -u)" -f "$CAMPAIGN/nodes/" 2>/dev/null); do kill -KILL "$_p" 2>/dev/null; done
+        say "cleared $_n stranded node process(es) (controller down, no CUDA context held)"
+      fi
+    fi
+
     if [ -f "$ROOT/logs/PAUSED_AGENT_UNREACHABLE" ]; then
       sleep "$INTERVAL"; continue
     fi

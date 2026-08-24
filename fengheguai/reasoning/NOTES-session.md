@@ -4049,3 +4049,603 @@ and timed out exactly as that config always does -- the failure mode its own ris
 predicted, on its first use. It now refuses nodes carrying max_autotune_gemm_search_space, with
 the three trial ids that established the config is unmeasurable. A fallback that re-runs
 anything is a loop when the engine keeps opening debug children of a config that cannot finish.
+
+## §102 — a three-hour outage the breaker handled, and a duplicate I walked into
+
+**The gap.** Between 16:53 and 17:07 my Mac lost SSH to the box. The courier could not see
+pending requests, t0486/t0487/t0488 expired unanswered, and the supervisor's breaker latched:
+
+    17:07:28Z agent unreachable: 3 new agent_error trials — pausing (resume is manual)
+
+The campaign then sat halted for 2.9 hours until I noticed. That is the breaker working as
+designed -- three slots lost instead of the remaining node space -- and the manual-resume latch
+is correct precisely because an automatic resume would have burned trials into a dead link for
+three hours.
+
+Two things did their jobs quietly. The courier refused a stale request on restart ("deadline
+already passed 8606s ago") rather than serving into a dead controller. And restarting the
+supervisor rebaselined the streak ("ignoring 3 pre-existing agent errors") so the breaker did
+not immediately re-trip on history.
+
+What I should improve: nothing on the box noticed the gap, and nothing told me. The courier now
+logs unreachability, but I only added that at 13:41 and it fires on the Mac side -- I still had
+to go looking. A campaign that can pause itself indefinitely needs its silence to be loud.
+
+**The duplicate.** t0490 came back `duplicate`, and it was my error. I built the
+bf16-plus-autotune entry by stripping the compile revert out of the standalone bf16 entry --
+which reproduces t0483's source byte for byte, and t0483's hash is burned by its timeout record.
+Confirmed directly: t0483 and t0490 both hash to b04f624cde8d6ba7d41f.
+
+The galling part is that I had verified distinct hashes for the exhaustive pair an hour earlier,
+explicitly because "copying an edit verbatim reproduces its source exactly". Then I produced the
+same situation by SUBTRACTION rather than copying, and did not think to check. The rule I had
+written was about copying; the rule I needed was about the artefact.
+
+**Rebuilt as 012 with a marker, hash verified distinct (68713d47) before queueing.** The check
+costs one dry-run and one shasum, and I now do it for every entry that is derived from another
+rather than written fresh.
+
+**Results banked before the outage:**
+
+    t0484  lm_head bf16, default compile   2819 steps (+2.73%)  mech +0.000393  vs champion +0.000009
+    t0485  champion re-measure             2746 steps           mech +0.000436  (within same-source spread)
+
+t0484 is the interesting one: the cast buys +2.73% of throughput for no measurable quality cost,
+and ties the champion only because it forfeits autotune's +2.26% to compile cleanly. Combining
+them is what 012 tests.
+
+## §103 — same-source spread reaches n=3, and it is wider than the last promotion
+
+Three runs of the champion or a near-identical re-measure of it:
+
+    t0472 r0   0.9611134
+    t0472 r1   0.9611335
+    t0491      0.9613154     (999-rerun-parent, inherited champion-like config, 2798 steps)
+    range      0.000202
+
+**t0472 was promoted over t0433 by -0.000180 raw. The same-source spread is 0.000202.** The
+promotion margin is smaller than the noise on a single measurement of the same model.
+
+I flagged "promoted is not demonstrated" when it happened and the point is now firmer rather
+than new. The engine's rule -- strict median decrease with both confirmation runs below the
+incumbent -- was satisfied, and that rule is not mine to override. But the scientific claim that
+zeroing attn_gate IMPROVES the model is not supported at this resolution. What is supported is
+weaker and still worth having: it does not hurt, and the initialiser now does what its own
+comment says.
+
+The 0.00085 n=1 floor I have been applying all session looks about 4x conservative against
+this, which is the right direction to be wrong in. But it means every result I recorded as
+"inside the floor" between roughly 0.0002 and 0.0009 was being judged against a threshold
+looser than the instrument -- init scale (+0.000408), EMA ramp (-0.000064), attn_gate
+(-0.000306), lm_head bf16 mechanism (+0.000393). Those all sit in the band where a tighter,
+measured floor would still call them null, so no verdict changes. It is luck rather than
+design that none of them landed at 0.0006.
+
+**What this campaign has actually established, at a resolution the data supports:**
+
+    -3.03% from baseline over 206 measured trials          large, unambiguous
+    the token law, validated out-of-sample on an identical model   residual -0.000292
+    MLP width and depth are strongly convex interior optima  effects 0.003-0.007, well clear
+    width buys ~2x depth per parameter                       0.000442 vs 0.000209 per %
+    depth*width^2 over-penalises width by ~9%                measured from two directions
+    EXHAUSTIVE autotune is worth +0.5% steps                 below floor, and unamortisable
+
+The two champions of this session are both small and honest: t0433 was pure throughput and the
+token law predicted it to within a fifth of the floor; t0472 is a missing initialiser line whose
+effect is below the measurement resolution.
+
+## §104 — an orphan that outlived its reaper, on a machine I share
+
+The controller pidfile pointed at a dead process while t0494's log kept advancing. Checking
+rather than guessing found the reason:
+
+    pid 3897556  ppid=1  nodes/t0495
+
+A trial whose controller had died, reparented to init, still holding a GPU. `reap_orphan_trials`
+exists and works -- but it only runs inside `stop_controller`, i.e. when the supervisor stops
+the controller ITSELF. An orphan created after the controller is already gone has nothing left
+to reap it, and sits there indefinitely.
+
+That is not merely wasted throughput. This box runs four other projects under the same account
+(vibeauto_old_run, ai_scientist_v2_baseline, and two deepsci_mls_lite workloads) plus two other
+users. A runaway process of mine holding a device is a courtesy failure, and it is invisible
+from my side because the symptom is just "the campaign seems slow".
+
+Fixed: the supervisor now calls reap_orphan_trials on every cycle while the controller is down,
+before considering whether to resume. Deployed and relaunched with the verify-then-launch script.
+
+**The shape of this bug is familiar.** reap_orphan_trials was correct; its CALL SITE assumed the
+only way an orphan appears is a stop we initiated. Same family as the guard assuming every model
+has champion-like occupancy, and the courier assuming a refusal is permanent -- a component that
+is right about its own job and wrong about when it is needed. The fix each time was to widen when
+it runs, not to change what it does.
+
+**Also worth noting what did NOT go wrong.** Through this whole churn the guard correctly
+declined to abort a 33.3% MFU run with no co-tenant, the reaper recovered the served bet, and no
+coordinate was burned. The box is cycling 45-50GB tenants on a roughly one-minute timescale,
+which is faster than a two-check selection can track -- no policy can anticipate a tenant that
+arrives 60 seconds after you choose a device, and the right response is to lose nothing when it
+happens rather than to predict it.
+
+## §105 — the guard was failing open when it could not see the device
+
+    low MFU 17.9% on gpu ? but no co-tenant — treating as an intrinsically slower model, not aborting
+
+`gpu ?` is the tell. our_gpu() reads the device from the controller's environment, and during a
+controller restart the pidfile is briefly stale -- so it returns empty, cotenant_on("") returns
+0, and the co-tenant condition passes everything. **The guard stopped protecting exactly when it
+could not see**, and 17.9% MFU is severe contention, not a slow model.
+
+Fail-open is the wrong default for a guard. Added MFU_SEVERE=25%: when the device cannot be
+identified, abort on that alone. Replayed against every relevant log before deploying:
+
+    t0492  17.5%   known:ABORT  unknown:ABORT   severe, caught blind
+    t0451  28.8%   known:ABORT  unknown:allow   moderate, slips through
+    t0453  29.0%   known:ABORT  unknown:allow   moderate, slips through
+    t0476  32.9%   known:allow* unknown:allow   narrow healthy, correctly spared
+    t0475  40.8%   known:allow  unknown:allow   wide healthy
+
+**This is deliberately a partial net and I want that on the record.** Moderate contention during
+the restart window still gets through, because without device identity I cannot distinguish 29%
+contention from a legitimately slow model -- and aborting on that ambiguity would resurrect the
+false positives that cost three coordinates today. The blind window is seconds long; the
+false-positive cost was permanent. Better to miss a rare moderate case than to kill healthy runs.
+
+That is the fourth revision of this guard, and the third that came from reading a log line rather
+than from a trial dying. Each version protected against what the previous one taught me existed:
+model-dependent step cost, then noisy instantaneous MFU, then model-dependent occupancy, and now
+its own blindness.
+
+## §106 — the guard was reading one trial's log and acting on another's device
+
+    low MFU 17.6% on gpu 7 but no co-tenant — treating as an intrinsically slower model
+
+Both halves of that line were about different trials. The log ordering at the time:
+
+    t0497-r0    71s old    0 step lines   <- the RUNNING trial, still compiling
+    t0496-r0   177s old  114 step lines   <- already killed; this is what the guard read
+
+The guard takes the newest log by mtime. t0497's log existed but had no steps, so the regex
+matched nothing there and the 17.6% came from t0496 -- a trial that was already dead. The device
+came from the live controller. And the kill scans nvidia-smi for ANY of our node processes, so
+had the numbers crossed the floor it would have killed whatever was actually running, on the
+strength of a corpse's occupancy.
+
+**This is exactly the mistake I made by hand twice today** -- attributing t0480's result to the
+wrong queue entry, and hunting a phantom killer for t0461 -- now encoded in a daemon. Reading
+one component's numbers and acting on another's.
+
+Fixed: the guard now extracts the node id from the log path and refuses to judge unless that
+node still has a live process. A log whose trial is gone is not evidence about anything running.
+
+The "no co-tenant" half was also wrong: gpu 7 held a 49.6GB process from vibeauto_old_run, one
+of the other projects on this account. The supervisor's memory check caught it correctly a
+minute later and paused. So the two instruments disagreed, and the one with the simpler
+question -- "is there a lot of foreign memory on our device right now" -- was right.
+
+**Fifth revision of this guard.** The failure modes have moved from "wrong threshold" to "wrong
+statistic" to "wrong model assumption" to "blind to the device" to "reading the wrong trial".
+Each is narrower than the last, which is what progress looks like, but it is worth being honest
+that a component I have rewritten five times is not one I should describe as reliable. What
+makes the campaign safe is not this guard being right; it is that the supervisor, the reaper and
+the duplicate-hash rule fail in different directions.
+
+## §107 — correcting §104: those orphans were not burning GPU
+
+In §104 I wrote that an orphaned trial "still holding a GPU" was a courtesy failure on a shared
+box. I checked this time instead of asserting it, and the claim was wrong for the case in front
+of me:
+
+    orphan 196916  (uv run wrapper)      not in nvidia-smi compute apps -> holds no GPU
+    child  197242  (the trial python)    not in nvidia-smi compute apps -> holds no GPU
+    trial state: 0 step lines, log stale 110s -> stuck in compile, never acquired the device
+
+Both processes were stranded before acquiring a CUDA context. They cost 0.5% of one CPU and
+nothing else. `reap_orphan_trials` scans nvidia-smi's compute-app list, which is the correct
+target -- it reaps processes that actually hold a device -- and it simply had nothing to reap
+here.
+
+I did not verify the GPU claim for t0495 either. I found it by pgrep on the node path, not in
+nvidia-smi, so I do not know whether it held a device. **The honest statement is that I killed
+two stranded processes and do not know whether either was costing the shared box anything.**
+
+This is the same error as the estimate-treated-as-measurement pattern from §87, in a new place:
+"orphan" carried an implication ("holds a GPU") that I never checked, and I wrote a note
+condemning myself for a courtesy failure that may not have occurred. Being wrong in the
+self-critical direction is still being wrong.
+
+The §104 FIX is still correct and worth keeping -- reaping while the controller is down closes a
+real gap for orphans that DO hold devices. Only its justification was overstated. And I have
+added a separate cleanup for stranded node processes that hold no CUDA context, which the reap
+by design will never catch.
+
+## §108 — I was stealing GPU 6 from another campaign all day
+
+A memory I hold says plainly: fengheguai's supervisor picks devices dynamically, and with
+`EXCLUDE=2` it kept claiming **GPU 6 in the gaps between LDM evaluations, contaminating roughly
+half of them (18-28% MFU instead of 40-42%)**. The fix, recorded this same day, was to run with
+`EXCLUDE=2,6`.
+
+Every supervisor relaunch I performed today used `EXCLUDE=2`. The relaunch script I wrote to make
+restarts safe hardcoded it, so each time I "fixed" the supervisor I re-broke the reservation. The
+supervisor resumed on gpu 6 at 12:54 under my configuration.
+
+Fixed: relaunch script and running supervisor now use `EXCLUDE=2,6`.
+
+**Two things worth sitting with.**
+
+First, the memory existed and I read past it. It was in the MEMORY.md index the whole session --
+"fengheguai picks GPUs dynamically; now EXCLUDE=2,6 so it stops stealing GPU 6" -- and I only
+looked at it because I happened to tail the index while updating a different note.
+
+Second, and worse for my reasoning today: I have repeatedly described the 45-50GB tenants as
+"other people's work" and framed my job as being a good citizen around them. The memory says the
+contention was **self-inflicted** -- several campaigns run under the same account, so `owner` is
+the wrong discriminator entirely. I checked owner and saw `zhubaiyu` and concluded "another
+project, leave it alone", which was right for vibeauto_old_run and deepsci_mls_lite but meant I
+never asked whether MY OWN supervisor was the thing crowding a device someone else had reserved.
+
+The correct discriminator is the campaign path in the command line, not the uid. I have written
+that sentence about process identity four times today in other contexts.
+
+### §108 addendum — I over-corrected, again
+
+Having written that I "framed the contention story backwards", I checked which processes the big
+tenants actually belong to:
+
+    gpu 5  49560MiB  vibeauto_old_run      not mine
+    gpu 7  45384MiB  vibeauto_old_run      not mine
+    gpu 0  37824MiB  fengheguai            mine, the running trial
+
+So the 45-50GB churn that has dominated the last two hours genuinely IS another project. My
+original framing was correct. The self-inflicted contention was **narrow and specific**: GPU 6,
+reserved for LDM, claimed twice today by my supervisor running with EXCLUDE=2.
+
+That fix stands and mattered. But "I was stealing GPU 6" is true while "I framed the whole
+contention story backwards" is not, and I wrote the second because the first felt like it should
+generalise.
+
+**This is the second self-critical overshoot in twenty minutes** -- §107 corrected a note that
+condemned me for orphans burning GPU when they held no CUDA context, and now this. The pattern is
+its own failure mode: on finding one real error I extrapolate it into a broader indictment
+without checking the broader claim. It is the same extrapolation error that produced three failed
+cross-axis capacity predictions today, pointed inward instead of outward.
+
+Accuracy about my own mistakes is not the same as maximising them.
+
+## §109 — NEW CHAMPION t0500 = 0.959724 (-3.16%), and a prediction that landed
+
+The bf16 + max-autotune combination, delivered by the fallback entry after 014 correctly refused
+the node:
+
+    runs   2888 steps  0.9594834
+           2877 steps  0.9599640
+    median 2882 (+2.73% over t0472)   raw -0.001312   thr -0.001576   mech +0.000264
+
+Champion 0.961036 -> **0.959724**. Campaign **-3.16%** from the 0.991068 baseline.
+
+**The components composed additively, as registered:**
+
+    lm_head bf16 alone      +2.73%  (t0484, default compile)
+    max-autotune alone      +2.26%  (t0445 control)
+    combined                +5.05%
+
+And the forecast was right on both axes -- I wrote "steps should land near 2880-2890" and
+"worth roughly -0.0016"; measured 2882 and -0.001576 of throughput.
+
+**Why this prediction worked when today's others failed.** It composed two SEPARATELY MEASURED
+quantities. Every prediction I got wrong today extrapolated one measurement into a regime where
+it had not been measured: capacity transferred across axes (three failures), depth*width^2 as a
+cost proxy (off by 9%), t0058's +5.3% quoted from a single uncorroborated run (delivered +1.14%).
+Composition of measurements is reliable here; extrapolation of measurements is not. That is a
+usable rule rather than a mood.
+
+**A caveat on variance.** The two confirmation runs differ by 0.000481 -- more than double the
+0.000195 and 0.000202 observed earlier. So same-source spread is wider than my n=3 tally
+suggested, and the §103 claim that the 0.00085 floor is "~4x conservative" deserves less
+confidence than I gave it. The promotion margin here (-0.001312) clears even the wider spread,
+so nothing about this result is in doubt; the calibration note is what needs softening.
+
+**Both of this session's champions are throughput.** t0433 (+1.14%, autotune), t0472 (an init
+line, sub-floor), t0500 (+2.73%, bf16 on top of autotune). Every capacity change measured today
+was real and unaffordable; every promotion came from making the same model run faster inside the
+same 300 seconds.
+
+## §110 — CUDA graphs segfault here too; the cross-campaign memory was right
+
+t0502 enabled torch._inductor.config.triton.cudagraphs on top of the champion's autotune:
+
+    return code 139 (SIGSEGV)   0 steps   no error text in the log
+
+It died during compilation, before the first step. Pre-registered criterion met: "a hard crash
+or a segfault... would be fast, unambiguous, and would close the axis." **Closed.**
+
+I hold a memory from the VPA campaign saying plain max-autotune segfaults through CUDA graphs. I
+discounted it -- different model, different torch build, and no node in these 502 trials had ever
+enabled them -- and tested anyway. It was right. The cost was one coordinate and four minutes for
+a definitive answer on a lever plausibly worth 3-10% of steps, which I still think was the right
+trade. But the memory deserved more weight than "warning rather than result": a segfault in the
+same library on the same box is not a model-specific finding.
+
+Worth noting what did NOT happen. I registered that the likeliest benign outcome was inductor
+silently declining to capture -- because this model calls mark_dynamic on the varlen descriptor
+every step and graph capture needs static shapes -- producing a null that means "not applicable"
+rather than "launch overhead does not matter". That is not what occurred. It crashed outright, so
+the dynamic-shape tension resolved into a hard failure rather than a quiet no-op, and the
+"launch overhead is 60% of the gap to peak" question remains genuinely unanswered.
+
+**The throughput axis after four probes:**
+
+    max-autotune (default search)   +2.26%   BANKED (t0433)
+    lm_head bf16                    +2.73%   BANKED (t0484 -> t0500 combined +5.05%)
+    EXHAUSTIVE search space         +0.5%    below floor, and unamortisable -- closed
+    CUDA graphs                     --       segfault -- closed
+
+Two of four paid, and together they are the entire distance from 0.961216 to 0.959724.
+
+## §111 — the logits upcast was already free, and I re-made an error I had written down
+
+t0504 removed `logits = logits.float()`, leaving the softcap tanh in bf16:
+
+    steps 2884   (champion 2882)   dt 105ms   MFU 39.7%   timed out in eval
+
+**+0.07% of steps. Nothing.** The 4.29GB fp32 materialisation I argued would be saved was never
+being paid: inductor fuses the conversion into the matmul epilogue, so it costs nothing to
+remove. The timeout is the usual cause -- a forward-graph change misses the inductor cache and
+the max-autotune re-search exceeds the wall clock -- but the step count answers the question
+without needing a score.
+
+**I made an error I had already recorded.** §47 says, in my own words: "Count bytes at KERNEL
+boundaries, not at operations. The model is torch.compiled, so adjacent pointwise ops fuse and
+their intermediates never reach memory." I then built this hypothesis by multiplying 1.07G
+elements by 4 bytes and treating the product as real traffic -- counting the operation, exactly
+what that note warns against.
+
+What made it feel new was a genuine distinction: t0382 measured a softcap reorder as free with an
+fp32 lm_head, and the champion's lm_head is bf16 now, so I argued the old measurement did not
+cover the new situation. That reasoning was sound and the conclusion still wrong -- the situation
+changed, but not in the way that mattered, because fusion does not care which dtype the producer
+emits.
+
+**The throughput axis is now five probes deep:**
+
+    max-autotune (default search)  +2.26%   BANKED
+    lm_head bf16                   +2.73%   BANKED  (combined +5.05%, champion 0.959724)
+    EXHAUSTIVE search space        +0.5%    closed, below floor and unamortisable
+    CUDA graphs                    --       closed, segfault rc 139
+    logits fp32 upcast removal     +0.07%   closed, already fused
+
+Two of five paid. The two that paid were both about what the hardware READS -- kernel selection
+and weight width -- and the three that failed were all about what I imagined the code was doing.
+
+## §112 — saturation, stated plainly
+
+The weight-width lever is exhausted, and working out why explains the one win it produced:
+
+    transformer matrices  37.7M params   casting saves 75MB/step  ~0.016ms of a 105ms step
+    lm_head weights        4.2M params   saved only 8MB
+    lm_head's REAL saving  its OUTPUT -- 2.15GB on a 1.07G-element vocab-sized tensor
+    transformer outputs    already bf16 under autocast; nothing available
+
+lm_head paid because its output is the vocab-sized tensor, not because its weights are large. No
+other matrix in this model has that property. There is no second instance of this lever.
+
+**Where the campaign stands after ~210 measured trials in this session:**
+
+    model axes      attention structure (3 dimensions), MLP width, depth at constant width,
+                    aspect ratio (one-sided), SwiGLU, U-net skips, attention softcap, EMA shape,
+                    init scale, gate width -- all closed with a measured optimum or a bracket
+    knob space      every one of 16 real constants varied at least twice, 400 trials ago
+    throughput      5 probes: autotune +2.26% and lm_head bf16 +2.73% banked (champion 0.959724),
+                    EXHAUSTIVE +0.5% closed, CUDA graphs segfault closed, logits upcast already
+                    fused closed
+
+**I do not have another good idea.** Further gains need a genuinely novel mechanism rather than
+a variation on a closed axis, and I would rather say that than manufacture bets to look busy.
+Coordinates are permanently consumed -- known_hashes includes failures -- so a low-value trial
+is not free, it removes a point from the space forever.
+
+So the queue holds the fallback, which re-runs parent configurations that died unmeasured. That
+is real work: it recovers experiments the box's contention destroyed, and it accumulates
+same-source variance observations, which I have needed all session and still only have four of.
+
+If a genuinely new mechanism occurs to me, or a result reopens a closed axis, I will queue it.
+Idling deliberately is a better use of a saturated search than churning it.
+
+## §113 — same-source variance at n=4, and it corrects my own calibration
+
+Four runs of the champion configuration (bf16 lm_head + max-autotune, 2877-2888 steps):
+
+    t0500 r0   0.9594834
+    t0500 r1   0.9599640
+    t0501      0.9597548
+    t0505      0.9598763
+    n=4  range 0.000481  mean 0.9597696
+
+**This corrects §103 in the direction that matters.** There I claimed, on three observations
+spanning 0.000202, that the 0.00085 n=1 floor was "~4x conservative". With four observations
+spanning 0.000481 it is about 1.8x -- roughly right, not badly loose. So the null verdicts I
+issued against that floor all session were sound rather than luckily sound, which is the
+conclusion I had reached by accident at §103 and now hold for a reason.
+
+It also settles the two promotion margins:
+
+    t0500 over t0472   -0.001312   2.7x the observed range -- solid
+    t0472 over t0433   -0.000180   INSIDE the range -- promoted, not demonstrated
+
+The second was flagged as such when it happened and stays flagged. The engine's rule (strict
+median decrease, both confirmation runs below the incumbent) was satisfied and is not mine to
+override, but the scientific claim "zeroing attn_gate improves the model" remains unsupported at
+this resolution. What is supported: it does not hurt, and the initialiser now matches its comment.
+
+**The variance number took the whole session to get.** I asserted it twice (§86, §88) before
+measuring it once, then measured it at n=1 (§96), n=3 (§103), and only now at n=4 does it look
+stable. Every one of those intermediate claims was stated more confidently than its evidence
+supported. The pattern is the same one that produced three failed capacity extrapolations: I
+reach for a number before I have one, and the fix is not caution but labelling -- say "estimate"
+at the point of REUSE, not just at the point of first calculation.
+
+## §114 — a champion that is the same model, and the ratchet that produced it
+
+t0506 promoted at 0.959683 against t0500's 0.959724. The diff of non-comment lines between the
+two nodes is **empty**. It is the same model.
+
+    t0506 r0  2876 steps  0.9596721
+    t0506 r1  2878 steps  0.9596932
+    margin over t0500: -0.000041   same-source spread (n=4): 0.000481
+
+Both runs happened to land low. The engine's rule -- strict median decrease with both
+confirmation runs below the incumbent -- was satisfied, and the ledger honestly records what ran.
+The improvement is not real.
+
+**The mechanism is a ratchet on noise.** The fallback entry re-runs a parent's configuration
+under a fresh hash. Applied to the champion, every re-run is a fresh draw from a distribution
+with ~0.0005 of spread. Given enough draws, one pair falls below the incumbent and promotes a
+no-op, and the recorded champion drifts downward forever without a single real improvement. That
+is not a hypothetical: it happened on the fallback's fourth or fifth use.
+
+I have not touched the ledger. Fabricating or reversing a recorded result is precisely what I am
+not permitted to do, and the record is accurate about what was measured. What I changed is that
+the campaign will stop MANUFACTURING these trials: the fallback now normalises its node's source
+(stripping comments and trailing comment text), hashes it, and refuses if it matches any trial
+that already has a completed measurement. Verified on the box in both directions -- a
+champion-identical node is refused by name, a genuinely different config still applies.
+
+**The honest headline is -3.16% at t0500.** t0506 is that model re-measured, and I will report it
+that way rather than claiming -3.17%.
+
+**What this says about the fallback design.** I built it to stop requests expiring, and it did
+that well -- five slots saved. But "re-run whatever the parent was" is only sound when the parent
+is unmeasured, and I encoded the useful half of that rule (skip configs known to FAIL) without
+the other half (skip configs already SCORED). The failure mode was in its own risk section from
+the start: "it cannot distinguish a parent worth re-measuring from one that failed for a reason
+that will recur." I wrote that about failures and missed the symmetric case about successes.
+
+## §115 — gradient clipping is null; the mechanism search is finished
+
+t0507, clip_grad_norm_(1.0) on the AdamW groups only:
+
+    steps 2869 (-0.28%)   raw +0.000475   throughput +0.000163   mechanism +0.000312
+
+Both raw and mechanism sit inside the 0.000481 same-source spread. **Null**, and predicted:
+I registered "I expect a null... range -0.001 to +0.001" for the stated reason -- Adam is already
+scale-invariant in its update magnitude, which absorbs most of what clipping would do. Steps flat,
+so the norm computation over ~62M AdamW parameters costs nothing measurable either.
+
+That closes the search for absent mechanisms. Of the three standard things this model does not do:
+
+    gradient clipping   MEASURED, null (t0507)
+    label smoothing     not run -- biases predictions away from the true distribution, which is
+                        exactly what bpb measures
+    dropout             not run -- roughly one epoch over a large corpus; the regime where it helps
+                        is not this one
+
+I committed when queueing the clip that a null would end this line rather than send me to the
+other two on worse reasoning. Honouring that.
+
+**Final state of the search.** Every model axis closed with a measured optimum or a bracket; the
+knob space exhausted 400 trials ago; five throughput probes with two banked (autotune +2.26%,
+lm_head bf16 +2.73%, combining to +5.05% and the real champion at t0500) and three closed
+(EXHAUSTIVE below floor, CUDA graphs segfault, logits upcast already fused); three absent
+mechanisms accounted for. The campaign's honest result is **-3.16%**, from 0.991068 to 0.959724.
+
+I have no further hypotheses worth a permanent coordinate.
+
+## §116 — label smoothing is catastrophic, and that closes the mechanism search for good
+
+t0510 (the fallback re-running t0509's unmeasured config) delivered the number:
+
+    label smoothing 0.02   2835 steps   bpb 1.0397155   +0.080033 vs champion
+
+**+0.080 bpb.** I predicted +0.001 to +0.004. Direction right, magnitude wrong by a factor of
+20 to 80 -- the fourth time today I have gotten a sign right and a size badly wrong (t0058's
++5.3%, the MLP 3x band, SwiGLU's catastrophe, now this).
+
+The mechanism is plain once measured: bpb is the distance between the model's distribution and
+the true one, and smoothing trains the model to hold 2% of its mass on 8191 wrong tokens. The
+floor alone is -log2(0.98) = 0.029 bits before any learned distortion. I had the argument right
+in the hypothesis -- "smoothing moves probability mass off the true target by construction, and
+bpb measures exactly that distance" -- and then predicted a number two orders of magnitude too
+small. Having the correct mechanism did not make me estimate its size correctly, which is worth
+noticing: the two are separate skills and I keep assuming the first implies the second.
+
+**This makes dropout unnecessary to test, and I am declining it on strengthened evidence rather
+than on the original hunch.** The pattern across today's results is now consistent:
+
+    capacity increases      all valuable, all unaffordable (MLP 5x, depth 13, 8x640)
+    capacity decreases      all expensive (MLP 3x +0.0066, depth 11 +0.0060)
+    extra paths             U-net skips +0.0024 -- the optimiser misused the freedom
+    explicit regularisation label smoothing +0.080
+
+A model that is capacity-starved and under-trained at 2880 steps has nothing to regularise.
+Dropout is regularisation. I can predict its sign and rough scale from the four results above
+without spending a coordinate, and doing so is a better use of the evidence than confirming it.
+
+**The mechanism search is closed.** All three absent-from-this-model mechanisms are accounted
+for: clipping measured null, label smoothing measured catastrophic, dropout inferred from a
+consistent four-result pattern.
+
+### §116 addendum — measured twice, by accident
+
+t0511 ran label smoothing again and scored 1.039492 against t0510's 1.0397155. Not a guard
+failure: the courier served my own warm-retry entry (055) in a race with my retiring it -- it had
+already captured the directory path when the mv landed.
+
+One coordinate spent on a duplicate. The consolation is real though: two independent runs of the
+same configuration at 1.0397 and 1.0395, consistent to 0.0002, so the +0.080 result is confirmed
+rather than a single unlucky draw. Given how badly I mis-estimated its magnitude, having it twice
+is worth more than it would have been for a result I had predicted correctly.
+
+The fallback will refuse this configuration from here -- both trials carry completed measurements
+and the normalised-hash check sees them.
+
+## §117 — closing entry: campaign paused, and what it actually established
+
+**Paused, not stopped.** The search is saturated and the hardened fallback correctly refuses to
+re-measure scored configurations, so every further request was becoming an agent_error --
+consuming a permanent coordinate and returning nothing. I set the campaign's own manual-pause
+flag and stopped the controller. Ledger intact at 974 rows, 514 nodes intact, supervisor still
+watching. One line resumes it:
+
+    rm /data3/zhubaiyu/fengheguai/logs/PAUSED_AGENT_UNREACHABLE
+
+**The honest result is -3.16%: 0.991068 -> 0.959724 at t0500.** The ledger's best is t0506 at
+0.959683, but its non-comment diff against t0500 is empty -- the same model, promoted on a
+re-measurement that landed 0.000041 low against a same-source spread of 0.000481. The published
+chart now says so in its caption, because a figure that reads -3.17% without that note implies
+an improvement nobody made.
+
+**What paid, across three champions this session:**
+
+    t0433  max-autotune + shared inductor cache      +1.14% steps, pure throughput
+    t0472  attn_gate zero-init                       a line missing from the model's own
+                                                     initialiser; effect below resolution
+    t0500  lm_head bf16 on top of autotune           +2.73%, composing to +5.05%
+
+All three are throughput. Every capacity change measured today was real and unaffordable.
+
+**What the campaign learned that outlasts the champion:**
+
+    width buys ~2x the capacity of depth per parameter    -0.000442 vs -0.000209 per % params
+    depth*width^2 over-penalises width by ~9%             larger GEMMs, fewer layer boundaries
+    DEPTH was never a depth axis                          it sets width through integer rounding;
+                                                          10/11/12 are all width 512
+    the token law holds out-of-sample                     residual -0.000292 on an identical model
+    same-source spread is 0.000481 at n=4                 the 0.00085 floor is ~1.8x, about right
+
+**And the methodological result I trust most:** composing separately measured quantities predicts
+well; extrapolating one measurement into an unmeasured regime does not. The bf16+autotune forecast
+hit 2882 steps against a predicted 2880-2890. Every prediction I missed today -- t0058's +5.3%,
+the MLP 3x band, SwiGLU, depth*width^2, label smoothing by two orders of magnitude -- was an
+extrapolation. Four times I had the mechanism right and the magnitude badly wrong, which says
+those are separate skills and I keep assuming the first implies the second.
+
+**Instruments, each fixed by a failure it caused rather than by review:**
+supervisor (foreign-process counting, starvation-with-co-tenant, orphan reaping while down,
+EXCLUDE=2,6 restoring LDM's reservation), throughput guard (four revisions: MFU not step rate,
+median not last sample, co-tenant required, live-trial binding, severe floor when blind), courier
+(retries while a request is open, falls through refusals, recovers bets from killed trials,
+refuses known-bad and already-measured configs).
+
+The recurring shape in all of them: a component correct about its own job, wrong about when it
+was needed. The fix each time was to widen when it runs, not to change what it does.
