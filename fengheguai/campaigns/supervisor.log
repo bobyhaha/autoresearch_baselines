@@ -1,0 +1,38 @@
+2026-08-21T08:22:14Z supervisor starting: interval 300s, free<5000MiB & <20%, foreign>10000MiB
+2026-08-21T08:22:14Z contention on gpu 0: 79002MiB foreign — pausing
+2026-08-21T08:22:16Z paused (pid 3269948 stopped)
+2026-08-21T08:39:16Z gpu 3 free on two checks — resuming
+2026-08-21T08:39:21Z resumed on gpu 3 (pid 3863473)
+2026-08-21T08:44:22Z contention on gpu 3: 50664MiB foreign — pausing
+2026-08-21T08:44:23Z paused (pid 3863473 stopped)
+2026-08-21T08:50:23Z gpu 1 free on two checks — resuming
+2026-08-21T08:50:28Z resumed on gpu 1 (pid 4021416)
+2026-08-21T08:55:28Z contention on gpu 1: 104038MiB foreign — pausing
+2026-08-21T08:55:29Z paused (pid 4021416 stopped)
+2026-08-21T09:12:30Z gpu 0 free on two checks — resuming
+2026-08-21T09:12:35Z resumed on gpu 0 (pid 113912)
+2026-08-21T09:42:37Z contention on gpu 0: 22224MiB foreign — pausing
+2026-08-21T09:42:38Z paused (pid 113912 stopped)
+2026-08-21T09:54:39Z gpu 1 free on two checks — resuming
+2026-08-21T09:54:44Z resumed on gpu 1 (pid 457477)
+2026-08-21T11:59:51Z contention on gpu 1: 29688MiB foreign — pausing
+2026-08-21T11:59:52Z paused (pid 457477 stopped)
+2026-08-21T12:05:53Z gpu 0 free on two checks — resuming
+2026-08-21T12:05:58Z resumed on gpu 0 (pid 570492)
+2026-08-21T12:56:01Z contention on gpu 0: 11916MiB foreign — pausing
+2026-08-21T12:56:02Z paused (pid 570492 stopped)
+2026-08-21T13:13:03Z gpu 3 free on two checks — resuming
+2026-08-21T13:13:08Z resumed on gpu 3 (pid 657693)
+2026-08-23T08:31:18Z contention on gpu 3: 66950MiB foreign — pausing
+2026-08-23T08:31:19Z paused (pid 657693 stopped)
+2026-08-23T08:37:20Z gpu 0 free on two checks — resuming
+2026-08-23T08:37:25Z resumed on gpu 0 (pid 1951314)
+2026-08-23T08:47:25Z contention on gpu 0: 69172MiB foreign — pausing
+2026-08-23T08:47:26Z paused (pid 1951314 stopped)
+2026-08-23T09:23:28Z gpu 3 free on two checks — resuming
+2026-08-23T09:23:33Z resumed on gpu 3 (pid 1978416)
+2026-08-23T12:08:43Z contention on gpu 3: 20202MiB foreign — pausing
+2026-08-23T12:08:44Z paused (pid 1978416 stopped)
+2026-08-23T12:14:45Z gpu 0 free on two checks — resuming
+2026-08-23T12:14:50Z resumed on gpu 0 (pid 3896151)
+2026-08-23T15:50:03Z supervisor exiting

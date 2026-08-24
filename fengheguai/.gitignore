@@ -1,0 +1,4 @@
+# Real connection details for the campaign host. Keep out of this public repo:
+# publishing a live user@host:port invites brute-force attempts, and git history
+# would retain it even after a later removal.
+ssh_target.local

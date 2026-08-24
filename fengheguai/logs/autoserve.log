@@ -1,0 +1,273 @@
+2026-08-24T07:42:48Z autoserve starting (interval 20s, queue 2 entries)
+2026-08-24T07:42:51Z t0428: deadline already passed (2534s ago); not serving a stale request
+2026-08-24T07:46:17Z t0429: serving 010-attn-softcap [30.0]
+t0429: attention softcap -> 30.0 at 2 call sites
+t0429 served: train.py 98801864ac70fbe8b006a571fee09c0ba67918f131c20a612eb4a330d196e1bd -> e6ab61895291b64880c722c1ec75e1f7f7613cdffcb434a7bc221a0480e31a8f, result published
+2026-08-24T07:46:33Z t0429: served ok, 1 entries left
+2026-08-24T07:56:07Z t0430: serving 020-attn-softcap-15 [15.0]
+t0430: attention softcap -> 15.0 at 2 call sites
+t0430 served: train.py 98801864ac70fbe8b006a571fee09c0ba67918f131c20a612eb4a330d196e1bd -> 83a250c3109584f5fcafbf951924f97098496170456fa033bbe5a3910408a3fd, result published
+2026-08-24T07:56:22Z t0430: served ok, 1 entries left
+2026-08-24T08:04:02Z t0431: serving 030-coord-descent 
+t0431: coordinate_descent_tuning enabled
+t0431 served: train.py 98801864ac70fbe8b006a571fee09c0ba67918f131c20a612eb4a330d196e1bd -> e4b3611af01500fc7156bc0ea9635033dd4877ebb6d4825fd64d19a12c1f95d7, result published
+2026-08-24T08:04:17Z t0431: served ok, 1 entries left
+2026-08-24T08:12:42Z t0432: serving 040-max-autotune 
+t0432: max-autotune-no-cudagraphs + shared inductor cache
+t0432 served: train.py 98801864ac70fbe8b006a571fee09c0ba67918f131c20a612eb4a330d196e1bd -> 54cc56d204b5f25651360249546ea35f2f09b915c579593d961d3c569d59c2bc, result published
+2026-08-24T08:12:58Z t0432: served ok, 1 entries left
+2026-08-24T08:13:45Z autoserve starting (interval 20s, queue 2 entries)
+2026-08-24T08:24:13Z t0433: serving 030-coord-descent 
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AssertionError: an autotune mode is already set; not a fresh coordinate
+2026-08-24T08:24:19Z t0433: serve FAILED (entry kept for inspection: 030-coord-descent)
+2026-08-24T08:27:14Z autoserve starting (interval 20s, queue 2 entries)
+2026-08-24T08:45:30Z t0434: serving 030-coord-descent 
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AssertionError: an autotune mode is already set; not a fresh coordinate
+2026-08-24T08:45:36Z t0434: 030-coord-descent refused this node — set aside, trying next
+2026-08-24T08:45:36Z t0434: serving 050-partial-rotary [0.5]
+t0434: partial rotary frac=0.5 (rotates 32 of 64 pairs)
+t0434 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 46ad5c97e5586ce59aadc260007db04e448aa9f1c658010c9a69c647723a87cc, result published
+2026-08-24T08:45:52Z t0434: served ok, 0 entries left
+2026-08-24T08:57:04Z t0435: serving 060-mlp-ratio-3 [3]
+t0435: MLP ratio 4 -> 3 (hidden 2048 -> 1536 per layer)
+t0435 served: train.py 46ad5c97e5586ce59aadc260007db04e448aa9f1c658010c9a69c647723a87cc -> 476d6ffdd94ced7bd7bd9803f3e2339386ac4720bbe1df03d362f3be5c70dc22, result published
+2026-08-24T08:57:19Z t0435: served ok, 1 entries left
+2026-08-24T09:08:34Z t0436: serving 070-mlp-ratio-5 [5]
+t0436: MLP ratio 4 -> 5 (hidden 2048 -> 2560 per layer)
+t0436 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> d7a21c3e3e7437e4875e422cb35a395b6cacfd45041588296d3e3422ef188471, result published
+2026-08-24T09:08:49Z t0436: served ok, 0 entries left
+2026-08-24T09:20:00Z t0437: serving 035-mlp-3-warm [3]
+Traceback (most recent call last):
+  File "<stdin>", line 19, in <module>
+AssertionError: expected exactly 2 occurrences of '4 * config.n_embd', found 0
+2026-08-24T09:20:06Z t0437: 035-mlp-3-warm refused this node — set aside, trying next
+2026-08-24T09:20:06Z t0437: serving 055-mlp-5-warm [5]
+Traceback (most recent call last):
+  File "<stdin>", line 19, in <module>
+AssertionError: expected exactly 2 occurrences of '4 * config.n_embd', found 0
+2026-08-24T09:20:12Z t0437: 055-mlp-5-warm refused this node — set aside, trying next
+2026-08-24T09:20:12Z t0437: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue
+2026-08-24T09:21:47Z autoserve starting (interval 20s, queue 1 entries)
+2026-08-24T09:30:42Z t0438: serving 035-mlp-3-warm [3]
+t0438: MLP ratio 4 -> 3 (hidden 2048 -> 1536 per layer)
+t0438 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 3aa0018a74388bf3b50abb9cd37649c7a9992eee206f49653b895dc4f7af5617, result published
+2026-08-24T09:30:58Z t0438: served ok, 0 entries left
+2026-08-24T09:42:12Z t0439: serving 080-swiglu 
+Traceback (most recent call last):
+  File "<stdin>", line 24, in <module>
+AssertionError: expected the stock ReLU^2 MLP with 2 width sites, found 0
+2026-08-24T09:42:18Z t0439: 080-swiglu does not apply to this node — skipping, trying next
+2026-08-24T09:42:18Z t0439: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue
+2026-08-24T09:55:08Z t0440: serving 080-swiglu 
+t0440: SwiGLU hidden 1344 (params -1.56%), compile mode -> default
+t0440 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 213b31d10302b2ecd875b58cfae94f1c735b494b0ed9b0776a266ba2d42bb3bb, result published
+2026-08-24T09:55:24Z t0440: served ok, 0 entries left
+2026-08-24T10:05:08Z t0441: serving 090-unet-skips 
+t0441: U-net skips added (6 learned scalars, zero-init), compile mode -> default
+t0441 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> a7ad6866b2b8f18e0c52c2abdc09fee7471d22a610b45553d299c019b48a0d27, result published
+2026-08-24T10:05:24Z t0441: served ok, 0 entries left
+2026-08-24T10:15:10Z t0442: serving 100-swiglu-init 
+t0442: SwiGLU hidden 1344 + c_gate init, compile mode -> default
+t0442 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 8412f4326758424652e0c55317402c87826b6440484fac9052f797218f77efb8, result published
+2026-08-24T10:15:25Z t0442: served ok, 1 entries left
+2026-08-24T10:23:36Z t0443: serving 110-init-scale [1.25]
+t0443: init scale x1.25 (s = 1.25 * sqrt(3) * n_embd^-0.5)
+t0443 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 37fa434fb3b87fdffffa1827ab85db6a74a9a0ac41e3d0f2072baffab523f882, result published
+2026-08-24T10:23:53Z t0443: served ok, 0 entries left
+2026-08-24T10:33:38Z t0444: serving 120-ema-ramp 
+t0444: EMA decay shaped (ramp at held mean), compile mode -> default
+t0444 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> f9843414b252342b8b6866aeabc61f3816cc512d80b49d7ccbaebe875716cb70, result published
+2026-08-24T10:33:54Z t0444: served ok, 0 entries left
+2026-08-24T10:42:04Z t0445: serving 130-control-default 
+t0445: CONTROL — champion model, default compile
+t0445 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> c413f83d36eba25dc7ba60cf340942858a6a262b5fa1dcf2697f92d9e46f92a4, result published
+2026-08-24T10:42:19Z t0445: served ok, 0 entries left
+2026-08-24T10:50:50Z t0446: QUEUE EMPTY -- not serving. Refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue before the 819s deadline.
+2026-08-24T11:04:52Z t0447: serving 140-exhaustive-autotune 
+t0447: autotune search space -> EXHAUSTIVE
+t0447 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 05fb84bd5454ea69816a104544644bb289735d43256d603f0e5392ef63ab7115, result published
+2026-08-24T11:05:08Z t0447: served ok, 0 entries left
+2026-08-24T11:07:48Z t0448: serving 150-exhaustive-warm 
+t0448: autotune search space -> EXHAUSTIVE
+t0448 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 8ff1359e20efbdecc5d3e1c7bb84c750f2638641e290da3cf11785e540013deb, result published
+2026-08-24T11:08:03Z t0448: served ok, 2 entries left
+2026-08-24T11:16:58Z t0449: serving 140-exhaustive-autotune 
+t0449: autotune search space -> EXHAUSTIVE
+t0449 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 05fb84bd5454ea69816a104544644bb289735d43256d603f0e5392ef63ab7115, result published
+2026-08-24T11:17:14Z t0449: served ok, 1 entries left
+2026-08-24T11:20:45Z reaper: recovered 1 lost bet(s)
+2026-08-24T11:21:08Z t0450: serving 150-exhaustive-warm 
+t0450: autotune search space -> EXHAUSTIVE
+t0450 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 8ff1359e20efbdecc5d3e1c7bb84c750f2638641e290da3cf11785e540013deb, result published
+2026-08-24T11:21:25Z t0450: served ok, 2 entries left
+2026-08-24T11:24:06Z t0451: serving 155-attn-gate-zero 
+t0451: attn_gate zero-initialised (graph unchanged, max-autotune kept)
+t0451 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 4ce264f7fd8e8c87d2687ff8ad83a667680f73e0032e9d367e4bbca60600b810, result published
+2026-08-24T11:24:24Z t0451: served ok, 1 entries left
+2026-08-24T11:27:58Z t0452: serving 140-exhaustive-autotune 
+t0452: autotune search space -> EXHAUSTIVE
+t0452 served: train.py 4ce264f7fd8e8c87d2687ff8ad83a667680f73e0032e9d367e4bbca60600b810 -> fe1a64bb8c80e1ee9f46eb31f7229106371fc5966d0065a4963841d123325743, result published
+2026-08-24T11:28:15Z t0452: served ok, 2 entries left
+2026-08-24T11:39:37Z t0453: serving 145-attn-gate-zero-retry 
+t0453: attn_gate zero-initialised (graph unchanged, max-autotune kept)
+t0453 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 6b95fe7c0ee6116e2358a6cd5c8d362126d15326bdf0c156529dfc772ab6e063, result published
+2026-08-24T11:39:54Z t0453: served ok, 1 entries left
+2026-08-24T11:43:23Z t0454: serving 160-depth-13 
+t0454: DEPTH 12 -> 13, compile mode -> default
+t0454 served: train.py 6b95fe7c0ee6116e2358a6cd5c8d362126d15326bdf0c156529dfc772ab6e063 -> fac29b7a7c033855bfe6c50fd94a5225c62bdee7583dc544a6cfc5faaf775a61, result published
+2026-08-24T11:43:40Z t0454: served ok, 0 entries left
+2026-08-24T11:48:21Z t0455: QUEUE EMPTY -- not serving. Refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue before the 824s deadline.
+2026-08-24T11:51:26Z t0456: serving 150-exhaustive-warm 
+t0456: autotune search space -> EXHAUSTIVE
+t0456 served: train.py 6b95fe7c0ee6116e2358a6cd5c8d362126d15326bdf0c156529dfc772ab6e063 -> fd72fbef00e91a2df5a5037854062abd90ed725706b02cc7d2d5222a1954188c, result published
+2026-08-24T11:51:43Z t0456: served ok, 1 entries left
+2026-08-24T11:54:07Z t0457: serving 160-depth-13 
+t0457: DEPTH 12 -> 13, compile mode -> default
+t0457 served: train.py 6b95fe7c0ee6116e2358a6cd5c8d362126d15326bdf0c156529dfc772ab6e063 -> fac29b7a7c033855bfe6c50fd94a5225c62bdee7583dc544a6cfc5faaf775a61, result published
+2026-08-24T11:54:24Z t0457: served ok, 0 entries left
+2026-08-24T11:57:54Z t0458: serving 150-exhaustive-warm 
+t0458: autotune search space -> EXHAUSTIVE
+t0458 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 8ff1359e20efbdecc5d3e1c7bb84c750f2638641e290da3cf11785e540013deb, result published
+2026-08-24T11:58:10Z t0458: served ok, 1 entries left
+2026-08-24T12:04:26Z t0459: serving 165-depth-13-retry 
+t0459: DEPTH 12 -> 13, compile mode -> default
+t0459 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> c0c44aea91f942fe6b43765b7e4e6544f3a18c775100df222c08d2379e462867, result published
+2026-08-24T12:04:42Z t0459: served ok, 1 entries left
+2026-08-24T12:10:08Z reaper: recovered 1 lost bet(s)
+2026-08-24T12:14:22Z t0460: serving 150-exhaustive-warm 
+t0460: autotune search space -> EXHAUSTIVE
+t0460 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 8ff1359e20efbdecc5d3e1c7bb84c750f2638641e290da3cf11785e540013deb, result published
+2026-08-24T12:14:38Z t0460: served ok, 2 entries left
+2026-08-24T12:23:35Z t0461: serving 170-wte-init-scale [0.5]
+t0461: wte init std 1.0 -> 0.5
+t0461 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 74238b8b59eae97fc6b9e810ff2f431730638fa9cac8099ea583f0a932b4468d, result published
+2026-08-24T12:23:51Z t0461: served ok, 2 entries left
+2026-08-24T12:28:04Z t0462: serving 150-exhaustive-warm 
+t0462: autotune search space -> EXHAUSTIVE
+t0462 served: train.py 74238b8b59eae97fc6b9e810ff2f431730638fa9cac8099ea583f0a932b4468d -> 65671fb35c7da1da41c4450a6c90adf8e34b24d8c621504818ed969434478024, result published
+2026-08-24T12:28:20Z t0462: served ok, 2 entries left
+2026-08-24T12:41:59Z t0463: serving 175-depth13-width512 
+t0463: DEPTH 13 @ ASPECT_RATIO 39 -> width 512, 4 heads (pure depth change)
+t0463 served: train.py 74238b8b59eae97fc6b9e810ff2f431730638fa9cac8099ea583f0a932b4468d -> 97e721fcba3a62f6660bf3738a74030bf653ad4eeb91434fe2827f65320017d9, result published
+2026-08-24T12:42:15Z t0463: served ok, 1 entries left
+2026-08-24T12:46:08Z t0464: serving 180-depth-11 
+t0464: DEPTH 12 -> 11, compile mode -> default
+t0464 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 1a8f432fea60bf6017ef79a75a8b16d51e046a12a56274c7fe0871d8e2b8b709, result published
+2026-08-24T12:46:24Z t0464: served ok, 0 entries left
+2026-08-24T12:46:27Z reaper: recovered 1 lost bet(s)
+2026-08-24T12:50:19Z t0465: serving 150-exhaustive-warm 
+t0465: autotune search space -> EXHAUSTIVE
+t0465 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 8ff1359e20efbdecc5d3e1c7bb84c750f2638641e290da3cf11785e540013deb, result published
+2026-08-24T12:50:36Z t0465: served ok, 1 entries left
+2026-08-24T12:52:35Z reaper: recovered 1 lost bet(s)
+2026-08-24T12:54:30Z t0466: serving 176-depth13-w512-retry 
+t0466: DEPTH 13 @ ASPECT_RATIO 39 -> width 512, 4 heads (pure depth change)
+t0466 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 77a7707e10b9c96188c4fc28d3b88720f1ea7e2d297ad098d5b0fd84850cde95, result published
+2026-08-24T12:54:46Z t0466: served ok, 2 entries left
+2026-08-24T12:58:38Z t0467: serving 180-depth-11 
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+AssertionError: expected the champion's depth 12, found 13
+2026-08-24T12:58:45Z t0467: 180-depth-11 does not apply to this node — skipping, trying next
+2026-08-24T12:58:45Z t0467: serving 190-attn-gate-attempt4 
+t0467: attn_gate zero-initialised (graph unchanged, max-autotune kept)
+t0467 served: train.py 77a7707e10b9c96188c4fc28d3b88720f1ea7e2d297ad098d5b0fd84850cde95 -> f294905d1fe6ddc0485097370cffbdc081eecfe859ebcead7332313e34d12202, result published
+2026-08-24T12:59:01Z t0467: served ok, 1 entries left
+2026-08-24T12:59:04Z reaper: recovered 1 lost bet(s)
+2026-08-24T13:00:37Z t0468: serving 150-exhaustive-warm 
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+AssertionError: expected the champion's autotune mode
+2026-08-24T13:00:44Z t0468: 150-exhaustive-warm does not apply to this node — skipping, trying next
+2026-08-24T13:00:44Z t0468: serving 180-depth-11 
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+AssertionError: expected the champion's depth 12, found 13
+2026-08-24T13:00:51Z t0468: 180-depth-11 does not apply to this node — skipping, trying next
+2026-08-24T13:00:51Z t0468: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue
+2026-08-24T13:13:46Z t0469: serving 150-exhaustive-warm 
+t0469: autotune search space -> EXHAUSTIVE
+t0469 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 8ff1359e20efbdecc5d3e1c7bb84c750f2638641e290da3cf11785e540013deb, result published
+2026-08-24T13:14:06Z t0469: served ok, 2 entries left
+2026-08-24T13:41:22Z t0471: serving 180-depth-11 
+t0471: DEPTH 12 -> 11, compile mode -> default
+t0471 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 1a8f432fea60bf6017ef79a75a8b16d51e046a12a56274c7fe0871d8e2b8b709, result published
+2026-08-24T13:41:39Z t0471: served ok, 1 entries left
+2026-08-24T13:41:51Z autoserve starting (interval 20s, queue 1 entries)
+2026-08-24T13:41:55Z SSH unreachable (rc=1) — cannot see pending requests; they will expire
+2026-08-24T13:42:12Z autoserve starting (interval 20s, queue 1 entries)
+2026-08-24T13:51:15Z t0472: serving 190-attn-gate-attempt4 
+t0472: attn_gate zero-initialised (graph unchanged, max-autotune kept)
+t0472 served: train.py 390e6744ec3d57ae59d7d55bb5cea29f87cda9805d07c5c350af3640cbcff331 -> 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b21317f5c811, result published
+2026-08-24T13:51:33Z t0472: served ok, 0 entries left
+2026-08-24T14:08:56Z t0473: serving 200-trade-depth-for-width 
+t0473: DEPTH 8 @ ASPECT_RATIO 72 -> width 640, 5 heads (constant-compute trade)
+t0473 served: train.py 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b21317f5c811 -> c0a749ed399dea8c8f7d4f72c63a5279de131c27d29dfd0ee3b14e6591ad3da5, result published
+2026-08-24T14:09:15Z t0473: served ok, 0 entries left
+2026-08-24T14:15:08Z t0474: QUEUE EMPTY -- not serving. Refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue before the 823s deadline.
+2026-08-24T14:28:55Z t0475: serving 205-trade-retry 
+t0475: DEPTH 8 @ ASPECT_RATIO 72 -> width 640, 5 heads (constant-compute trade)
+t0475 served: train.py 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b21317f5c811 -> eaa2005ad147acb5dc31bc2832fbd8093805ba5a11cb2555a01198afac3a194c, result published
+2026-08-24T14:29:15Z t0475: served ok, 0 entries left
+2026-08-24T14:38:19Z t0476: serving 210-trade-deeper-narrower 
+t0476: DEPTH 21 @ ASPECT_RATIO 18 -> width 384, 3 heads (constant-compute trade)
+t0476 served: train.py 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b21317f5c811 -> ce3e538e4a226b31a34cf35857c0f185f8f653c09771c63f243f5aa384a76cd9, result published
+2026-08-24T14:38:38Z t0476: served ok, 0 entries left
+2026-08-24T14:42:59Z t0477: serving 220-exhaustive-again 
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+AssertionError: expected the champion's autotune mode
+2026-08-24T14:43:05Z t0477: 220-exhaustive-again does not apply to this node — skipping, trying next
+2026-08-24T14:43:06Z t0477: serving 225-exhaustive-warm-partner 
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+AssertionError: expected the champion's autotune mode
+2026-08-24T14:43:12Z t0477: 225-exhaustive-warm-partner does not apply to this node — skipping, trying next
+2026-08-24T14:43:12Z t0477: NO QUEUE ENTRY APPLIED — refill /Users/baiyu/Desktop/OPHIS/fengheguai/queue
+2026-08-24T14:56:55Z t0478: serving 215-trade-deeper-retry 
+t0478: DEPTH 21 @ ASPECT_RATIO 18 -> width 384, 3 heads (constant-compute trade)
+t0478 served: train.py 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b21317f5c811 -> c672fce43827ce871096c7d76f388c80cc4f3bf9450db722db74f325f947d592, result published
+2026-08-24T14:57:11Z t0478: served ok, 2 entries left
+2026-08-24T15:04:12Z t0479: serving 220-exhaustive-again 
+t0479: autotune search space -> EXHAUSTIVE
+t0479 served: train.py 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b21317f5c811 -> 019e0eb4acb6e84834f3fdeb4ddc59ed01b077c3b3267005bd91522ac58fd494, result published
+2026-08-24T15:04:29Z t0479: served ok, 2 entries left
+2026-08-24T15:06:28Z reaper: recovered 1 lost bet(s)
+2026-08-24T15:15:48Z t0480: serving 215-trade-deeper-retry 
+t0480: DEPTH 21 @ ASPECT_RATIO 18 -> width 384, 3 heads (constant-compute trade)
+t0480 served: train.py 019e0eb4acb6e84834f3fdeb4ddc59ed01b077c3b3267005bd91522ac58fd494 -> 866f5d159a88705c697b8cc7eea7b56546d2541545979184f2461cb391162881, result published
+2026-08-24T15:16:04Z t0480: served ok, 2 entries left
+2026-08-24T15:31:34Z t0481: serving 225-exhaustive-warm-partner 
+t0481: autotune search space -> EXHAUSTIVE
+t0481 served: train.py 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b21317f5c811 -> f3ce249f2d9e799f8c7020db11cbc6be909fe71cd1c0a32542fde4648ef6b491, result published
+2026-08-24T15:31:50Z t0481: served ok, 1 entries left
+2026-08-24T15:43:03Z t0482: serving 999-rerun-parent 
+t0482: re-running inherited configuration under a fresh hash
+t0482 served: train.py f3ce249f2d9e799f8c7020db11cbc6be909fe71cd1c0a32542fde4648ef6b491 -> 32ddf8697d6c916b123ca3f55f214ad6101c84e86bef5eca7dfe3ddcb7308327, result published
+2026-08-24T15:43:20Z t0482: served ok, 0 entries left
+2026-08-24T15:54:33Z t0483: serving 230-lmhead-bf16 
+t0483: lm_head cast to bf16
+t0483 served: train.py 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b21317f5c811 -> b04f624cde8d6ba7d41f18107bbca969e8135d0bb7863760ac1f8ee2c26c828e, result published
+2026-08-24T15:54:48Z t0483: served ok, 1 entries left
+2026-08-24T16:06:01Z t0484: serving 999-rerun-parent 
+t0484: re-running inherited configuration under a fresh hash
+t0484 served: train.py b04f624cde8d6ba7d41f18107bbca969e8135d0bb7863760ac1f8ee2c26c828e -> 46a489e6935526ea4b420fe907dda35eefb3f36a2a7b6294e4d652aeb719c1cc, result published
+2026-08-24T16:06:16Z t0484: served ok, 0 entries left
+2026-08-24T16:15:32Z t0485: serving 235-lmhead-bf16-retry 
+t0485: lm_head cast to bf16
+t0485 served: train.py 36b8396a87cc287e0a21703f1b7bf50f0d6310922f45a9d86748b21317f5c811 -> 07c9a2a83147730ccc70ce0c6f7aa0a7329feca0eacbd8065d5ea8925edf1709, result published
+2026-08-24T16:15:47Z t0485: served ok, 1 entries left
+2026-08-24T16:23:54Z SSH unreachable (rc=255) — cannot see pending requests; they will expire
+2026-08-24T17:18:44Z SSH unreachable (rc=255) — cannot see pending requests; they will expire
+2026-08-24T18:13:47Z SSH unreachable (rc=255) — cannot see pending requests; they will expire
+2026-08-24T18:24:03Z t0489: deadline already passed (3755s ago); not serving a stale request
+2026-08-24T18:25:07Z SSH unreachable (rc=255) — cannot see pending requests; they will expire
+2026-08-24T18:33:04Z SSH unreachable (rc=255) — cannot see pending requests; they will expire
+2026-08-24T19:06:14Z SSH unreachable (rc=255) — cannot see pending requests; they will expire
+2026-08-24T19:44:03Z SSH unreachable (rc=255) — cannot see pending requests; they will expire
+2026-08-24T19:44:52Z autoserve starting (interval 20s, queue 2 entries)
+2026-08-24T19:44:54Z t0489: deadline already passed (8606s ago); not serving a stale request

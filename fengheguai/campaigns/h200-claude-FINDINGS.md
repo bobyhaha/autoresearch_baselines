@@ -331,3 +331,1019 @@ t0081 did not improve the prior champion: val_bpb=0.970276, delta=+0.000141. Hyp
 ## t0082: discard
 
 t0082 did not improve the prior champion: val_bpb=0.970253, delta=+0.000118. Hypothesis: The NorMuon variance horizon was measured at a different batch and the argument for re-testing it is the one that has paid twice in this campaign. t0041 raised beta2 from 0.95 to 0.98 at batch 2**18 and measured 0.000107, below the repeat noise, so the axis was closed as a null. The champion now trains at 2**17, where each per-step gradient carries roughly twice the noise, and this buffer estimates the squared magnitude of the orthogonalised update per row in order to rescale it. A noisier input to that estimate is exactly the condition under which a longer averaging window should help, and it is the same reasoning that made the weight-decay rescale at t0065 and the softcap shift at t0069 pay off after the batch moved. Raising beta2 to 0.98 lengthens the horizon from roughly 20 steps to 50.
+
+## t0083: discard
+
+t0083 did not improve the prior champion: val_bpb=0.970621, delta=+0.000486. Hypothesis: Depth is the only axis in this campaign measured at even integers alone, and the odd value between the champion and the rejected one has never been tried. Depth 12 is the champion, 10 cost 0.000807 and 14 cost 0.001519 at batch 2**18 and 0.001801 again at 2**17, so the curve is established but only at a spacing of two. Two changes since those measurements make 13 worth one node rather than an obvious loser: the short attention span narrowed from 512 to 256, cutting per-token attention cost by roughly 3 percent, and the batch halved so the run now takes 2874 steps rather than 1465, which is the regime where a deeper stack has more updates to converge in. Verified arithmetic: ASPECT_RATIO 39 with depth 13 gives a base of 507, which build_model_config rounds up to a model_dim of exactly 512 with 4 heads of width 128, so width is held and only depth moves.
+
+## t0084: discard
+
+t0084 did not improve the prior champion: val_bpb=0.972235, delta=+0.002100. Hypothesis: The within-block allocation of capacity has been measured in one direction only. t0047 raised the MLP expansion from 4 to 5 and lost 0.001595, almost exactly matching the 0.001519 that adding two layers cost, which established that capacity is saturated regardless of how it is bought. The downward direction was never tested and is not symmetric with the upward one: reducing the MLP frees FLOPs that convert into steps, and steps have proven valuable at this operating point, since halving the batch to gain them was worth 0.000718 and narrowing the attention span to gain them was worth 0.000452. Reducing the expansion from 4 to 3 removes about 17 percent of matrix FLOPs and should raise the step count from 2874 toward roughly 3300. The two elite lines agree that the optimizer is exhausted as a source of gains, since t0082 measured the last untested Muon control as null, so what remains is the compute budget itself and how it is spent.
+
+## t0085: discard
+
+t0085 did not improve the prior champion: val_bpb=0.970922, delta=+0.000787. Hypothesis: The unembedding initialisation is the last untested quantity on the parameter this campaign found most sensitive. Three separate results say lm_head dynamics dominate the early run: the output softcap is the steepest axis measured, where 7 cost 0.005206 and 30 cost 0.004637 around an optimum that later shifted from 10 to 13, and its surviving mechanism is damping the gradient into lm_head; and the unembedding rate was sharply peaked at the old batch, where a 30 percent move cost 0.003152. The initialisation sits directly upstream of both. It is currently normal with standard deviation 0.001, which is near zero but not zero, so the model begins with small random logit structure that carries no information and must be unlearned before useful structure replaces it. Every other output projection in this architecture is initialised to exact zeros, including attn.c_proj and mlp.c_proj, so lm_head is the one inconsistency. Zeroing it starts the model at exactly uniform predictions and should lower val_bpb.
+
+## t0086: discard
+
+t0086 did not improve the prior champion: val_bpb=0.971715, delta=+0.001580. Hypothesis: The unembedding initialisation turned out to be a live axis rather than a formality, and only one side of it has been measured. t0085 replaced the standard deviation of 0.001 with exact zeros, expecting a null or a small gain on the argument that random logit structure carries no information and must be unlearned, and it cost 0.000787. That refutes the argument: the small random init is doing something useful, most plausibly breaking the symmetry among vocabulary rows so that the first updates differentiate them rather than moving every row identically. If asymmetry at initialisation is what matters, more of it should help, and the inherited 0.001 is not obviously the right magnitude since it produces logits of order 0.02 against a softcap of 13. Raising it tenfold to 0.01 tests that and, with the zero measurement, brackets the axis.
+
+## t0087: keep
+
+t0087 improved the prior champion: val_bpb=0.969277, delta=-0.000858. Hypothesis: The value embeddings are initialised with a scale meant for a different kind of parameter, and the mismatch is large and quantifiable. init_weights computes s as sqrt(3) times n_embd to the minus one half, which is a fan-in scale appropriate for the projections c_q, c_k, c_v and c_fc, each of which sums 512 inputs. It then applies the same s to the value-embedding tables, which are embeddings with fan-in one: a single row is selected per token. The consequence is that a value embedding starts with element RMS s over sqrt(3), about 0.044, while the stream it is added to, v equals c_v of x, has element RMS 1.0, so the path begins 22.6 times weaker than what it modifies. That transformer.wte is initialised with normal of standard deviation 1.0 rather than with s shows the file already distinguishes embeddings from projections elsewhere. This matters because the value-embedding path is the most load-bearing mechanism measured in this campaign: extending it to every layer gained 0.001806 and halving its width cost 0.005427. Initialising it to match the value stream should let it contribute from the first step instead of having to grow into relevance within 300 seconds.
+
+## t0088: discard
+
+t0088 did not improve the prior champion: val_bpb=0.969342, delta=+0.000065. Hypothesis: Correcting the value-embedding initialisation was the largest single gain since the depth work, and its optimum is not yet bracketed. t0087 replaced the fan-in scale s, which gave element RMS 0.044, with plus or minus sqrt(3), giving RMS 1.0 to match the v stream, and gained 0.000858 against a repeat noise of about 0.00013. That confirms the diagnosis, that a scale meant for a 512-input projection was wrongly applied to a fan-in-one embedding table, but matching v exactly was a principled target rather than a measured optimum. The mechanism argues the useful scale could be larger: the gate multiplies the embedding by 2*sigmoid before adding, so at the zero-initialised gate the factor is exactly 1.0, and the value stream carries v plus ve; if the model wants the memory path to dominate the projected value early, an embedding larger than v would let it. Doubling to RMS 2.0 tests whether the optimum sits at parity or beyond it.
+
+## t0089: keep
+
+t0089 improved the prior champion: val_bpb=0.968389, delta=-0.000888. Hypothesis: Correcting the value-embedding initialisation changed what learning rate that path should want, and the earlier measurement of its rate was taken under the broken init. t0087 rescaled the tables from element RMS 0.044 to 1.0, matching the v stream, and gained 0.000858; t0088 then showed the axis is flat above parity, so the scale is right. Under the old init the tables began 22.6 times too small and had to grow into relevance inside 300 seconds, which is a condition that rewards a fast rate. That is the regime in which t0023 tested a decoupled value-embedding rate of 0.9 and found it slightly worse than the shared 0.6, and in which every other embedding-rate result was collected. Now that the path starts at the scale it needs, the rate no longer has to fund growth and can instead be tuned for stability, so a lower rate should help. This node decouples the two groups again and halves the value-embedding rate to 0.3 while wte keeps 0.6.
+
+## t0090: discard
+
+t0090 did not improve the prior champion: val_bpb=0.968528, delta=+0.000139. Hypothesis: The value-embedding rate is a live axis with a large measured gradient and only one side explored. Halving it from the shared 0.6 to a decoupled 0.3 gained 0.000888, one of the largest single gains in this campaign and about seven times the repeat noise. The mechanism behind it is specific: t0087 fixed an initialisation that had these tables starting 22.6 times smaller than the v stream they feed, and a path that no longer has to grow into relevance does not need a rate sized for growth. That argument does not stop at 0.3. If the rate was funding growth that the init now supplies, the correct rate is whatever suits a table already at the right scale, and nothing measured so far locates it. Halving again to 0.15 tests whether the gradient continues or whether 0.3 is the turning point, and either result brackets the axis against the 0.6 measurement.
+
+## t0091: discard
+
+t0091 did not improve the prior champion: val_bpb=0.968898, delta=+0.000509. Hypothesis: Both elite lines are consequences of one repair, and they point at a third quantity that was measured under the same defect. t0087 corrected a value-embedding initialisation that started the tables 22.6 times weaker than the v stream, and t0089 then showed that the learning rate for that group had been sized to fund the growth the init now supplies, gaining 0.000888 by halving it; t0090 bracketed that rate at 0.3. The gate is the remaining control on the same path and it was tuned in exactly the broken regime. Its width was bracketed across four points in t0031, t0032 and t0035, settling at 128 channels, but every one of those runs had the gate modulating a signal of element RMS 0.044 against a value stream of RMS 1.0, so the gate was deciding how much of an almost invisible contribution to admit. It now modulates a contribution at parity with v, which is a materially harder decision and plausibly one that wants more context. Widening to 256, the value that lost by 0.000668 under the old scale, tests whether that loss was conditional on the defect.
+
+## t0092: discard
+
+t0092 did not improve the prior champion: val_bpb=0.996374, delta=+0.027985. Hypothesis: The initialisation fix in t0087 improved the value-embedding path but simultaneously made its update quantisation 32 times coarser, and nothing has corrected for that. These tables are stored as bf16 parameters, cast in init_weights alongside wte. bf16 carries 8 mantissa bits, so its resolution scales with magnitude: near the old element scale of 0.044 the ulp was 0.00024, but at the corrected scale near 1.0 it is 0.0078. AdamW writes its update directly into that bf16 tensor, so any per-row update smaller than the ulp is silently rounded away. This bites hardest exactly where it matters: embedding gradients are sparse, so a given row is touched only when its token appears and its Adam update is often far below the nominal rate, and the warmdown drives the effective rate to a tenth of peak over the final half of the budget. Keeping the tables in fp32 while casting the gathered rows to the activation dtype preserves those small updates at no change to the forward computation.
+
+## t0093: failed
+
+t0093 ended as failed. Hypothesis: t0092 showed the value-embedding path is precision-limited but bought the fix in the most expensive place. Holding those tables in fp32 improved quality per step, loss 3.013 against the champion 3.029 at step 1000, yet throughput collapsed from 105ms to 211ms per step and the run lost 36 percent of its steps, finishing at 0.996374, worse than the original baseline. The cost came from tripling memory traffic on the largest parameter block, 50M parameters as fp32 weights plus fp32 moments. There is a cheaper place to spend that precision. _step_adamw allocates its moment buffers with torch.zeros_like(p), so a bf16 parameter silently receives bf16 moments, and the moments are where small updates must survive across steps: exp_avg holds a running average divided by the square root of exp_avg_sq, and both sit at an ulp of 0.0078 near the corrected embedding scale. Keeping parameters in bf16, so gathers and writes stay cheap, while allocating moments in fp32 should capture most of the quality effect at a fraction of the traffic.. Evidence: expected one nonce-bound locked evaluation, found 0; training process exited with code 1; training_seconds is missing from output
+
+## t0094: discard
+
+t0094 did not improve the prior champion: val_bpb=0.968509, delta=+0.000121. Hypothesis: Unchanged from t0093: the value-embedding path is precision-limited, as t0092 demonstrated by improving loss per step from 3.029 to 3.013 at step 1000, and the cheap place to spend that precision is the AdamW moment buffers rather than the parameters, because _step_adamw allocates them with torch.zeros_like(p) and a bf16 parameter therefore receives bf16 moments with an ulp of 0.0078 near the corrected embedding scale. t0093 did not test this. It aborted during compilation of adamw_step_fused with a fake-tensor failure on exp_avg.lerp_(grad, 1 - beta1_t): the moment buffer is now fp32 while grad remains bf16, and an in-place operation cannot promote its own destination. The diagnosis is a dtype contract inside the fused step, not a defect in the idea.
+
+## t0095: discard
+
+t0095 did not improve the prior champion: val_bpb=0.980817, delta=+0.012429. Hypothesis: The MLP nonlinearity is the last untouched component of the transformer block. Every other part has been measured: attention span and pattern, head width and count, value embeddings and their gate, the residual and skip scalars, depth, width and the MLP expansion ratio. The activation is squared ReLU, which is the modded-nanogpt lineage choice and is plausibly tuned, but it has never been tested here and it sits on the path carrying two thirds of the matrix FLOPs. GELU is the natural comparison: same parameter count, same FLOP count to within a rounding error, no change to any other quantity, and a materially different shape, being smooth and slightly negative near zero rather than exactly zero below the origin and quadratic above it. If squared ReLU is load-bearing rather than incidental this should regress and the block is then fully characterised.
+
+## t0096: keep
+
+t0096 improved the prior champion: val_bpb=0.967286, delta=-0.001103. Hypothesis: Weight averaging was dismissed early in this campaign on a premise that has since become false. The argument then was that the schedule anneals the rate to zero, so the final weights are already settled and Polyak averaging has nothing to denoise. That stopped being true at t0048, which introduced FINAL_LR_FRAC of 0.1 and was promoted: the model now finishes training at a tenth of peak rate, still taking meaningful steps, so its final parameters are a single noisy draw from a distribution rather than a converged point. Averaging the tail of the trajectory should land closer to the centre of that distribution than any individual endpoint. The cost is small and can be checked rather than assumed: the averaged copy is about 96M parameters, so each update moves roughly 1GB of memory traffic against a 105ms step, which is well under one percent.
+
+## t0097: discard
+
+t0097 did not improve the prior champion: val_bpb=0.967445, delta=+0.000159. Hypothesis: Weight averaging gained 0.001103, the largest single improvement in the last forty trials, and its window has not been tuned. The mechanism is specific: FINAL_LR_FRAC of 0.1 means the model never fully anneals, so its final parameters are one noisy draw rather than a converged point, and averaging the tail lands nearer the centre of that distribution. The averaging cost almost nothing in throughput, 2870 steps against the champion 2875, so the trade is nearly free and the only question is the window length. The decay sets that window: at 0.99 the effective horizon is about 100 steps, roughly the last 3 percent of a 2870-step run. If the endpoint noise is what is being removed, a longer horizon should remove more of it, up to the point where the average starts including weights from a materially higher learning rate. Raising the decay to 0.995 doubles the horizon to about 200 steps and tests that.
+
+## t0098: discard
+
+t0098 did not improve the prior champion: val_bpb=0.967527, delta=+0.000242. Hypothesis: The two elite lines are the same mechanism at two window lengths, and together they say the optimum lies at or below the shorter one. Weight averaging at a decay of 0.99, an effective horizon near 100 steps, gained 0.001103 over the unaveraged champion; widening it to 0.995 and roughly 200 steps gave back 0.000159. The reading that fits both is that what averaging removes is genuine endpoint noise from a model that never fully anneals, and that reaching further back mixes in weights from a materially higher learning rate which the schedule was deliberately moving away from. If that is right the optimum is short rather than long, and the untested direction is shorter still. A decay of 0.98 halves the horizon to about 50 steps and, with the 0.995 measurement, brackets the axis from both sides.
+
+## t0099: discard
+
+t0099 did not improve the prior champion: val_bpb=0.967290, delta=+0.000004. Hypothesis: Averaging changes what the schedule endpoint is for, and the endpoint has not been re-measured since averaging arrived. FINAL_LR_FRAC was raised from 0.0 to 0.1 in t0048, where it measured within noise and was promoted on a strict median; the reason a floor is normally costly is that the model stops settling and its final weights are left noisy. Weight averaging removes exactly that cost, and t0096 proved it does so here, gaining 0.001103 by averaging the tail of a run that never fully anneals. With the noise now absorbed by the average, a higher floor should be affordable and should buy real progress: the run spends its last 30 percent at a rate that decays toward the floor, so doubling the floor to 0.2 keeps the model learning materially faster through roughly 860 steps whose endpoint noise the EMA is already cleaning up. The two settings are complements rather than independent knobs.
+
+## t0100: discard
+
+t0100 did not improve the prior champion: val_bpb=0.969158, delta=+0.001872. Hypothesis: t0099 returned a null so exact it is a measurement in its own right: doubling the schedule floor from 0.1 to 0.2 changed val_bpb by four parts in a million, against a repeat noise of 1.3e-4. The reading is that weight averaging has decoupled final quality from where the schedule ends. Annealing normally serves two purposes, making progress at a useful rate and settling the model so its endpoint is not a noisy draw; the EMA introduced in t0096 now performs the second, and t0099 shows the first is insensitive to the floor across a factor of two. If the floor is genuinely not binding, the schedule is giving away rate for no return, and a much higher floor should let the model keep learning through the entire warmdown while the average absorbs the extra endpoint noise. Raising it to 0.4 tests where that stops being true.
+
+## t0101: discard
+
+t0101 did not improve the prior champion: val_bpb=0.968589, delta=+0.001303. Hypothesis: The warmdown fraction was measured before weight averaging existed, and averaging is exactly what made its cost avoidable. t0026 shortened the anneal from 0.5 to 0.35 and lost 0.000758, and t0020 lengthened it to 0.8 and lost 0.001467, so 0.5 was bracketed. But the reason a short anneal costs is that the model reaches the end of training less settled, and t0096 introduced an EMA that settles it, with t0099 then showing the schedule endpoint no longer influences the locked score across a doubling of the floor. If the endpoint is now handled by the average, the anneal is buying less than it did and the budget it consumes is better spent at full rate: shortening to 0.35 returns 15 percent of the run, roughly 430 steps, to the flat phase. This recipe has also shown repeatedly that it is expensive to deprive of full-rate steps, since a 2 percent warmup cost 0.001875 in t0061, which is the same quantity being bought back here.
+
+## t0102: discard
+
+t0102 did not improve the prior champion: val_bpb=0.968007, delta=+0.000721. Hypothesis: The anneal has been measured for length but never for shape. Its fraction of the budget is bracketed at 0.5, with 0.35 costing 0.000758 before averaging and 0.001303 after, and 0.8 costing 0.001467; its endpoint is bracketed with 0.2 an exact null and 0.4 costing 0.001872. Throughout, the decay itself has been linear in elapsed time, which is a choice rather than a necessity, and this recipe has proved unusually sensitive to how full-rate time is spent: a 2 percent warmup cost 0.001875 in t0061. A cosine anneal between the same two endpoints keeps the rate near its peak for longer at the start of the decay and flattens again as it approaches the floor, front-loading rate where the model still benefits from it and settling more gently at the end. Given that t0101 just showed the anneal does real work beyond endpoint settling, changing how that work is distributed is the natural remaining question.
+
+## t0103: discard
+
+t0103 did not improve the prior champion: val_bpb=0.974490, delta=+0.007204. Hypothesis: Averaging the endpoint of the trajectory paid 0.001103 in t0096, and the natural question is whether averaging the trajectory itself pays too. Lookahead does that: a slow copy of the weights follows the fast ones by a fraction alpha every k steps, and the fast weights are then reset onto the slow copy, so the optimizer explores from a point that is itself an average of recent iterates rather than from the latest one. It is a different intervention from the EMA, which only changes what is evaluated and never influences training, whereas this changes the path. The conditions here favour it: the run takes about 2870 steps at a batch of 2**17, which is the noisiest per-step gradient this campaign has used, and t0096 established that this model reaches its end as a noisy draw rather than a converged point. The cost is small and checkable, roughly 1GB of traffic every five steps against a 105ms step.
+
+## t0104: discard
+
+t0104 did not improve the prior champion: val_bpb=0.969680, delta=+0.002394. Hypothesis: t0103 tested Lookahead on every parameter and lost 0.007204, and its risk note named the likely cause in advance: Muon maintains a momentum buffer and a NorMuon per-row variance estimate keyed to the parameters it is updating, and Lookahead rewrites those parameters without touching either, so for five steps after each sync the orthogonalised update is correcting a trajectory that no longer exists. The pre-registered follow-up was a larger k, but that only makes the disruption rarer rather than testing the diagnosis. Restricting Lookahead to the AdamW groups tests it directly: those moments are plain per-coordinate exponential averages of gradients, which tolerate a parameter being moved under them far better than an orthogonalisation whose scale comes from a running variance estimate. The groups this covers are also the ones worth covering, since they hold wte, lm_head and the twelve value-embedding tables, roughly 58M parameters and the path this campaign has repeatedly found load-bearing.
+
+## t0105: discard
+
+t0105 did not improve the prior champion: val_bpb=0.968249, delta=+0.000963. Hypothesis: Logit magnitude is the most sensitive quantity this campaign has found, and only one instrument controls it. The output softcap is the single inherited default that proved suboptimal, and its curve is steep in both directions: 7 costs 0.005206, 10 was the optimum at the old batch, 13 is the optimum now, 30 costs 0.004637. Both failures converge on the same mechanism, damping the gradient into lm_head, and t0039 showed that a uniform learning-rate reduction cannot substitute for it because the cap acts selectively on tokens whose logits have grown large. A z-loss is the other selective instrument for the same quantity: it penalises the log-partition, so it pushes back on exactly the examples whose logits are collectively large, and it does so through the loss rather than by clipping the function. If softcapping this model is worth several thousandths of a bpb, a second, smoother control on the same quantity is the most promising remaining lever.
+
+## t0106: failed
+
+t0106 ended as failed. Hypothesis: The training context length has never been varied, and document masking has made most of it unused. Attention now costs about 62.9M of the roughly 314M per-token FLOPs, and 50.3M of that sits in the four full-context layers spanning 2048 tokens; the other eight layers see only 256. Since t0010 those full-context layers cannot read across a document boundary anyway, so the span they actually exploit is the length of the enclosing document rather than the row. Halving the training context to 1024 halves the cost of those four layers, removing about 25M FLOPs per token or 8 percent of the total, which should convert into roughly 6 to 8 percent more optimizer steps. Evaluation is untouched: prepare.evaluate_bpb builds its own loader at MAX_SEQ_LEN and the model handles a longer input at eval because the rotary table is precomputed for ten times the configured length.. Evidence: expected one nonce-bound locked evaluation, found 0; training process exited with code 1; training_seconds is missing from output
+
+## t0107: discard
+
+t0107 did not improve the prior champion: val_bpb=0.967646, delta=+0.000360. Hypothesis: Unchanged from t0106: with document masking confining attention inside documents, the four full-context layers exploit the enclosing document rather than the full row, so halving the training context to 1024 should free about 8 percent of per-token FLOPs and convert them into optimizer steps while evaluation continues at MAX_SEQ_LEN. t0106 did not test this. It aborted before training on the assertion that TOTAL_BATCH_SIZE divides tokens_per_fwdbwd, because that quantity is computed as DEVICE_BATCH_SIZE times MAX_SEQ_LEN rather than the training length; doubling the device batch to 128 therefore produced 262144 tokens per forward-backward against a total batch of 131072. I changed the model config and the dataloader but missed the third place the sequence length is used.
+
+## t0108: discard
+
+t0108 did not improve the prior champion: val_bpb=0.971588, delta=+0.004302. Hypothesis: The residual carry scalars are the last untested initialisation in the model. GPT.forward computes x as resid_lambdas[i] times x plus x0_lambdas[i] times x0 at every layer, so resid_lambdas sets how much of the accumulated stream each block inherits, and it is initialised to exactly 1.0, the identity. That value is correct by construction rather than by measurement, and it was chosen for a depth-8 model; the champion runs depth 12, so the stream now passes through half again as many blocks before reaching the head. This is the same class of quantity as the weight decay corrected in t0065 and the embedding skip examined in t0072: a per-layer setting whose cumulative effect changed when depth did. Damping the carry slightly to 0.95 compounds to about 0.54 across twelve layers, which is a material change to how much early-layer signal survives to the output.
+
+## t0109: discard
+
+t0109 did not improve the prior champion: val_bpb=0.967923, delta=+0.000637. Hypothesis: Decoupling the value embeddings changed what EMBEDDING_LR governs, and its value has not been re-measured since. Until t0089 that constant drove one AdamW group containing both transformer.wte and the twelve value-embedding tables, roughly 58M parameters, and 0.6 was confirmed optimal for that combination twice, at batch 2**18 in t0012 and again at 2**17 in t0053. t0089 then gave the value embeddings their own rate and measured their preference at 0.3, bracketed by t0090 at 0.15 and by the old shared 0.6. That is the inference: if the blended optimum over both groups was 0.6 while the larger of the two prefers 0.3, then wte alone must prefer something above 0.6, otherwise the blend could not have landed there. wte is now only 4.2M parameters and is normalised immediately in forward, so its rate is not constrained by the value stream any more. Raising it to 0.9 tests the inference.
+
+## t0110: discard
+
+t0110 did not improve the prior champion: val_bpb=1.019412, delta=+0.052126. Hypothesis: The output softcap is the only constant in this recipe whose optimum has been observed to move, and it has moved in one direction each time the model around it changed. It was bracketed at 10 at batch 2**18, then t0069 raised it to 13 and gained 0.000214 once lm_head became less sensitive at the smaller batch. Since then three further changes have altered what reaches lm_head: the value-embedding tables were rescaled by a factor of 22.6 in t0087, their learning rate was halved in t0089, and weight averaging in t0096 changed which weights are finally scored. Each of those makes the representation feeding the head better conditioned, which is the same condition that moved the optimum upward before. The cap is also the steepest axis measured here, so being 20 percent off it has cost thousandths of a bpb in both directions historically. Testing 16 checks whether the optimum has drifted again.
+
+## t0112: discard
+
+t0112 did not improve the prior champion: val_bpb=0.971295, delta=+0.004009. Hypothesis: This re-tests the softcap drift question that t0110 failed to answer. That node set the cap to 16 and returned 1.019412, worse than the untuned baseline, but the result is not attributable to the cap: it completed only 1342 optimizer steps against 2863 for the immediately preceding trial, and a foreign process occupying 104GB at full utilisation appeared on the pinned GPU partway through the run. A 53 percent step collapse is a contention signature, not a modelling effect, so the measurement was discarded and the campaign moved to an uncontended GPU. The underlying hypothesis stands: the output softcap is the only constant in this recipe whose optimum has been observed to move, rising from 10 to 13 in t0069 once lm_head became less sensitive, and three subsequent changes have further improved the representation feeding the head, namely the value-embedding rescale in t0087, its halved rate in t0089 and weight averaging in t0096. Testing 15 checks for further drift; 16 is not retested because that source already exists and would be rejected as a duplicate candidate.
+
+## t0113: discard
+
+t0113 did not improve the prior champion: val_bpb=0.975221, delta=+0.007935. Hypothesis: Both elite lines concern the endpoint of training, and one parameter of that machinery has never been measured. t0096 introduced weight averaging and gained 0.001103; t0099 then showed the schedule floor is inert across a doubling because the average now absorbs endpoint noise. The averaging window has been bracketed through its decay, 0.98 and 0.995 both worse than 0.99, but EMA_START has only ever been argued about, not tested. My argument was that it cannot bind: with a decay of 0.99 the effective horizon is roughly 100 steps while the averaging phase spans about 860, so the average forgets its starting point many times over. Moving the start from 0.7 to 0.5 nearly doubles the phase to about 1430 steps and tests that argument directly. If the reasoning is right this is an exact null, which is the outcome I expect.
+
+## t0117: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0118: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0120: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0121: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0122: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0123: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0124: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0125: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0126: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0127: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0129: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0130: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0131: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0133: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0134: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0135: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0136: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0137: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0138: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0139: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0140: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0141: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0142: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0143: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0144: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0145: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0146: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0147: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0148: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0149: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0150: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0151: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0152: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0153: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0154: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0155: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0156: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0157: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0158: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0159: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0160: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0161: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0162: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0163: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0164: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0165: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0166: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0167: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0168: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0169: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0170: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0171: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0172: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0173: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0174: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0175: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0176: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0177: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0178: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0179: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0180: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0181: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0182: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0183: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0184: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0185: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0186: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0187: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0188: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0189: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0190: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0191: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0192: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0193: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0194: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0195: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0196: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0197: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0198: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0199: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0200: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0201: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0202: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0203: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0204: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0205: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0206: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0207: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0208: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0209: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0210: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0211: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0212: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0213: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0214: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0215: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0216: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0217: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0218: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0219: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0220: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0221: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0222: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0223: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0224: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0225: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0226: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0227: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0228: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0229: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0230: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0231: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0232: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0233: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0234: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0235: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0236: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0237: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0238: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0239: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0240: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0241: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0242: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0243: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0244: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0245: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0246: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0247: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0248: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0249: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0250: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0251: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0252: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0253: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0254: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0255: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0256: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0257: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0258: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0259: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0260: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0261: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0262: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0263: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0264: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0265: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0266: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0267: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0268: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0269: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0270: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0271: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0272: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0273: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0274: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0275: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0276: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0277: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0278: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0279: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0280: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0281: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0282: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0283: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0284: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0285: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0286: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0287: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0288: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0289: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0290: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0291: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0292: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0293: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0294: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0295: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0296: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0297: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0298: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0299: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0300: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0301: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0302: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0303: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0304: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0305: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0306: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0307: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0308: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0309: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0310: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0311: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0312: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0313: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0314: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0315: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0316: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0317: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0320: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0321: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0322: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0323: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0324: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0325: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0326: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0327: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0328: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0329: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0330: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0332: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0333: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0334: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0335: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0336: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0337: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0338: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0339: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0340: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0341: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0342: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0343: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0344: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0345: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
+
+## t0346: agent_error
+
+agent_error: agent exited with code 1; agent did not produce its structured result; agent result is missing non-empty hypothesis; agent result is missing non-empty change_summary; agent result is missing non-empty expected_val_bpb_effect; agent result is missing non-empty risk
